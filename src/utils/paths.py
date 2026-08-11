@@ -79,8 +79,12 @@ def resolve_image_path(raw: str | Path, paths: DatasetPaths) -> Path | None:
         return p.resolve()
 
     name = p.name
+    isic_nested = paths.isic2019_root / "ISIC_2019_Training_Input"
+    lesion_isic = paths.csg_data_root / "lesion_only_images" / "ISIC_2019_Training_Input"
     candidates = (
         paths.isic2019_root / name,
+        isic_nested / name,
+        lesion_isic / name,
         paths.pad_ufes_root / "images" / name,
         paths.pad_ufes_root / name,
         paths.csg_data_root / name,

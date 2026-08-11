@@ -4,7 +4,7 @@
 # PanDerm is skipped (already complete). Runs ResNet-50 → EfficientNet-B3 → UNI.
 #
 # Usage (on GPU server):
-#   export CSG_DATA_ROOT=/mnt/data2/Vinh/CSG-SKin/data
+#   export CSG_DATA_ROOT=/mnt/data2/Vinh/CSG-Skin/data
 #   export PANDERM_EMBEDDINGS_ROOT=/mnt/data2/Vinh/reference_embeddings
 #   nohup ./scripts/run_overnight_batch.sh > results/logs/overnight_batch.log 2>&1 &
 #   echo $! > results/logs/overnight_batch.pid
@@ -40,10 +40,12 @@ if [[ -z "${CSG_DATA_ROOT:-}" ]]; then
   exit 1
 fi
 
-# Quick sanity: at least one ISIC image resolves under CSG root.
-SAMPLE="$(find "$CSG_DATA_ROOT/ISIC_2019_Training_Input" -type f 2>/dev/null | head -1 || true)"
+# Quick sanity: at least one ISIC image under CSG root (flat or nested layout).
+SAMPLE="$(find "$CSG_DATA_ROOT" -path '*/ISIC_2019_Training_Input/*' -type f 2>/dev/null | head -1 || true)"
 if [[ -z "$SAMPLE" ]]; then
-  echo "WARN: no files under $CSG_DATA_ROOT/ISIC_2019_Training_Input — extract may fail." | tee -a "$BATCH_LOG"
+  echo "WARN: no ISIC images under $CSG_DATA_ROOT — extract may fail." | tee -a "$BATCH_LOG"
+else
+  echo "ISIC sample: $SAMPLE" | tee -a "$BATCH_LOG"
 fi
 
 FAILED=()

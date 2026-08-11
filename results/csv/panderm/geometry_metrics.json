@@ -1,0 +1,422 @@
+{
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "r": 16,
+  "reference_alpha0": {
+    "condition_number": 1338282.2591054065,
+    "per_direction_variance_w": 20.19818878173828,
+    "lid_mean": 15.027931404443088,
+    "spectral_decay_slope": 0.0069687240082659165
+  },
+  "results": {
+    "canonical": [
+      {
+        "seed": 42,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 42,
+        "alpha": 0.25,
+        "condition_number": 1362401.029566817,
+        "per_direction_variance_w": 12.477412223815918,
+        "lid_mean": 14.949698197327438,
+        "spectral_decay_slope": 0.0067508528358705975
+      },
+      {
+        "seed": 42,
+        "alpha": 0.5,
+        "condition_number": 3648785.796527249,
+        "per_direction_variance_w": 7.222400188446045,
+        "lid_mean": 14.749628658926484,
+        "spectral_decay_slope": 0.006767479980583559
+      },
+      {
+        "seed": 42,
+        "alpha": 0.75,
+        "condition_number": 7818642.031766221,
+        "per_direction_variance_w": 4.433149814605713,
+        "lid_mean": 14.516279008856985,
+        "spectral_decay_slope": 0.006786978611054372
+      },
+      {
+        "seed": 42,
+        "alpha": 1.0,
+        "condition_number": 13771577.662022011,
+        "per_direction_variance_w": 4.109662055969238,
+        "lid_mean": 14.260968576467315,
+        "spectral_decay_slope": 0.006806695756699814
+      },
+      {
+        "seed": 52,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 52,
+        "alpha": 0.25,
+        "condition_number": 1209104.6813967163,
+        "per_direction_variance_w": 19.366256713867188,
+        "lid_mean": 15.058672485229483,
+        "spectral_decay_slope": 0.0067422916873061504
+      },
+      {
+        "seed": 52,
+        "alpha": 0.5,
+        "condition_number": 1152730.5528168147,
+        "per_direction_variance_w": 18.580209732055664,
+        "lid_mean": 15.085181232021043,
+        "spectral_decay_slope": 0.006748811847615606
+      },
+      {
+        "seed": 52,
+        "alpha": 0.75,
+        "condition_number": 1124209.6067890576,
+        "per_direction_variance_w": 17.840051651000977,
+        "lid_mean": 15.057203083323724,
+        "spectral_decay_slope": 0.006762919462568012
+      },
+      {
+        "seed": 52,
+        "alpha": 1.0,
+        "condition_number": 1120247.236458866,
+        "per_direction_variance_w": 17.14577865600586,
+        "lid_mean": 14.949030086921587,
+        "spectral_decay_slope": 0.006779040254715638
+      },
+      {
+        "seed": 62,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 62,
+        "alpha": 0.25,
+        "condition_number": 1116029.2816576108,
+        "per_direction_variance_w": 16.85218048095703,
+        "lid_mean": 15.066598259845312,
+        "spectral_decay_slope": 0.006746793303730681
+      },
+      {
+        "seed": 62,
+        "alpha": 0.5,
+        "condition_number": 1057581.5790079674,
+        "per_direction_variance_w": 13.957733154296875,
+        "lid_mean": 15.009458157680243,
+        "spectral_decay_slope": 0.006759614707883946
+      },
+      {
+        "seed": 62,
+        "alpha": 0.75,
+        "condition_number": 1135713.384691309,
+        "per_direction_variance_w": 11.514848709106445,
+        "lid_mean": 14.847283455102504,
+        "spectral_decay_slope": 0.006779150407411149
+      },
+      {
+        "seed": 62,
+        "alpha": 1.0,
+        "condition_number": 1393859.0886671955,
+        "per_direction_variance_w": 9.523523330688477,
+        "lid_mean": 14.650883581678356,
+        "spectral_decay_slope": 0.006799429908142517
+      },
+      {
+        "seed": 72,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 72,
+        "alpha": 0.25,
+        "condition_number": 1056505.1120160695,
+        "per_direction_variance_w": 18.65976333618164,
+        "lid_mean": 15.048108031598188,
+        "spectral_decay_slope": 0.006737684073657906
+      },
+      {
+        "seed": 72,
+        "alpha": 0.5,
+        "condition_number": 912423.7290577056,
+        "per_direction_variance_w": 17.233652114868164,
+        "lid_mean": 15.038893613230655,
+        "spectral_decay_slope": 0.006752153869968089
+      },
+      {
+        "seed": 72,
+        "alpha": 0.75,
+        "condition_number": 846486.1450539153,
+        "per_direction_variance_w": 15.919851303100586,
+        "lid_mean": 14.916908297083504,
+        "spectral_decay_slope": 0.006769673600668562
+      },
+      {
+        "seed": 72,
+        "alpha": 1.0,
+        "condition_number": 899731.9157241096,
+        "per_direction_variance_w": 14.718363761901855,
+        "lid_mean": 14.733412117309971,
+        "spectral_decay_slope": 0.006787469898570196
+      },
+      {
+        "seed": 82,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 82,
+        "alpha": 0.25,
+        "condition_number": 985432.8212655985,
+        "per_direction_variance_w": 16.593046188354492,
+        "lid_mean": 15.054477019063546,
+        "spectral_decay_slope": 0.0067406189743878546
+      },
+      {
+        "seed": 82,
+        "alpha": 0.5,
+        "condition_number": 808505.3168708279,
+        "per_direction_variance_w": 13.438728332519531,
+        "lid_mean": 15.035844239733112,
+        "spectral_decay_slope": 0.006751130680071053
+      },
+      {
+        "seed": 82,
+        "alpha": 0.75,
+        "condition_number": 727059.6702813895,
+        "per_direction_variance_w": 10.735233306884766,
+        "lid_mean": 14.943613557728858,
+        "spectral_decay_slope": 0.0067672394911177025
+      },
+      {
+        "seed": 82,
+        "alpha": 1.0,
+        "condition_number": 847980.0717336078,
+        "per_direction_variance_w": 8.482561111450195,
+        "lid_mean": 14.815452939846052,
+        "spectral_decay_slope": 0.006784703045258329
+      }
+    ],
+    "conventional": [
+      {
+        "seed": 42,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 42,
+        "alpha": 0.25,
+        "condition_number": 1159821.640063274,
+        "per_direction_variance_w": 21.26902198791504,
+        "lid_mean": 14.98463379748907,
+        "spectral_decay_slope": 0.0067518859937160105
+      },
+      {
+        "seed": 42,
+        "alpha": 0.5,
+        "condition_number": 1373548.329303482,
+        "per_direction_variance_w": 22.445667266845703,
+        "lid_mean": 14.85107960168713,
+        "spectral_decay_slope": 0.00676889259335829
+      },
+      {
+        "seed": 42,
+        "alpha": 0.75,
+        "condition_number": 2085979.3713212209,
+        "per_direction_variance_w": 23.728132247924805,
+        "lid_mean": 14.691439735796061,
+        "spectral_decay_slope": 0.006787720885363553
+      },
+      {
+        "seed": 42,
+        "alpha": 1.0,
+        "condition_number": 3239935.373909187,
+        "per_direction_variance_w": 25.11640739440918,
+        "lid_mean": 14.465354491414262,
+        "spectral_decay_slope": 0.006806672047010316
+      },
+      {
+        "seed": 52,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 52,
+        "alpha": 0.25,
+        "condition_number": 1198561.3810970648,
+        "per_direction_variance_w": 20.30983543395996,
+        "lid_mean": 15.04052224485212,
+        "spectral_decay_slope": 0.00673807907405361
+      },
+      {
+        "seed": 52,
+        "alpha": 0.5,
+        "condition_number": 1130533.6533656556,
+        "per_direction_variance_w": 20.43040657043457,
+        "lid_mean": 15.053822058140826,
+        "spectral_decay_slope": 0.0067437329119397985
+      },
+      {
+        "seed": 52,
+        "alpha": 0.75,
+        "condition_number": 1101428.7688292991,
+        "per_direction_variance_w": 20.559898376464844,
+        "lid_mean": 14.99673534874902,
+        "spectral_decay_slope": 0.006757692684812374
+      },
+      {
+        "seed": 52,
+        "alpha": 1.0,
+        "condition_number": 1093853.5333063477,
+        "per_direction_variance_w": 20.698314666748047,
+        "lid_mean": 14.873370524436352,
+        "spectral_decay_slope": 0.006773700925031087
+      },
+      {
+        "seed": 62,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 62,
+        "alpha": 0.25,
+        "condition_number": 1216603.1648867545,
+        "per_direction_variance_w": 20.183460235595703,
+        "lid_mean": 15.033862737159712,
+        "spectral_decay_slope": 0.0067476161971033715
+      },
+      {
+        "seed": 62,
+        "alpha": 0.5,
+        "condition_number": 1158117.9236888487,
+        "per_direction_variance_w": 20.19316864013672,
+        "lid_mean": 15.01607947929885,
+        "spectral_decay_slope": 0.006757099428139723
+      },
+      {
+        "seed": 62,
+        "alpha": 0.75,
+        "condition_number": 1126479.895306153,
+        "per_direction_variance_w": 20.227310180664062,
+        "lid_mean": 14.895566687144846,
+        "spectral_decay_slope": 0.00677338356186967
+      },
+      {
+        "seed": 62,
+        "alpha": 1.0,
+        "condition_number": 1111980.0365680265,
+        "per_direction_variance_w": 20.285884857177734,
+        "lid_mean": 14.73605781541938,
+        "spectral_decay_slope": 0.0067910708159395735
+      },
+      {
+        "seed": 72,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 72,
+        "alpha": 0.25,
+        "condition_number": 1103743.8813998268,
+        "per_direction_variance_w": 20.36884880065918,
+        "lid_mean": 15.030288684897359,
+        "spectral_decay_slope": 0.006738273879779759
+      },
+      {
+        "seed": 72,
+        "alpha": 0.5,
+        "condition_number": 998993.1082896589,
+        "per_direction_variance_w": 20.554109573364258,
+        "lid_mean": 15.014514024561745,
+        "spectral_decay_slope": 0.006751907359617788
+      },
+      {
+        "seed": 72,
+        "alpha": 0.75,
+        "condition_number": 937494.9686365428,
+        "per_direction_variance_w": 20.753969192504883,
+        "lid_mean": 14.899964461135209,
+        "spectral_decay_slope": 0.006768147563588898
+      },
+      {
+        "seed": 72,
+        "alpha": 1.0,
+        "condition_number": 916734.339938157,
+        "per_direction_variance_w": 20.96842384338379,
+        "lid_mean": 14.71766048752442,
+        "spectral_decay_slope": 0.00678494831728366
+      },
+      {
+        "seed": 82,
+        "alpha": 0.0,
+        "condition_number": 1338282.2591054065,
+        "per_direction_variance_w": 20.19818878173828,
+        "lid_mean": 15.027931404443088,
+        "spectral_decay_slope": 0.0069687240082659165
+      },
+      {
+        "seed": 82,
+        "alpha": 0.25,
+        "condition_number": 1145569.4818178655,
+        "per_direction_variance_w": 20.923768997192383,
+        "lid_mean": 15.008756026834456,
+        "spectral_decay_slope": 0.0067426519439914775
+      },
+      {
+        "seed": 82,
+        "alpha": 0.5,
+        "condition_number": 1087078.042464445,
+        "per_direction_variance_w": 21.680139541625977,
+        "lid_mean": 14.967960174580476,
+        "spectral_decay_slope": 0.0067519045257770915
+      },
+      {
+        "seed": 82,
+        "alpha": 0.75,
+        "condition_number": 1078980.5091649103,
+        "per_direction_variance_w": 22.46729850769043,
+        "lid_mean": 14.849245860223851,
+        "spectral_decay_slope": 0.0067654134151616824
+      },
+      {
+        "seed": 82,
+        "alpha": 1.0,
+        "condition_number": 1108340.2266611466,
+        "per_direction_variance_w": 23.285249710083008,
+        "lid_mean": 14.705591453558196,
+        "spectral_decay_slope": 0.0067800890869103144
+      }
+    ]
+  }
+}

@@ -10,8 +10,8 @@
 # PANDERM_EMBEDDINGS_ROOT=/Users/cubo/Research/Paper4/PhaseB/assets/reference_embeddings
 
 # Server example:
-# CSG_DATA_ROOT=/mnt/data2/Vinh/Research/CSG-SKin/data
-# PANDERM_EMBEDDINGS_ROOT=/mnt/data2/Vinh/Research/Paper4/PhaseB/assets/reference_embeddings
+# CSG_DATA_ROOT=/mnt/data2/Vinh/CSG-Skin/data
+# PANDERM_EMBEDDINGS_ROOT=/mnt/data2/Vinh/Paper4/PhaseB/assets/reference_embeddings
 
 CSG_DATA_ROOT=
 PANDERM_EMBEDDINGS_ROOT=

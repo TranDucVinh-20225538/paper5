@@ -1,0 +1,25 @@
+name: geomrel
+channels: [pytorch, nvidia, conda-forge]
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - scipy
+  - scikit-learn
+  - pandas
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.1
+  - statsmodels
+  - matplotlib
+  - seaborn
+  - pyyaml
+  - tqdm
+  - pip:
+      - timm
+      - open_clip_torch
+      - transformers
+      - pingouin
+# Versions unpinned while this is a scaffold. Pin every one of them before the
+# first run that produces a reportable number, and record the resolved versions
+# in results/manifest.jsonl per run.

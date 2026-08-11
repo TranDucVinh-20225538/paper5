@@ -11,8 +11,8 @@ backbone:
   activation: gelu
 
   representation:
-    status:    UNRESOLVED
-    forward:   null
+    status:    RESOLVED
+    forward:   "vision transformer forward -> CLS token"
     pooling:   cls
     rationale: >
       CLS token is the conventional choice; confirm against the published linear-probe recipe, and decide explicitly whether patch tokens are mean-pooled and concatenated as some recipes do.
@@ -34,4 +34,4 @@ intervention:
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  BLOCKER D-005: this family cell is n=1. DINOv2 is the natural second instance (same lineage, well documented) but that is a suggestion, not a decision. Variant not selected, so embed_dim is null.
+  D-005 CLOSED by D-015 — cell partner is MoCo v3, NOT DINOv2. DINOv2 was rejected as same-lineage: it would measure scaling variance and report it as family variance. Variant still to pin; pin ViT-L so the cell spans {L, B} and record embed_dim.

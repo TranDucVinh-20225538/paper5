@@ -1,0 +1,12 @@
+PLACEHOLDER — choose a license before this repository is made public.
+
+For research code accompanying a paper the usual choices are MIT (permissive,
+simplest) or Apache-2.0 (permissive + explicit patent grant). Some venues or
+institutions require a specific one; check before deciding.
+
+Note that a license covers the CODE only. It does not grant any rights over
+ISIC 2019 or PAD-UFES-20, which carry their own terms, nor over any pretrained
+checkpoint in assets/checkpoints/ — each of those has its own license and some
+are non-commercial. Record them in assets/README.md.
+
+Replace this file, and log the choice as a decision.

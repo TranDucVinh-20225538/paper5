@@ -1,0 +1,6 @@
+{
+  "mean": [123.675, 116.28, 103.53],
+  "std": [58.395, 57.12, 57.375],
+  "scale": "0-255",
+  "note": "fixture for unit tests only — not a frozen production asset"
+}

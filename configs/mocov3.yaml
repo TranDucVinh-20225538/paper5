@@ -1,0 +1,39 @@
+# mocov3 — D-015. Chosen over DINOv2 to avoid same-lineage under-sampling of within-family variance.
+backbone:
+  name:       mocov3
+  family:     general_ssl
+  variant:    MoCo v3 ViT-B/16   # VERIFY exact release
+  loader:     timm
+  checkpoint: null      # PENDING — pin the official checkpoint and record it
+  embed_dim:  768       # VERIFY
+  activation: gelu
+
+  representation:
+    status:  RESOLVED
+    forward: "vision transformer forward -> CLS token"
+    pooling: cls
+    rationale: >
+      CLS token, matching the published linear-probe recipe.
+
+preprocessing:
+  asset:  assets/preprocessing/mocov3.json
+  sha256: null
+  source: null      # PENDING — cite the published eval transform
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+notes: >
+  Objective is instance-contrastive, deliberately different from DINOv3's self-distillation. That
+  difference IS the point: two members of one cell must differ in the property the cell is named for,
+  or within-family variance is under-estimated. DINOv2 would have measured scaling variance instead.
+  MAE was rejected as second choice — larger objective contrast but weak frozen features, hence
+  material Gate 0-pre risk (D-020).

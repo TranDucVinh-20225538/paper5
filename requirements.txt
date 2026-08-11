@@ -1,0 +1,19 @@
+# Pin exactly before the first real run. Floating versions silently change
+# results — a different BLAS or a different sklearn default is enough to move
+# a condition number.
+numpy
+scipy
+scikit-learn
+pandas
+torch
+torchvision
+timm                # ResNet-50, EfficientNet-B3
+open_clip_torch     # OpenCLIP, BiomedCLIP
+transformers        # SigLIP, HF-hosted variants
+statsmodels         # fixed-effect model, contrasts
+pingouin            # exact Kendall tau, Wilcoxon
+matplotlib
+seaborn
+pyyaml
+tqdm
+pytest>=7.4          # dev — milestone tests; pin before first reportable run

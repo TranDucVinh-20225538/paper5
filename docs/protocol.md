@@ -155,9 +155,23 @@ cross-backbone results are the most tempting way to let the outcome taxonomy dri
 analysis must not condition on it in a way that opens that path — check the model specification
 against the causal graph before fitting, not after.
 
-## Pilot first
+## Run order (D-027) — PanDerm first, then MedSAM
 
-Run the **complete** ladder on MedSAM before committing to the rest. It is the structurally most
-different encoder in the set, so it is the cheapest place to find out that the adapter, the nuisance
-direction, or the gates do not port. Finding that out on backbone 7 instead of backbone 1 costs the
-whole budget.
+**1. PanDerm — pipeline regression test.** Its embeddings already exist from Paper 4, so the full
+ladder can be re-run and checked against **known values**. It is the only backbone in the set that
+can validate the pipeline against ground truth, and it costs almost nothing.
+
+**2. MedSAM — architecture-portability probe.** The structurally most different encoder, and the
+cheapest place to find out the adapter, nuisance direction or gates do not port.
+
+**3. The remaining eight**, in any order.
+
+*Why not MedSAM first, as the kickoff and the brief both say.* MedSAM is simultaneously the most
+structurally different encoder **and** the one most likely to fail Gate 0-pre legitimately — it is a
+segmentation model, so its features encode boundaries and regions rather than necessarily
+class-discriminative semantics. Run it first and a failure is **ambiguous**: it cannot be
+distinguished from a misconfigured pipeline, because no validated baseline exists yet. With PanDerm
+run first, any MedSAM failure is unambiguously a property of MedSAM.
+
+The original instinct is preserved — MedSAM still runs before the eight backbones whose budget
+depends on the recipe porting. Full design: [`medsam_integration.md`](medsam_integration.md).

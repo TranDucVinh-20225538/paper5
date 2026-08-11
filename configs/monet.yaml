@@ -1,0 +1,45 @@
+# monet — VERIFIED 2026-08-11. D-014.
+#
+# NAME COLLISION WARNING: NOVAglow646/Monet-7B is an unrelated Qwen2.5-VL reasoning model
+# (arXiv 2511.21395). NOT this. The correct model is suinleelab/monet.
+backbone:
+  name:       monet
+  family:     medical_vlm
+  variant:    suinleelab/monet  (CLIP ViT-L/14, 105,550 derm image-text pairs from medical literature)
+  loader:     hf
+  checkpoint: "suinleelab/monet"
+  embed_dim:  1024          # VERIFY — ViT-L pre-projection; projected is ~768, NOT used
+  activation: gelu
+
+  representation:
+    status:  RESOLVED
+    forward: 'AutoModelForZeroShotImageClassification.from_pretrained("suinleelab/monet") -> vision tower, PRE-projection'
+    pooling: cls
+    rationale: >
+      Pre-projection per D-018, uniformly with all four VLMs. The projection head is trained for
+      image-text alignment; taking post-projection would inject text-alignment structure into the
+      geometry being measured and would corrupt the primary covariate.
+
+preprocessing:
+  asset:  assets/preprocessing/monet.json
+  sha256: null
+  source: "AutoProcessor.from_pretrained('suinleelab/monet') — freeze its resolved transform"
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+license:
+  spdx:  null      # OPEN — not visible on the reviewed card excerpt. Record, do not assume (D-023)
+  redistributable_artifacts: null
+
+notes: >
+  Public, not gated. Nature Medicine 2024. ViT-L/14 pairs with BiomedCLIP's ViT-B/16 to give the
+  medical-VLM cell a {B, L} spread, which forced D-022 (general-VLM cell matched to {B, L}).

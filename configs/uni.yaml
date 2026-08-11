@@ -1,0 +1,48 @@
+# uni — CONFIRMED from model card 2026-08-11, access granted. D-016.
+backbone:
+  name:       uni
+  family:     medical_ssl
+  variant:    MahmoodLab/UNI  (ViT-L/16, DINOv2 recipe on Mass-100K histopathology)
+  loader:     timm
+  checkpoint: "hf-hub:MahmoodLab/uni"
+  embed_dim:  1024          # CONFIRMED — feature_emb shape [1, 1024]
+  activation: gelu
+
+  representation:
+    status:  RESOLVED
+    forward: 'timm.create_model("hf-hub:MahmoodLab/uni", pretrained=True, init_values=1e-5, dynamic_img_size=True)'
+    pooling: cls
+    rationale: >
+      CLS token. Authors document frozen use explicitly (logistic regression, k-NN and
+      nearest-centroid on the class token), which is the direct evidence that Gate 0-pre risk is low
+      here — the reason UNI was chosen over RETFound, whose MAE pretraining gives weak frozen features.
+
+preprocessing:
+  asset:  assets/preprocessing/uni.json
+  sha256: null      # PENDING — freeze then hash
+  source: "model card: Resize(224) + ImageNet mean/std"
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]      # d < 1536, so no 256 rung (D-021)
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+license:
+  spdx:  CC-BY-NC-ND-4.0
+  redistributable_artifacts: false    # D-023
+  note: >
+    ND clause. The card defines derivatives to include "models trained on outputs from the UNI model
+    or datasets created from the UNI model" — which covers this study's adapter AND its extracted
+    embeddings. Non-commercial academic research is permitted, so the research is fine, but UNI's
+    adapter checkpoints and adapted embeddings CANNOT be released publicly. Attribution must extend
+    to ViT and DINOv2. reproduce.sh is non-uniform here: checksums only.
+
+notes: >
+  CRITICAL: init_values=1e-5 is REQUIRED or LayerScale parameters (block.0.ls1.gamma etc.) fail to
+  load. Silently wrong features if omitted without error — check the load is strict.

@@ -1,7 +1,14 @@
 # geometry-reliability-generalization
 
-Multi-backbone causal replication of a geometry-mediated account of distance-based
-reliability-estimator behaviour, in dermatology image classification under acquisition shift.
+**Paper 5** — multi-backbone causal replication of a geometry-mediated account of
+distance-based reliability-estimator behaviour, in dermatology image classification under
+acquisition shift.
+
+| | |
+|---|---|
+| **Local path** | `/Users/cubo/Research/geometry-reliability-generalization/` |
+| **GitHub** | https://github.com/TranDucVinh-20225538/paper5 |
+| **Latest tag** | `v0.1-kickoff` |
 
 **Status: pre-protocol.** No runs have started. Five blockers are open — see
 [`ONE_PAGE_SUMMARY.md`](ONE_PAGE_SUMMARY.md) § Stop conditions. Nothing in this repository may be

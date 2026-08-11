@@ -1,37 +1,32 @@
-# biomedclip — see _template.yaml for field semantics and rules.
-# null = decision not made. The pipeline must refuse to run, not fill it in.
-
+# biomedclip — representation RESOLVED by D-018 (pre-projection, uniform across all VLMs).
 backbone:
   name:       biomedclip
   family:     medical_vlm
-  variant:    null
+  variant:    "BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"   # VERIFY exact hub string
   loader:     open_clip
-  checkpoint: null
-  embed_dim:  null
+  checkpoint: "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"   # VERIFY
+  embed_dim:  768        # VERIFY — ViT-B/16 pre-projection. Projected (~512) is NOT used.
   activation: gelu
 
   representation:
-    status:    UNRESOLVED
-    forward:   null
-    pooling:   attn_pool
+    status:  RESOLVED
+    forward: "image tower forward, PRE-projection"
+    pooling: cls
     rationale: >
-      Dual-encoder VLM: use the IMAGE tower's pooled output, analogous to CLIP image_embeds. Confirm empirically whether that is pre- or post-projection — the projected space is trained for text alignment and may not be the right geometry to study.
+      Pre-projection per D-018. Uniform with MONET, SigLIP and OpenCLIP — an inconsistent extraction
+      rule across the four VLMs would confound both VLM cells.
 
-preprocessing:
-  asset:  assets/preprocessing/biomedclip.json
-  sha256: null      # PENDING — filled at freeze time
-  source: null      # PENDING — cite the published eval transform
+preprocessing: {asset: assets/preprocessing/biomedclip.json, sha256: null, source: null}
 
 intervention:
-  r:           null
+  r: null
   lambda_proj: null
-  grid:
-    r:           [16, 32, 64, 128]
-    lambda_proj: [0.1, 1, 5]
+  grid: {r: [16, 32, 64, 128], lambda_proj: [0.1, 1, 5]}
   nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
   alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
 
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  BLOCKER D-004: this family cell is n=1. Do not proceed to protocol with it at n=1. Candidates for a second instance, none selected: PLIP, MedCLIP, Quilt-1M CLIP. Variant and embed_dim stay null until the cell is closed.
+  Cell partner is MONET (ViT-L/14). This cell spans {B, L}, which D-022 mirrors in the general-VLM
+  cell so the medical-vs-general VLM contrast is scale-controlled by construction.

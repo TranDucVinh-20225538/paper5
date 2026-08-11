@@ -1,37 +1,32 @@
-# siglip — see _template.yaml for field semantics and rules.
-# null = decision not made. The pipeline must refuse to run, not fill it in.
-
+# siglip — ViT-L/16 per D-022 (was ViT-B/16; revised after MONET confirmed as ViT-L/14).
 backbone:
   name:       siglip
   family:     general_vlm
-  variant:    null
+  variant:    "google/siglip-large-patch16-256"   # VERIFY — must be the ViT-L variant, not base
   loader:     hf
-  checkpoint: null
-  embed_dim:  null
+  checkpoint: "google/siglip-large-patch16-256"   # VERIFY
+  embed_dim:  1024       # VERIFY — ViT-L pre-projection
   activation: gelu
 
   representation:
-    status:    UNRESOLVED
-    forward:   null
-    pooling:   attn_pool
+    status:  RESOLVED
+    forward: "vision tower forward, PRE-projection"
+    pooling: attn_pool
     rationale: >
-      Image tower pooled output. SigLIP uses an attention-pooling head rather than a CLS token — pin which tensor is taken and whether it is pre- or post-projection.
+      SigLIP uses an attention-pooling (MAP) head, NOT a CLS token — do not assume CLS. Take the
+      pooled output before the projection head, per D-018.
 
-preprocessing:
-  asset:  assets/preprocessing/siglip.json
-  sha256: null      # PENDING — filled at freeze time
-  source: null      # PENDING — cite the published eval transform
+preprocessing: {asset: assets/preprocessing/siglip.json, sha256: null, source: null}
 
 intervention:
-  r:           null
+  r: null
   lambda_proj: null
-  grid:
-    r:           [16, 32, 64, 128]
-    lambda_proj: [0.1, 1, 5]
+  grid: {r: [16, 32, 64, 128], lambda_proj: [0.1, 1, 5]}
   nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
   alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
 
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  Variant not pinned. Choose one published variant and record it in the decision log before extraction.
+  D-022: pinned at ViT-L to mirror MONET, so both VLM cells carry one ViT-B and one ViT-L. Objective
+  is sigmoid pairwise contrastive, vs OpenCLIP's softmax contrastive — that is the within-cell spread.

@@ -4,10 +4,10 @@
      Every change to this file must be authorized by an entry in the program decision log:
      ../lab-notebook/decision_log.md -->
 
-    Version:     1
-    Amended-by:  D-009 (initial)
+    Version:     2
+    Amended-by:  D-017 (backbone set fixed at N=10; D-014…D-024 from the backbone audit)
     Date:        2026-08-11
-    Status:      PLAN — not yet a preregistration (see Stop conditions)
+    Status:      PLAN — not yet a preregistration. One stop condition remains (D-007).
 
 This file is the anchor. Every other document in this repository is downstream of it. If something
 here changes, the change is a decision, and the decision goes in the log with an ID before the edit
@@ -68,12 +68,35 @@ Paper 4's ladder, reapplied independently per backbone. Backbone stays **frozen*
 - `r` and `λ_proj` set by a pre-committed grid, smallest value passing Gate 0 + Gate 1,
   **never tuned against outcome results**. Grid re-run fresh per backbone.
 
+## Sampled backbones — N = 10, balanced 5 × 2 (D-017)
+
+| Cell | Instance 1 | dim | Instance 2 | dim |
+|---|---|---|---|---|
+| CNN, supervised | ResNet-50 | 2048 | EfficientNet-B3 | 1536 |
+| Medical, image-only SSL | PanDerm | 1024 | UNI | 1024 |
+| Medical, vision-language | BiomedCLIP | 768 | MONET | 1024 |
+| General, image-only SSL | DINOv3 | 1024 | MoCo v3 | 768 |
+| General, vision-language | OpenCLIP ViT-B/16 | 768 | SigLIP ViT-L/16 | 1024 |
+
+Plus **MedSAM** as a declared **architecture-portability probe**: full ladder, included in
+per-backbone analysis, **excluded from the family-level model** (D-016). Dimensions are
+pre-projection throughout (D-018).
+
+Selection reasoning and every rejected candidate: [`docs/backbone_audit.md`](docs/backbone_audit.md).
+
 ## Primary outcome
 
 Kendall's τ (exact) between **condition number** and estimator AUROC, per backbone, with backbone as
 a **fixed effect** and planned family-level contrasts (CNN / medical-SSL / medical-VLM / general-SSL
 / general-VLM). Estimators: Mahalanobis, cosine-to-centroid, k-NN (k=10), KDE. Holm–Bonferroni
 across backbone × estimator × metric × arm.
+
+**Condition number is computed on a fixed number of principal components** (k below the smallest
+embedding dimension in the set), not on the raw full-dimensional covariance (D-019). At fixed sample
+size κ grows with dimension as arithmetic, and dimension tracks family across this set — so raw κ
+would let the family contrast pick up dimension rather than geometry. Raw κ with `d` as a covariate
+is retained as a preregistered sensitivity analysis. Paper 4 could not have detected this: with one
+backbone, `d` was constant.
 
 ## Secondary outcomes
 
@@ -91,30 +114,50 @@ not a caveat.
 
 | # | Blocker | Decision |
 |---|---|---|
-| 1 | Compute / server access and multi-day job duration — confirmed, not inferred | **D-003** — open |
-| 2 | medical-VLM family cell still n=1 (BiomedCLIP alone) | **D-004** — open |
-| 3 | general-SSL family cell still n=1 (DINOv3 alone) | **D-005** — open |
-| 4 | Outcome-taxonomy thresholds are drafts, not numbers | **D-007** — open |
+| 1 | Compute / server access and multi-day job duration | **D-003** — ✅ closed, confirmed by PI |
+| 2 | medical-VLM family cell was n=1 | **D-014** — ✅ closed, MONET |
+| 3 | general-SSL family cell was n=1 | **D-015** — ✅ closed, MoCo v3 |
+| 4 | Backbone count inconsistent across documents (7 vs 8) | **D-017** — ✅ closed, **N = 10** |
+| 5 | **Outcome-taxonomy thresholds are drafts, not numbers** | **D-007** — ⛔ **OPEN — the last one** |
 
-Plus one that must resolve before the taxonomy can even be written:
+D-007 is now unblocked (it was waiting on the denominator) but not resolved. **Until it closes,
+nothing here is preregistered.** The power analysis is likewise unblocked and unwritten.
 
-| 5 | Backbone count is inconsistent across documents (7 vs 8) and will change again when blockers 2–3 close | **D-006** — open |
+## Gates — three outcomes each, never two
 
 **Gate 1 failure on a backbone means "not testable" for that backbone. It is never counted as
 falsification of the hypothesis.** This distinction is load-bearing for the outcome taxonomy.
 
+**Gate 0 carries the same three-way structure** (D-020). A frozen-feature adequacy check, **Gate
+0-pre**, runs before the domain probe:
+
+| Gate 0-pre | Gate 0 | Reading |
+|---|---|---|
+| pass | pass | proceed |
+| pass | fail | **implementation broken** — fix it, not a finding |
+| fail | — | **features inadequate for this task** — declared exclusion, neither a bug nor a falsification |
+
+Without this, a backbone whose frozen features are genuinely too weak on dermoscopy either gets
+reported as broken code, or invites someone to "fix" the implementation until the gate passes —
+outcome-contingent tuning entering through the back door, in the one place the protocol exists to
+prevent it.
+
 ## Success criteria
 
-Preregistered outcome taxonomy — **draft criteria, pending D-006 and D-007.** The denominators below
-are written against a backbone count that is not yet fixed; they are placeholders, and are marked as
-such deliberately so they cannot be read as preregistered numbers later.
+Outcome taxonomy — **N is now fixed at 10, but the thresholds themselves are still drafts pending
+D-007.** The denominators below are no longer placeholders; the *criteria* still are, and are marked
+so deliberately so they cannot be read as preregistered numbers later.
 
-| Outcome | Draft criterion | Reading |
+| Outcome | Draft criterion (N=10 family members) | Reading |
 |---|---|---|
-| A — full replication | Holm-significant, same direction, in **all N** backbones | Strongest result |
-| B — majority replication | Significant, same direction, in **≥⌈N·4/7⌉** backbones, no family reversed | Still strong |
-| C — family-conditional | Significant within one family (≥2/2 agreeing) but not another, split **directionally consistent by family**, not scattered | Most interesting; drives the Discussion |
-| D — no broader replication | Significant in **≤1** backbone, i.e. not exceeding Paper 4 alone | Paper 4 becomes a boundary condition, not a general account |
+| A — full replication | Holm-significant, same direction, in **all 10** | Strongest result |
+| B — majority replication | Significant, same direction, in **≥6** *(draft — the 4/7 rule rescaled; needs sign-off, not arithmetic)*, no family reversed | Still strong |
+| C — family-conditional | Significant within one family (**2/2** agreeing) but not another, split **directionally consistent by family**, not scattered | Most interesting; drives the Discussion |
+| D — no broader replication | Significant in **≤1**, i.e. not exceeding Paper 4 alone | Paper 4 becomes a boundary condition, not a general account |
+
+MedSAM is scored and reported but **does not count toward any denominator above** — it is a
+portability probe, not a family member (D-016). Fixing this in advance prevents a post-hoc argument
+about whether to include it once its result is known.
 
 All four outcomes are publishable. This follows Paper 4's own precedent that each of its
 falsification outcomes was "scientifically informative and publishable." A single backbone breaking

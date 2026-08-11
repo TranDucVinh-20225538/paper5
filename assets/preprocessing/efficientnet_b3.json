@@ -1,0 +1,14 @@
+{
+  "instrument": "timm EfficientNet-B3 (efficientnet_b3.ra2_in1k)",
+  "frozen_from": {
+    "source": "timm default eval transform (ImageNet)",
+    "note": "Resize 256 + CenterCrop 224 + ImageNet normalize — standard timm inference recipe"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 256 },
+    { "op": "CenterCrop", "size": 224 },
+    { "op": "ToTensor" },
+    { "op": "Normalize", "mean": [0.485, 0.456, 0.406], "std": [0.229, 0.224, 0.225] }
+  ],
+  "modified": false
+}

@@ -19,8 +19,8 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/resnet50.json
-  sha256: null      # PENDING — filled at freeze time
-  source: null      # PENDING — cite the published eval transform
+  sha256: 9e1c0113ee94007bdbd2697f038e5ef81ac7f3568628e81202e2d16d7f182c37
+  source: timm ImageNet eval (Resize 256, CenterCrop 224)
 
 intervention:
   r:           null

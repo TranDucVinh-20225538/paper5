@@ -17,6 +17,8 @@ dependencies = [
     "torchvision",
     "pyyaml",
     "tqdm",
+    "timm",
+    "pillow",
 ]
 
 [project.optional-dependencies]

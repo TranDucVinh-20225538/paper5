@@ -139,6 +139,16 @@ def extract_embeddings(
             skip_reason="reuse Paper 4 frozen embeddings",
         )
 
+    if loader_name == "timm":
+        from src.backbone.loaders.timm_loader import extract_timm_embeddings
+
+        return extract_timm_embeddings(cfg, output_dir=output_dir)
+
+    if loader_name == "medsam":
+        from src.backbone.loaders.medsam_loader import extract_medsam_embeddings
+
+        return extract_medsam_embeddings(cfg, output_dir=output_dir)
+
     if loader_name != "fixture":
         raise NotImplementedError(
             f"Extraction loader {loader_name!r} is not implemented yet. "

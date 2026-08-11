@@ -7,6 +7,9 @@ backbone:
   checkpoint: "hf-hub:MahmoodLab/uni"
   embed_dim:  1024          # CONFIRMED — feature_emb shape [1, 1024]
   activation: gelu
+  loader_kwargs:
+    init_values: 1.0e-5
+    dynamic_img_size: true
 
   representation:
     status:  RESOLVED
@@ -19,8 +22,8 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/uni.json
-  sha256: null      # PENDING — freeze then hash
-  source: "model card: Resize(224) + ImageNet mean/std"
+  sha256: 943e69719ce234a00dc14f5025b4e306fde2fb11df2f537ed9aa166ad944fe10
+  source: "UNI model card: Resize(224) + ImageNet mean/std"
 
 intervention:
   r:           null

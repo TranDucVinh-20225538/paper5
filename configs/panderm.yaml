@@ -1,0 +1,37 @@
+# panderm — see _template.yaml for field semantics and rules.
+# null = decision not made. The pipeline must refuse to run, not fill it in.
+
+backbone:
+  name:       panderm
+  family:     medical_ssl
+  variant:    PanDerm_Large_LP
+  loader:     panderm
+  checkpoint: assets/checkpoints/panderm_ll_data6_checkpoint-499.pth
+  embed_dim:  1024
+  activation: gelu
+
+  representation:
+    status:    RESOLVED
+    forward:   model.forward_features(x, is_train=False)
+    pooling:   none
+    rationale: >
+      Pinned in Paper 4. 1024-d vector straight out of forward_features, no CLS/pooling ambiguity.
+
+preprocessing:
+  asset:  assets/preprocessing/panderm.json
+  sha256: null      # PENDING — filled at freeze time
+  source: null      # PENDING — cite the published eval transform
+
+intervention:
+  r:           16
+  lambda_proj: 0.1
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+notes: >
+  Paper 4 anchor. r/lambda already won their pre-committed grid HERE, so they are not null. Frozen embeddings exist at Paper4/PhaseB/assets/reference_embeddings/ and are reusable without rerunning extraction. Still rerun the full ladder: Paper 4 ran only one point of the causal design on it in the FM setting.

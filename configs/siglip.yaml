@@ -1,0 +1,37 @@
+# siglip — see _template.yaml for field semantics and rules.
+# null = decision not made. The pipeline must refuse to run, not fill it in.
+
+backbone:
+  name:       siglip
+  family:     general_vlm
+  variant:    null
+  loader:     hf
+  checkpoint: null
+  embed_dim:  null
+  activation: gelu
+
+  representation:
+    status:    UNRESOLVED
+    forward:   null
+    pooling:   attn_pool
+    rationale: >
+      Image tower pooled output. SigLIP uses an attention-pooling head rather than a CLS token — pin which tensor is taken and whether it is pre- or post-projection.
+
+preprocessing:
+  asset:  assets/preprocessing/siglip.json
+  sha256: null      # PENDING — filled at freeze time
+  source: null      # PENDING — cite the published eval transform
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+notes: >
+  Variant not pinned. Choose one published variant and record it in the decision log before extraction.

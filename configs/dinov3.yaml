@@ -1,0 +1,37 @@
+# dinov3 — see _template.yaml for field semantics and rules.
+# null = decision not made. The pipeline must refuse to run, not fill it in.
+
+backbone:
+  name:       dinov3
+  family:     general_ssl
+  variant:    null
+  loader:     dinov3
+  checkpoint: null
+  embed_dim:  null
+  activation: gelu
+
+  representation:
+    status:    UNRESOLVED
+    forward:   null
+    pooling:   cls
+    rationale: >
+      CLS token is the conventional choice; confirm against the published linear-probe recipe, and decide explicitly whether patch tokens are mean-pooled and concatenated as some recipes do.
+
+preprocessing:
+  asset:  assets/preprocessing/dinov3.json
+  sha256: null      # PENDING — filled at freeze time
+  source: null      # PENDING — cite the published eval transform
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+notes: >
+  BLOCKER D-005: this family cell is n=1. DINOv2 is the natural second instance (same lineage, well documented) but that is a suggestion, not a decision. Variant not selected, so embed_dim is null.

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+#
+# Guards the anchor document.
+#
+# ONE_PAGE_SUMMARY.md is the single file the whole project is meant to orbit. Its
+# value comes entirely from being STABLE: if it can drift quietly, it stops being
+# a preregistration anchor and becomes a running commentary on whatever the
+# results turned out to be.
+#
+# This hook makes every edit to it pass through a decision ID. It does not check
+# the decision log directly, because the log lives in a separate program-tier
+# repository (see D-009) that git cannot see from here. Instead it enforces the
+# link: change the body, change `Amended-by:`.
+#
+# Install:  git config core.hooksPath .githooks
+# Bypass:   git commit --no-verify   (leaves no trace — don't)
+
+set -euo pipefail
+
+ANCHOR="ONE_PAGE_SUMMARY.md"
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+grep -qx "$ANCHOR" <<<"$staged" || exit 0
+
+# New file on first commit: nothing to compare against.
+if ! git cat-file -e "HEAD:$ANCHOR" 2>/dev/null; then
+  exit 0
+fi
+
+before=$(git show "HEAD:$ANCHOR" | grep -m1 '^ *Amended-by:' || true)
+after=$(git show ":$ANCHOR"     | grep -m1 '^ *Amended-by:' || true)
+
+if [[ -z "$after" ]]; then
+  cat >&2 <<EOF
+
+  BLOCKED: $ANCHOR has no 'Amended-by:' line.
+
+  The anchor document must always name the decision that authorized its
+  current state. Restore the line.
+
+EOF
+  exit 1
+fi
+
+if [[ "$before" == "$after" ]]; then
+  cat >&2 <<EOF
+
+  BLOCKED: $ANCHOR changed, but 'Amended-by:' did not.
+
+    still: $(sed 's/^ *//' <<<"$after")
+
+  Every change to the anchor is a decision. Before committing:
+
+    1. Add an entry to  ../lab-notebook/decision_log.md
+       - a new immutable D-0xx id
+       - 'Outcome data seen at decision time: YES/NO'  <- the field that matters
+    2. Bump 'Version:' in $ANCHOR
+    3. Set  'Amended-by:'  to that D-0xx
+
+  This is the mechanism that keeps the anchor from drifting toward the results.
+  Bypass with --no-verify only if you understand what you are giving up.
+
+EOF
+  exit 1
+fi
+
+exit 0

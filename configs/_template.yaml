@@ -1,0 +1,95 @@
+# Backbone config template.
+#
+# RULE: a value here is something that may be SEARCHED OVER. A value that must be
+# frozen and hashed (preprocessing transforms, the dataset split) belongs in
+# assets/, not here. Do not blur the two.
+#
+# RULE: `null` means the decision has not been made. It does NOT mean "use a
+# default". Every null below is a real open item, and the pipeline should refuse
+# to run rather than fill one in silently.
+
+backbone:
+  name:         # short id; must match the experiments/<name>/ directory
+  family:       # cnn | medical_ssl | medical_vlm | general_ssl | general_vlm
+  variant:      # exact published variant string — pin it, never "base"
+  loader:       # timm | hf | open_clip | panderm | medsam | dinov3
+  checkpoint:   # path or hub id
+  embed_dim:    # int — confirm empirically, do not trust the model card
+
+  # Which tensor is "the embedding". Fixed and documented per backbone before any
+  # extraction, mirroring how PanDerm's forward_features choice was pinned in
+  # Paper 4. Non-ViT-classification encoders are the hard cases: MedSAM is
+  # segmentation-oriented (patch/mask embeddings, no pooled vector by default),
+  # and the CLIP-style dual encoders need the image tower's pooled output.
+  representation:
+    status:     # RESOLVED | UNRESOLVED — extraction must refuse to run on UNRESOLVED
+    forward:    # exact call, e.g. model.forward_features(x, is_train=False)
+    pooling:    # cls | mean | gap | attn_pool | none
+    rationale:  # why this tensor and not another — this is the auditable part
+
+  # Match the backbone's own activation. Paper 4 used GELU because that is
+  # PanDerm's. Do not hardcode it anywhere.
+  activation:
+
+preprocessing:
+  asset:        # assets/preprocessing/<name>.json — frozen, hashed
+  sha256:       # filled at freeze time; mismatch is a hard error
+  source:       # URL/citation of the published eval transform this mirrors
+
+intervention:
+  # z' = z + W2 . act(W1 . z),  W2 zero-init (identity at init)
+  # L = L_task + lambda_proj * cos(z', w)^2
+  #
+  # r and lambda_proj come from a PRE-COMMITTED grid: smallest value passing
+  # Gate 0 and Gate 1. Never tuned against outcome results. Re-run the grid fresh
+  # per backbone — PanDerm's winning values are not assumed to transfer.
+  r:            # null until the grid has run
+  lambda_proj:  # null until the grid has run
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  optimizer:    adamw
+  lr:           1.0e-3
+  batch_size:   512
+  epochs:       100
+
+  nuisance_direction:
+    formula:    unit(mu_ISIC - mu_PAD)
+    learned:    false      # closed-form and fixed. Never adversarial.
+    note:       recomputed per backbone — the direction lives in this embedding space
+
+  # Post-hoc interpolation from ONE trained adapter. Not five training runs.
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+arms:
+  canonical:    true
+  conventional: true   # L_orth structurally ABSENT — not lambda=0
+  adaptation:   true   # 3 capacity rungs, task-loss only: linear probe / r=8 / r=16
+
+seeds: [42, 52, 62, 72, 82]
+
+gates:
+  gate0_implementation_integrity:
+    probe_acc_over_majority: 0.05    # majority baseline 0.688 for this split
+    balanced_acc_over_chance: 0.10
+    method: l2-regularized logistic regression on standardized features, 5 seeds
+  gate1_manipulation_check:
+    metrics: [lid, spectral_decay_slope]
+    requires: reproducible dose-dependence across the alpha ladder
+    monotonic: false
+    # A Gate 1 failure means NOT TESTABLE for this backbone.
+    # It is never counted as falsification of the hypothesis.
+
+estimators:
+  mahalanobis:  {epsilon: 1.0e-5}
+  cosine_centroid: {}
+  knn:          {k: 10, also_report: [1, 10, 50]}
+  kde:          {}
+  # Excluded, as in Paper 4: energy, vim, relative_mahalanobis — classifier-head
+  # dependent, out of scope for a geometry-only hypothesis.
+
+geometry:
+  primary:   condition_number     # sole Holm-significant metric in Paper 4
+  secondary: [lid, spectral_decay_slope]
+
+metrics: [auroc, fpr_at_95tpr]

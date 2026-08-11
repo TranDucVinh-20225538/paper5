@@ -1,0 +1,73 @@
+# ---------------------------------------------------------------------------
+# Large artifacts — NEVER in git. See datasets/README.md for where they live.
+#
+# Order-of-magnitude, assuming 1024-d float32 (dims vary: ResNet-50 2048-d,
+# EfficientNet-B3 1536-d, CLIP towers 512-1024-d):
+#   train n=16,211 x 1024 x 4B  ~=  66 MB   per backbone
+#   eval  n= 7,365 x 1024 x 4B  ~=  30 MB   per backbone
+#   adapted: 5 seeds x 5 alphas x 3 arms    ~=  2 GB per backbone
+# Across the full backbone set this is tens of GB. Git cannot hold it, and
+# git-lfs would make every clone unusable.
+#
+# Track the CHECKSUM, not the array. See results/README.md.
+# ---------------------------------------------------------------------------
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+
+# Raw data never enters the repo
+datasets/**
+!datasets/README.md
+!datasets/*.md
+!datasets/checksums/
+!datasets/checksums/**
+
+# Per-run outputs: keep JSON/CSV summaries and the manifest, drop raw dumps
+experiments/*/runs/
+experiments/*/embeddings/
+experiments/*/checkpoints/
+results/logs/*
+!results/logs/.gitkeep
+
+# Manuscript build products — source is tracked, builds are not,
+# except the deliberate per-round snapshots in paper/history/
+paper/manuscript/**/*.aux
+paper/manuscript/**/*.bbl
+paper/manuscript/**/*.blg
+paper/manuscript/**/*.fdb_latexmk
+paper/manuscript/**/*.fls
+paper/manuscript/**/*.log
+paper/manuscript/**/*.out
+paper/manuscript/**/*.synctex.gz
+paper/manuscript/**/*.toc
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Secrets — never
+.env
+*.key
+credentials.json

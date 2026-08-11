@@ -1,0 +1,37 @@
+# medsam — see _template.yaml for field semantics and rules.
+# null = decision not made. The pipeline must refuse to run, not fill it in.
+
+backbone:
+  name:       medsam
+  family:     medical_ssl
+  variant:    MedSAM ViT-B image encoder
+  loader:     medsam
+  checkpoint: null
+  embed_dim:  null
+  activation: gelu
+
+  representation:
+    status:    UNRESOLVED
+    forward:   null
+    pooling:   null
+    rationale: >
+      OPEN. Segmentation-oriented encoder — emits a spatial feature map, not a pooled vector. Which tensor becomes 'the embedding', and how it is pooled, must be decided and written down BEFORE extraction. embed_dim stays null until that is settled, since it follows from the choice.
+
+preprocessing:
+  asset:  assets/preprocessing/medsam.json
+  sha256: null      # PENDING — filled at freeze time
+  source: null      # PENDING — cite the published eval transform
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+notes: >
+  Architecture-portability pilot backbone. Run the full ladder here FIRST, before committing to the rest — cheap insurance that the adapter / nuisance-direction / Gate-0 / Gate-1 machinery survives a structurally different encoder.

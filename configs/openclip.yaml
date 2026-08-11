@@ -1,0 +1,37 @@
+# openclip — see _template.yaml for field semantics and rules.
+# null = decision not made. The pipeline must refuse to run, not fill it in.
+
+backbone:
+  name:       openclip
+  family:     general_vlm
+  variant:    null
+  loader:     open_clip
+  checkpoint: null
+  embed_dim:  null
+  activation: gelu
+
+  representation:
+    status:    UNRESOLVED
+    forward:   null
+    pooling:   null
+    rationale: >
+      Image tower pooled output (image_embeds). Pin pre- vs post-projection explicitly.
+
+preprocessing:
+  asset:  assets/preprocessing/openclip.json
+  sha256: null      # PENDING — filled at freeze time
+  source: null      # PENDING — cite the published eval transform
+
+intervention:
+  r:           null
+  lambda_proj: null
+  grid:
+    r:           [16, 32, 64, 128]
+    lambda_proj: [0.1, 1, 5]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
+
+seeds: [42, 52, 62, 72, 82]
+
+notes: >
+  Variant AND pretraining corpus both need pinning — 'OpenCLIP' alone does not identify a model. Record the choice in the decision log; a reviewer asking 'why OpenCLIP and not EVA' is asking about exactly this.

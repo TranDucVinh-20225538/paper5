@@ -59,8 +59,9 @@ def test_fixture_pipeline_steps_0_through_3(repo_root: Path, tmp_path: Path) -> 
     assert record["train_n"] == 8
     assert record["eval_n"] == 4
     assert not record["skipped"]
-    assert Path(record["train_path"]).is_file()
-    assert Path(record["eval_path"]).is_file()
+    assert Path(record["train_dir"]).is_dir()
+    assert (Path(record["train_dir"]) / "embeddings.npy").is_file()
+    assert (Path(record["eval_dir"]) / "embeddings.npy").is_file()
 
     lines = manifest.read_text(encoding="utf-8").strip().splitlines()
     assert len(lines) == 1

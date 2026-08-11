@@ -37,21 +37,28 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Allow null checkpoint (tests only)",
     )
+    parser.add_argument(
+        "--grid-epochs",
+        type=int,
+        default=None,
+        help="Override intervention epochs during Step 5 grid (tests only)",
+    )
     args = parser.parse_args(argv)
+
+    common = dict(
+        require_preprocessing_hash=not args.allow_null_preprocessing_hash,
+        require_split_checksum=not args.skip_split_check,
+        require_checkpoint=not args.allow_null_checkpoint,
+        loader_override=args.loader,
+    )
 
     if args.through_step < 3:
         from src.pipeline.hard_stops import run_step0_hard_stops
         from src.utils.config import load_backbone_config
 
         cfg = load_backbone_config(args.config)
-        repo_root = args.config.resolve().parents[1]
-        run_step0_hard_stops(
-            cfg,
-            repo_root,
-            require_preprocessing_hash=not args.allow_null_preprocessing_hash,
-            require_split_checksum=not args.skip_split_check,
-            require_checkpoint=not args.allow_null_checkpoint,
-        )
+        repo_root = find_repo_root(args.config)
+        run_step0_hard_stops(cfg, repo_root, **{k: v for k, v in common.items() if k != "loader_override"})
         print(f"Step 0 passed for {cfg.name}")
         return 0
 
@@ -60,18 +67,37 @@ def main(argv: list[str] | None = None) -> int:
 
         record = run_steps_0_through_3(
             args.config,
-            require_preprocessing_hash=not args.allow_null_preprocessing_hash,
-            require_split_checksum=not args.skip_split_check,
-            require_checkpoint=not args.allow_null_checkpoint,
-            loader_override=args.loader,
             fixture_train_n=8,
             fixture_eval_n=4,
+            **common,
         )
         print(f"Step 3 complete: {record['backbone']} train_sha256={record['train_sha256'][:12]}…")
         return 0
 
-    print(f"Steps 4–{args.through_step} not implemented yet.", file=sys.stderr)
+    if args.through_step <= 6:
+        from src.pipeline.steps import run_steps_0_through_6
+
+        record = run_steps_0_through_6(
+            args.config,
+            fixture_train_n=200,
+            fixture_eval_n=120,
+            grid_epochs=args.grid_epochs,
+            **common,
+        )
+        print(
+            f"Step 6 complete: {record['backbone']} r={record['selected_r']} "
+            f"lambda={record['selected_lambda_proj']} gate0=PASS"
+        )
+        return 0
+
+    print(f"Steps 7–{args.through_step} not implemented yet.", file=sys.stderr)
     return 1
+
+
+def find_repo_root(start: Path) -> Path:
+    from src.utils.config import find_repo_root as _find
+
+    return _find(start)
 
 
 if __name__ == "__main__":

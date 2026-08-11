@@ -66,6 +66,31 @@ def _resolve_csg_data_root(repo_root: Path) -> Path | None:
     return None
 
 
+def resolve_image_path(raw: str | Path, paths: DatasetPaths) -> Path | None:
+    """
+    Map metadata ``path`` values to on-disk files under CSG_DATA_ROOT.
+
+    master_metadata.csv may store absolute paths from another machine (e.g. Paper4
+    archive on a Mac). When the literal path is missing, fall back to basename
+    lookup under the configured ISIC / PAD image roots.
+    """
+    p = Path(raw).expanduser()
+    if p.is_file():
+        return p.resolve()
+
+    name = p.name
+    candidates = (
+        paths.isic2019_root / name,
+        paths.pad_ufes_root / "images" / name,
+        paths.pad_ufes_root / name,
+        paths.csg_data_root / name,
+    )
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate.resolve()
+    return None
+
+
 def load_dataset_paths(*, repo_root: Path | None = None) -> DatasetPaths:
     """
     Resolve dataset paths from datasets/paths.local or environment variables.

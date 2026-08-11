@@ -28,6 +28,7 @@ def test_build_splits_counts(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) ->
     def _fake_isfile(path: str) -> bool:
         return str(path).startswith("/tmp/")
 
+    monkeypatch.setattr("src.datasets.splits._optional_dataset_paths", lambda: None)
     monkeypatch.setattr("src.datasets.splits.os.path.isfile", _fake_isfile)
 
     train = build_isic_train_df(meta, split=SplitConfig())

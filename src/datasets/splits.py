@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from src.datasets.constants import LABEL_TO_INDEX
-from src.utils.paths import load_split_checksum_spec
+from src.utils.paths import DatasetPaths, load_split_checksum_spec, resolve_image_path
 
 
 @dataclass(frozen=True)
@@ -20,7 +20,20 @@ class SplitConfig:
     val_fraction: float = 0.2
 
 
-def load_filtered_master(metadata_csv: Path | str) -> pd.DataFrame:
+def _optional_dataset_paths() -> DatasetPaths | None:
+    try:
+        from src.utils.paths import load_dataset_paths
+
+        return load_dataset_paths()
+    except FileNotFoundError:
+        return None
+
+
+def load_filtered_master(
+    metadata_csv: Path | str,
+    *,
+    dataset_paths: DatasetPaths | None = None,
+) -> pd.DataFrame:
     df = pd.read_csv(metadata_csv)
     required = {"path", "label", "domain"}
     missing = required.difference(df.columns)
@@ -32,7 +45,17 @@ def load_filtered_master(metadata_csv: Path | str) -> pd.DataFrame:
         raise ValueError("No valid rows after filtering to expected lesion labels.")
 
     df["label_idx"] = df["label"].map(LABEL_TO_INDEX).astype(int)
-    df = df[df["path"].map(lambda p: os.path.isfile(str(p)))].reset_index(drop=True)
+
+    paths = dataset_paths if dataset_paths is not None else _optional_dataset_paths()
+
+    def _resolve_row(path_val: str) -> str | None:
+        if paths is not None:
+            resolved = resolve_image_path(path_val, paths)
+            return str(resolved) if resolved is not None else None
+        return path_val if os.path.isfile(str(path_val)) else None
+
+    df["path"] = df["path"].map(_resolve_row)
+    df = df[df["path"].notna()].reset_index(drop=True)
     if df.empty:
         raise ValueError("No rows with existing image paths.")
     return df

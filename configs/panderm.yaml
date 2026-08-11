@@ -19,8 +19,8 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/panderm.json
-  sha256: null      # PENDING — filled at freeze time
-  source: null      # PENDING — cite the published eval transform
+  sha256: a92ffcd606347632c4cfae8243ea2c987708d58d9676d861a9844f0a6ebdff72
+  source: Paper4/PhaseB/assets/reference_preprocessing.json (PanDerm get_eval_transforms, imagenet norm)
 
 intervention:
   r:           16

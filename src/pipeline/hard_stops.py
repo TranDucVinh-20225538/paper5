@@ -22,15 +22,37 @@ def git_commit_sha(repo_root: Path) -> str:
         return "unknown"
 
 
-def verify_split_checksum(repo_root: Path) -> None:
-    """Verify dataset split manifest if the checksum file is present."""
-    checksum_path = repo_root / "datasets" / "checksums" / "split_seed42.sha256"
-    if not checksum_path.is_file():
+def verify_split_checksum(repo_root: Path, *, verify_live: bool = True) -> None:
+    """
+    Verify pinned split spec exists and optionally match live master_metadata.csv.
+
+    When CSG_DATA_ROOT is configured, compares sha256 against the Papers 1–4 artifact.
+    """
+    from src.utils.paths import (
+        load_dataset_paths,
+        load_split_checksum_spec,
+        verify_master_metadata_checksum,
+    )
+
+    spec_path = repo_root / "datasets" / "checksums" / "split_seed42.sha256"
+    if not spec_path.is_file():
         raise FileNotFoundError(
-            f"Split checksum missing: {checksum_path}. "
+            f"Split checksum missing: {spec_path}. "
             "Verify Papers 1–4 split before running (protocol Step 0)."
         )
-    # File presence is the gate for M2; content verification added when manifest lands.
+    spec = load_split_checksum_spec(repo_root)
+    if "sha256" not in spec:
+        raise ValueError(f"Invalid split spec (missing sha256): {spec_path}")
+
+    if not verify_live:
+        return
+
+    try:
+        paths = load_dataset_paths(repo_root=repo_root)
+        verify_master_metadata_checksum(paths, repo_root=repo_root)
+    except FileNotFoundError:
+        # Dataset paths not configured — pinned spec in repo is sufficient for CI/fixture runs.
+        pass
 
 
 def run_step0_hard_stops(

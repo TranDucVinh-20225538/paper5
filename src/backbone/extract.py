@@ -9,7 +9,6 @@ wired in a later milestone — no PanDerm assumptions in the dispatch layer.
 from __future__ import annotations
 
 import hashlib
-import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -70,7 +69,9 @@ def extract_embeddings(
     out_eval = output_dir / f"{cfg.name}_eval.npy"
 
     if cfg.name == "panderm" and loader_name != "fixture":
-        root = Path(os.environ.get("PANDERM_EMBEDDINGS_ROOT", ""))
+        from src.utils.paths import load_panderm_embeddings_root
+
+        root = load_panderm_embeddings_root()
         if not root.is_dir():
             raise FileNotFoundError(
                 "PanDerm extraction skipped but PANDERM_EMBEDDINGS_ROOT is unset or missing. "

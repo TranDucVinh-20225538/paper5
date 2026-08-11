@@ -28,6 +28,8 @@ datasets/**
 !datasets/*.md
 !datasets/checksums/
 !datasets/checksums/**
+!datasets/paths.local.example
+datasets/paths.local
 
 # Per-run outputs: keep JSON/CSV summaries and the manifest, drop raw dumps
 experiments/*/runs/

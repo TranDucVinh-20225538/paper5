@@ -50,7 +50,7 @@ def test_fixture_pipeline_steps_0_through_3(repo_root: Path, tmp_path: Path) -> 
         repo_root=repo_root,
         output_dir=out_dir,
         manifest_path=manifest,
-        require_split_checksum=False,
+        require_split_checksum=True,
         loader_override="fixture",
         fixture_train_n=8,
         fixture_eval_n=4,

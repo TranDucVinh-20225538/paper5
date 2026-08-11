@@ -28,9 +28,28 @@ Step 0 of the protocol. That file is small, deterministic, and belongs in git; t
 
 ## Where the actual data lives
 
-Fill in per machine. Do not hardcode paths in `src/` — read them from an env var or a local,
-gitignored path file.
+Fill in per machine via **environment variables** or a gitignored local file — never hardcode in `src/`.
 
-    ISIC 2019:      <TODO>
-    PAD-UFES-20:    <TODO>
-    Embeddings:     <TODO — outside git, see .gitignore for the size argument>
+```bash
+# Option A — environment (recommended on server)
+export CSG_DATA_ROOT=/path/to/CSG-SKin/data
+export PANDERM_EMBEDDINGS_ROOT=/path/to/Paper4/PhaseB/assets/reference_embeddings
+
+# Option B — gitignored local file
+cp datasets/paths.local.example datasets/paths.local
+# edit paths.local
+```
+
+| Variable | Points to |
+|---|---|
+| `CSG_DATA_ROOT` or `CSG_ROOT` | `CSG-SKin/data/` — images + `master_metadata.csv` **only** |
+| `PANDERM_EMBEDDINGS_ROOT` | Paper 4 frozen PanDerm embeddings (M3+) |
+| `RESEARCH_ROOT` | Optional fallback: `$RESEARCH_ROOT/CSG-SKin/data` |
+
+Split verification: `datasets/checksums/split_seed42.sha256` pins `master_metadata.csv` sha256 from Papers 1–4. When `CSG_DATA_ROOT` is set, Step 0 verifies the live file matches.
+
+Typical layout under `CSG-SKin/data/`:
+
+    master_metadata.csv
+    ISIC_2019_Training_Input/
+    pad_ufes20/

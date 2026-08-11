@@ -1,0 +1,17 @@
+# Copy to datasets/paths.local (gitignored) and edit paths for this machine.
+#
+# CSG_DATA_ROOT / CSG_ROOT: dataset files ONLY (images + master_metadata.csv).
+# Do NOT use these to import CSG-SKin Python modules.
+#
+# PANDERM_EMBEDDINGS_ROOT: Paper 4 frozen embeddings (M3+ regression).
+
+# Local Mac example:
+# CSG_DATA_ROOT=/Users/cubo/Research/CSG-SKin/data
+# PANDERM_EMBEDDINGS_ROOT=/Users/cubo/Research/Paper4/PhaseB/assets/reference_embeddings
+
+# Server example:
+# CSG_DATA_ROOT=/mnt/data2/Vinh/Research/CSG-SKin/data
+# PANDERM_EMBEDDINGS_ROOT=/mnt/data2/Vinh/Research/Paper4/PhaseB/assets/reference_embeddings
+
+CSG_DATA_ROOT=
+PANDERM_EMBEDDINGS_ROOT=

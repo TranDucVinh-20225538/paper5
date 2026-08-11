@@ -86,3 +86,66 @@ def alpha0_baseline_geometry(z_eval: np.ndarray, meta_eval: pd.DataFrame) -> dic
     """Baseline (alpha=0) LID/slope for grid Gate 1 comparison."""
     m = compute_gate1_measurement(z_eval, meta_eval)
     return {"lid_mean": m["lid_mean"], "spectral_decay_slope": m["spectral_decay_slope"]}
+
+
+def _metric_reproducible_at_alpha(
+    arm_rows: list[dict[str, Any]],
+    alpha: float,
+    metric_key: str,
+) -> bool:
+    """EA-03: all seeds deviate from alpha=0 baseline in the same direction."""
+    baseline_rows = [r for r in arm_rows if r["alpha"] == 0.0]
+    alpha_rows = [r for r in arm_rows if r["alpha"] == alpha]
+    if not baseline_rows or not alpha_rows:
+        return False
+    baseline_val = float(baseline_rows[0]["gate1_measurement"][metric_key])
+    deltas = [
+        float(r["gate1_measurement"][metric_key]) - baseline_val for r in alpha_rows
+    ]
+    nonzero = [d for d in deltas if abs(d) > 1e-12]
+    if not nonzero:
+        return False
+    first_sign = np.sign(nonzero[0])
+    return all(np.sign(d) == first_sign for d in nonzero)
+
+
+def score_gate1_ea03(
+    ladder_results: dict[str, list[dict[str, Any]]],
+    alphas: list[float],
+) -> dict[str, list[dict[str, Any]]]:
+    """Re-score alpha-ladder outputs under EA-03 manipulation check."""
+    scored: dict[str, list[dict[str, Any]]] = {}
+    for arm, rows in ladder_results.items():
+        arm_scores: list[dict[str, Any]] = []
+        for alpha in alphas:
+            if alpha == 0.0:
+                arm_scores.append(
+                    {
+                        "alpha": alpha,
+                        "lid_reproducible": False,
+                        "slope_reproducible": False,
+                        "gate1_pass": False,
+                    }
+                )
+                continue
+            lid_rep = _metric_reproducible_at_alpha(rows, alpha, "lid_mean")
+            slope_rep = _metric_reproducible_at_alpha(rows, alpha, "spectral_decay_slope")
+            arm_scores.append(
+                {
+                    "alpha": alpha,
+                    "lid_reproducible": lid_rep,
+                    "slope_reproducible": slope_rep,
+                    "gate1_pass": bool(lid_rep or slope_rep),
+                }
+            )
+        scored[arm] = arm_scores
+    return scored
+
+
+def gate1_manipulation_pass(ea03_scores: dict[str, list[dict[str, Any]]]) -> bool:
+    """Backbone passes EA-03 if canonical or conventional shows dose-dependence at some alpha > 0."""
+    for arm in ("canonical", "conventional"):
+        for row in ea03_scores.get(arm, []):
+            if row["alpha"] > 0 and row["gate1_pass"]:
+                return True
+    return False

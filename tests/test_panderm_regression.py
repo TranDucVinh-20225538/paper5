@@ -10,11 +10,13 @@ import pytest
 from src.intervention.embeddings import load_embedding_artifacts
 from src.intervention.gates import compute_gate0
 from src.intervention.nuisance import compute_nuisance_direction
+from src.geometry.metrics import compute_geometry_metrics
 from src.utils.config import load_backbone_config
 
 PANDERM_W_RAW_NORM = 9.014975355083987
 PANDERM_PROBE_ACC = 0.9990045248868779
 PANDERM_BAL_ACC = 0.5739691277090949
+PANDERM_KAPPA_ALPHA0 = 1338282.217424521
 
 
 def _panderm_root() -> Path | None:
@@ -56,3 +58,20 @@ def test_panderm_gate0_alpha0_regression(repo_root: Path) -> None:
     assert gate0["domain_probe_accuracy_mean"] == pytest.approx(PANDERM_PROBE_ACC, rel=1e-4)
     # Balanced accuracy varies slightly with sklearn version; gate0_pass is the regression target.
     assert gate0["id_task_balanced_accuracy_mean"] > 0.125 + 0.10
+
+
+@pytest.mark.skipif(_panderm_root() is None, reason="PanDerm embeddings not available")
+def test_panderm_kappa_alpha0_regression(repo_root: Path) -> None:
+    root = _panderm_root()
+    assert root is not None
+    artifacts = load_embedding_artifacts(
+        root / "ReferenceTrainEmbedding",
+        root / "ReferenceEmbedding",
+    )
+    nuisance = compute_nuisance_direction(artifacts)
+    metrics = compute_geometry_metrics(
+        artifacts.eval_embeddings,
+        artifacts.eval_metadata,
+        nuisance.w,
+    )
+    assert metrics["condition_number"] == pytest.approx(PANDERM_KAPPA_ALPHA0, rel=1e-4)

@@ -90,7 +90,24 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
 
-    print(f"Steps 7–{args.through_step} not implemented yet.", file=sys.stderr)
+    if args.through_step <= 12:
+        from src.pipeline.steps import run_steps_0_through_12
+
+        record = run_steps_0_through_12(
+            args.config,
+            fixture_train_n=200,
+            fixture_eval_n=120,
+            grid_epochs=args.grid_epochs,
+            train_epochs=args.grid_epochs,
+            **common,
+        )
+        if record.get("gate1") == "not_testable":
+            print(f"Step 9: {record['backbone']} Gate 1 NOT TESTABLE — stopped.", file=sys.stderr)
+            return 2
+        print(f"Step 12 complete: {record['backbone']} gate1=PASS")
+        return 0
+
+    print(f"Steps 13+ not implemented.", file=sys.stderr)
     return 1
 
 

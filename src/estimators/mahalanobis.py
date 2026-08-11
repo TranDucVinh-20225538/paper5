@@ -39,3 +39,35 @@ def compute_mahalanobis_params_from_arrays(
     cov = cov + reg_eps * np.eye(feat_dim, dtype=np.float64)
     precision = np.linalg.inv(cov)
     return class_means.astype(np.float32), precision.astype(np.float32)
+
+
+def mahalanobis_min_squared_distances(
+    features: np.ndarray,
+    class_means: np.ndarray,
+    precision: np.ndarray,
+) -> np.ndarray:
+    """Min over classes of squared Mahalanobis distance (higher → more OOD-like)."""
+    n_samples = features.shape[0]
+    n_classes = class_means.shape[0]
+    mins = np.empty(n_samples, dtype=np.float64)
+    p = precision.astype(np.float64)
+    for i in range(n_samples):
+        x = features[i].astype(np.float64)
+        best = np.inf
+        for c in range(n_classes):
+            delta = x - class_means[c].astype(np.float64)
+            d2 = float(delta @ p @ delta)
+            if d2 < best:
+                best = d2
+        mins[i] = best
+    return mins.astype(np.float32)
+
+
+def fpr_at_95_tpr(y_true: np.ndarray, scores: np.ndarray) -> float:
+    from sklearn.metrics import roc_curve
+
+    fpr, tpr, _ = roc_curve(y_true, scores)
+    reached = np.where(tpr >= 0.95)[0]
+    if reached.size == 0:
+        return 1.0
+    return float(fpr[reached[0]])

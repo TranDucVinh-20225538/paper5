@@ -35,6 +35,9 @@ datasets/paths.local
 experiments/*/runs/
 experiments/*/embeddings/
 experiments/*/checkpoints/
+experiments/*/alpha_ladder/
+experiments/*/arms/
+experiments/*/nuisance/
 results/logs/*
 !results/logs/.gitkeep
 

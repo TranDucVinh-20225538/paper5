@@ -14,7 +14,7 @@ from src.intervention.gates import (
     compute_gate1_measurement,
     gate1_selection_pass,
 )
-from src.intervention.training import apply_adapter, train_adapter
+from src.intervention.training import apply_adapter, resolve_training_epochs, train_adapter
 from src.utils.config import BackboneConfig
 
 
@@ -45,9 +45,7 @@ def search_hyperparameters(
     z_eval = artifacts.eval_embeddings
     meta_eval = artifacts.eval_metadata
     baseline = alpha0_baseline_geometry(z_eval, meta_eval)
-
-    intervention = cfg.raw.get("intervention", {})
-    epoch_override = epochs if epochs is not None else int(intervention.get("epochs", 100))
+    epoch_override = resolve_training_epochs(cfg, epochs)
 
     trials: list[dict[str, Any]] = []
     selected: GridSelection | None = None

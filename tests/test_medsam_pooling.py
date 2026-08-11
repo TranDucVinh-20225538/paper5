@@ -28,9 +28,9 @@ def test_medsam_mask_non_square_excludes_padding_patches() -> None:
     # 800×600 landscape → scaled 1024×768, padded to 1024×1024 bottom/right
     mask = medsam_valid_patch_mask(600, 800)
     assert mask.shape == (64, 64)
-    assert mask[47, 63] is True   # last valid row, last valid col
-    assert mask[48, 63] is False  # first fully padded row
-    assert mask[47, 64 - 1] is True
+    assert mask[47, 63]        # last valid row, last valid col
+    assert not mask[48, 63]    # first fully padded row
+    assert mask[47, 64 - 1]
     assert mask.sum() == 48 * 64  # 768/16 = 48 valid rows, all 64 cols valid
 
 

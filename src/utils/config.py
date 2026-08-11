@@ -32,6 +32,8 @@ class BackboneConfig:
     grid_r: list[int]
     grid_lambda_proj: list[float]
     seeds: list[int]
+    loader: str
+    checkpoint: str | None
 
     @property
     def is_representation_resolved(self) -> bool:
@@ -84,6 +86,11 @@ def effective_r_grid(embed_dim: int, grid_r: list[int]) -> list[int]:
     if embed_dim >= _HIGH_DIM_THRESHOLD and _HIGH_DIM_R_RUNG not in rungs:
         rungs.append(_HIGH_DIM_R_RUNG)
     return sorted(rungs)
+
+
+def find_repo_root(start: Path | None = None) -> Path:
+    """Return repository root containing ONE_PAGE_SUMMARY.md."""
+    return _repo_root(start)
 
 
 def load_backbone_config(
@@ -141,6 +148,10 @@ def load_backbone_config(
     if lambda_val is not None and not isinstance(lambda_val, (int, float)):
         raise TypeError("intervention.lambda_proj must be number or null")
 
+    loader = bb.get("loader")
+    if not loader:
+        raise ValueError(f"backbone.loader is required in {path}")
+
     return BackboneConfig(
         raw=raw,
         path=path,
@@ -157,6 +168,8 @@ def load_backbone_config(
         grid_r=effective_r_grid(embed_dim, [int(x) for x in grid_r]),
         grid_lambda_proj=[float(x) for x in grid_lambda],
         seeds=[int(s) for s in seeds],
+        loader=str(loader),
+        checkpoint=bb.get("checkpoint"),
     )
 
 

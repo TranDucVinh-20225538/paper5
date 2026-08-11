@@ -55,6 +55,9 @@ def test_validate_for_pipeline_run_rejects_unresolved(tmp_path: Path) -> None:
 backbone:
   name: bad
   family: cnn
+  variant: x
+  loader: fixture
+  checkpoint: x
   embed_dim: 128
   activation: relu
   representation:

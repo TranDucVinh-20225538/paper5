@@ -11,6 +11,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Paper 5 per-backbone pipeline")
     parser.add_argument("config", type=Path, help="configs/<backbone>.yaml")
     parser.add_argument(
+        "--from-step",
+        type=int,
+        default=0,
+        choices=range(0, 13),
+        help="Start at this protocol step (default: 0). Use 8 to resume CPU analysis after GPU phase.",
+    )
+    parser.add_argument(
         "--through-step",
         type=int,
         default=3,
@@ -52,6 +59,21 @@ def main(argv: list[str] | None = None) -> int:
         loader_override=args.loader,
     )
 
+    if args.from_step > args.through_step:
+        parser.error("--from-step must be <= --through-step")
+
+    if args.from_step >= 8:
+        if args.through_step < 8:
+            parser.error("CPU phase requires --through-step >= 8")
+        from src.pipeline.steps import run_steps_8_through_12_from_config
+
+        record = run_steps_8_through_12_from_config(args.config)
+        if record.get("gate1") == "not_testable":
+            print(f"Step 9: {record['backbone']} Gate 1 NOT TESTABLE — stopped.", file=sys.stderr)
+            return 2
+        print(f"Step {args.through_step} complete: {record['backbone']} gate1=PASS")
+        return 0
+
     if args.through_step < 3:
         from src.pipeline.hard_stops import run_step0_hard_stops
         from src.utils.config import load_backbone_config
@@ -87,6 +109,23 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"Step 6 complete: {record['backbone']} r={record['selected_r']} "
             f"lambda={record['selected_lambda_proj']} gate0=PASS"
+        )
+        return 0
+
+    if args.through_step <= 7:
+        from src.pipeline.steps import run_steps_0_through_7
+
+        record = run_steps_0_through_7(
+            args.config,
+            fixture_train_n=200,
+            fixture_eval_n=120,
+            grid_epochs=args.grid_epochs,
+            train_epochs=args.grid_epochs,
+            **common,
+        )
+        print(
+            f"Step 7 complete: {record['backbone']} r={record['r']} "
+            f"lambda={record['lambda_proj']} (GPU phase done)"
         )
         return 0
 

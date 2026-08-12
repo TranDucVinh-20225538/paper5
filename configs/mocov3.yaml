@@ -1,24 +1,32 @@
 # mocov3 — D-015. Chosen over DINOv2 to avoid same-lineage under-sampling of within-family variance.
+# D-042: weights via nyu-visionx/moco-v3-vit-b mirror of FAIR vit-b-300ep (see docs/decisions/D-042-mocov3-provenance.md).
 backbone:
   name:       mocov3
   family:     general_ssl
-  variant:    MoCo v3 ViT-B/16   # VERIFY exact release
+  variant:    MoCo v3 ViT-B/16 (300-epoch IN1K)
   loader:     timm
-  checkpoint: null      # PENDING — pin the official checkpoint and record it
-  embed_dim:  768       # VERIFY
+  checkpoint: vit_base_patch16_224
+  embed_dim:  768
   activation: gelu
+  loader_kwargs:
+    pretrained: false
+    safetensors_hub:
+      repo_id: nyu-visionx/moco-v3-vit-b
+      filename: model.safetensors
+      revision: 7d091cd70772c5c0ecf7f00b5f12ca609a99d69d
+      weights_sha256: 345a04069364250ef448402363443ae8d2da68678e6a88239a8906d2325b912e
 
   representation:
     status:  RESOLVED
-    forward: "vision transformer forward -> CLS token"
+    forward: "timm vit_base_patch16_224 + MoCo v3 safetensors weights"
     pooling: cls
     rationale: >
       CLS token, matching the published linear-probe recipe.
 
 preprocessing:
   asset:  assets/preprocessing/mocov3.json
-  sha256: null
-  source: null      # PENDING — cite the published eval transform
+  sha256: ef541f33ebdaae9db0884aae938e61516fb1c1acd140e8ea20e1bee342d98c01
+  source: "MoCo v3 linear-probe eval transform frozen 2026-08-12"
 
 intervention:
   r:           null
@@ -34,6 +42,4 @@ seeds: [42, 52, 62, 72, 82]
 notes: >
   Objective is instance-contrastive, deliberately different from DINOv3's self-distillation. That
   difference IS the point: two members of one cell must differ in the property the cell is named for,
-  or within-family variance is under-estimated. DINOv2 would have measured scaling variance instead.
-  MAE was rejected as second choice — larger objective contrast but weak frozen features, hence
-  material Gate 0-pre risk (D-020).
+  or within-family variance is under-estimated.

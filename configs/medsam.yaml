@@ -1,26 +1,26 @@
-# medsam — see _template.yaml for field semantics and rules.
-# null = decision not made. The pipeline must refuse to run, not fill it in.
-
+# medsam — D-016 architecture-portability probe (excluded from family model).
+# D-025 pre-neck 768-d + D-026 masked GAP. Checkpoint: wanglab/medsam-vit-base.
 backbone:
   name:       medsam
-  family:     PROBE          # D-016 — NOT a family member. Excluded from the family-level model.
+  family:     PROBE
   variant:    MedSAM ViT-B image encoder
   loader:     medsam
-  checkpoint: null
-  embed_dim:  768          # pre-neck; VERIFY with one forward pass
+  checkpoint: "wanglab/medsam-vit-base"
+  embed_dim:  768
   activation: gelu
 
   representation:
-    status:    RESOLVED      # D-025, D-026
+    status:    RESOLVED
     forward:   "image_encoder(x) -> PRE-NECK tokens 64x64x768, then masked GAP"
     pooling:   gap_masked
     rationale: >
-      OPEN. Segmentation-oriented encoder — emits a spatial feature map, not a pooled vector. Which tensor becomes 'the embedding', and how it is pooled, must be decided and written down BEFORE extraction. embed_dim stays null until that is settled, since it follows from the choice.
+      Pre-neck 768-d by D-018 extension; neck is segmentation projection head. Masked GAP over
+      valid (non-padded) patches per D-026.
 
 preprocessing:
   asset:  assets/preprocessing/medsam.json
-  sha256: null      # PENDING — filled at freeze time
-  source: null      # PENDING — cite the published eval transform
+  sha256: fbcf2ba867421a9bfbcf048df6ad7c00a1f41a66812520b5a052bdebdff80b1b
+  source: "MedSAM 1024 eval transform frozen 2026-08-12"
 
 intervention:
   r:           null
@@ -34,4 +34,5 @@ intervention:
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  D-016: reclassified out of the medical-SSL cell. MedSAM is supervised segmentation (SAM fine-tuned on medical masks), NOT self-supervised — it shares only 'medical' and 'image-only' with PanDerm, so keeping it in an SSL-named cell would break the homogeneity the family contrast assumes. Retained as a declared architecture-portability probe: full ladder, per-backbone analysis, EXCLUDED from the family model and from every outcome-taxonomy denominator. Run it FIRST — it is the structurally most different encoder in the set and the cheapest place to discover the recipe does not port. Representation choice is still open: see docs/medsam_integration.md (Task 4).
+  D-016: reclassified out of the medical-SSL cell. Excluded from family-level model. Highest
+  extraction cost in the set (1024 input). See docs/medsam_integration.md.

@@ -4,7 +4,7 @@ backbone:
   family:     general_vlm
   variant:    "google/siglip-large-patch16-256"   # VERIFY — must be the ViT-L variant, not base
   loader:     hf
-  checkpoint: "google/siglip-large-patch16-256"   # VERIFY
+  checkpoint: "google/siglip-large-patch16-256"   # hub @ d0da9f87
   embed_dim:  1024       # VERIFY — ViT-L pre-projection
   activation: gelu
 
@@ -16,7 +16,7 @@ backbone:
       SigLIP uses an attention-pooling (MAP) head, NOT a CLS token — do not assume CLS. Take the
       pooled output before the projection head, per D-018.
 
-preprocessing: {asset: assets/preprocessing/siglip.json, sha256: null, source: null}
+preprocessing: {asset: assets/preprocessing/siglip.json, sha256: 75be8ddaf053413c48d9f0ebe0ec522aebb41b9f945ec8fa9c5a3cebbaca41e6, source: "SigLIP large patch16-256 processor frozen 2026-08-12"}
 
 intervention:
   r: null

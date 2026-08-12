@@ -37,7 +37,11 @@ def _pool_forward_features(features: torch.Tensor, pooling: str) -> torch.Tensor
 
 
 def create_timm_model(cfg: BackboneConfig) -> torch.nn.Module:
+    import hashlib
+
     import timm
+    from huggingface_hub import hf_hub_download
+    from safetensors.torch import load_file
 
     checkpoint = cfg.checkpoint
     if not checkpoint:
@@ -46,14 +50,34 @@ def create_timm_model(cfg: BackboneConfig) -> torch.nn.Module:
     bb = cfg.raw.get("backbone", {})
     kwargs: dict = {"pretrained": True, "num_classes": 0}
     loader_kwargs = bb.get("loader_kwargs")
+    safetensors_hub = None
     if isinstance(loader_kwargs, dict):
-        kwargs.update(loader_kwargs)
+        safetensors_hub = loader_kwargs.get("safetensors_hub")
+        kwargs.update({k: v for k, v in loader_kwargs.items() if k != "safetensors_hub"})
 
     if cfg.name == "uni":
         kwargs.setdefault("init_values", 1e-5)
         kwargs.setdefault("dynamic_img_size", True)
 
     model = timm.create_model(checkpoint, **kwargs)
+
+    if safetensors_hub:
+        path = hf_hub_download(
+            safetensors_hub["repo_id"],
+            safetensors_hub["filename"],
+            revision=safetensors_hub.get("revision"),
+        )
+        expected = safetensors_hub.get("weights_sha256")
+        if expected:
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if digest != expected:
+                raise ValueError(
+                    f"{cfg.name}: MoCo weights sha256 mismatch "
+                    f"(got {digest}, expected {expected})"
+                )
+        state = load_file(path)
+        model.load_state_dict(state, strict=False)
+
     model.eval()
     return model
 

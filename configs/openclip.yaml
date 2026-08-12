@@ -5,7 +5,7 @@ backbone:
   family:     general_vlm
   variant:    "ViT-B-16 / laion2b_s34b_b88k"      # VERIFY — pin corpus, not just architecture
   loader:     open_clip
-  checkpoint: "ViT-B-16::laion2b_s34b_b88k"       # VERIFY
+  checkpoint: "ViT-B-16::laion2b_s34b_b88k"       # weights: laion/CLIP-ViT-B-16-laion2B-s34B-b88K @ 7288da5a
   embed_dim:  768        # VERIFY — pre-projection. Projected (512) is NOT used.
   activation: gelu
 
@@ -16,7 +16,7 @@ backbone:
     rationale: >
       Pre-projection per D-018.
 
-preprocessing: {asset: assets/preprocessing/openclip.json, sha256: null, source: null}
+preprocessing: {asset: assets/preprocessing/openclip.json, sha256: 79779a72cb4e024885fa6e3de1304215f3bc32fe8cae4184aa71fb181a670969, source: "open_clip ViT-B-16 laion2b_s34b_b88k eval transform frozen 2026-08-12"}
 
 intervention:
   r: null

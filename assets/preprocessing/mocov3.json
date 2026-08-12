@@ -1,0 +1,30 @@
+{
+  "instrument": "MoCo v3 ViT-B/16 (300-epoch IN1K pretrain)",
+  "frozen_from": {
+    "source": "timm vit_base_patch16_224 + nyu-visionx/moco-v3-vit-b weights (D-042)",
+    "official_release": {
+      "repo": "https://github.com/facebookresearch/moco-v3",
+      "artifact": "vit-b-300ep.pth",
+      "url": "https://dl.fbaipublicfiles.com/moco-v3/vit-b-300ep.pth",
+      "note": "FAIR canonical release; direct download blocked from this host (403). Provenance verified via HF mirror weight load into timm architecture."
+    },
+    "hub_id": "nyu-visionx/moco-v3-vit-b",
+    "hub_revision": "7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
+    "checkpoint": {
+      "weights_file": "model.safetensors",
+      "weights_sha256": "345a04069364250ef448402363443ae8d2da68678e6a88239a8906d2325b912e"
+    },
+    "note": "Linear-probe eval recipe: Resize 256, CenterCrop 224, ImageNet normalize"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 256 },
+    { "op": "CenterCrop", "size": 224 },
+    { "op": "ToTensor" },
+    {
+      "op": "Normalize",
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
+    }
+  ],
+  "modified": false
+}

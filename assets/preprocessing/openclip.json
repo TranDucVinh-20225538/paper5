@@ -1,0 +1,24 @@
+{
+  "instrument": "OpenCLIP ViT-B-16 / LAION-2B (laion2b_s34b_b88k)",
+  "frozen_from": {
+    "source": "open_clip.create_model_and_transforms('ViT-B-16', pretrained='laion2b_s34b_b88k').eval transform",
+    "hub_id": "laion/CLIP-ViT-B-16-laion2B-s34B-b88K",
+    "hub_revision": "7288da5a0d6f0b51c4a2b27c624837a9236d0112",
+    "checkpoint": {
+      "weights_file": "open_clip_model.safetensors",
+      "weights_sha256": "3f25d29d3cc74e1d25d47e0593b4dd0864ced1e9b4d8e486a247ca4502f227f1"
+    },
+    "note": "OpenCLIP eval: Resize 224 bicubic, CenterCrop 224, CLIP normalize (D-018 pre-projection)"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 224, "interpolation": "bicubic" },
+    { "op": "CenterCrop", "size": 224 },
+    { "op": "ToTensor" },
+    {
+      "op": "Normalize",
+      "mean": [0.48145466, 0.4578275, 0.40821073],
+      "std": [0.26862954, 0.26130258, 0.27577711]
+    }
+  ],
+  "modified": false
+}

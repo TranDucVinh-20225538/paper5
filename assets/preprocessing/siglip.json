@@ -1,0 +1,23 @@
+{
+  "instrument": "google/siglip-large-patch16-256",
+  "frozen_from": {
+    "source": "transformers.AutoImageProcessor.from_pretrained('google/siglip-large-patch16-256')",
+    "hub_revision": "d0da9f876e7d66b4e250cd2450c3ba2ce735e447",
+    "checkpoint": {
+      "hub_id": "google/siglip-large-patch16-256",
+      "weights_file": "model.safetensors",
+      "weights_sha256": "e00d04afb3fb45b0113e5c79b6d6889eff5f240e9c54cfb149dab4a3e304e9a3"
+    },
+    "note": "SigLIP eval: resize 256x256, rescale 1/255, normalize mean=std=0.5 (D-018 pre-projection; attn_pool head)"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 256 },
+    { "op": "ToTensor" },
+    {
+      "op": "Normalize",
+      "mean": [0.5, 0.5, 0.5],
+      "std": [0.5, 0.5, 0.5]
+    }
+  ],
+  "modified": false
+}

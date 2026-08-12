@@ -1,14 +1,14 @@
 # dinov3 — D-015 cell partner to MoCo v3 (ViT-L vs ViT-B).
-# HF ACCESS: PENDING Meta approval (facebook/dinov3-vitl16-pretrain-lvd1689m).
-# Do not queue until huggingface-cli can download weights. See docs/backbone_readiness.md.
+# HF access approved 2026-08-12. Loader: transformers (D-045).
 
 backbone:
   name:       dinov3
   family:     general_ssl
-  variant:    "facebook/dinov3-vitl16-pretrain-lvd1689m"
-  loader:     dinov3
+  variant:    facebook/dinov3-vitl16-pretrain-lvd1689m  (ViT-L/16, LVD-1689M)
+  loader:     hf          # D-045 — NOT timm: timm 0.9.16 cannot build dinov3
   checkpoint: "facebook/dinov3-vitl16-pretrain-lvd1689m"
-  embed_dim:  1024       # VERIFY after download — ViT-L CLS pre-head
+  revision:   ea8dc2863c51be0a264bab82070e3e8836b02d51   # D-044 — immutable. NEVER a branch.
+  embed_dim:  1024        # ViT-L; VERIFY with one forward pass
   activation: gelu
 
   representation:
@@ -20,8 +20,8 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/dinov3.json
-  sha256: null      # PENDING — filled at freeze time
-  source: null      # PENDING — cite the published eval transform
+  sha256: 62424930330eb84dc388265e1696b21c3c4ff272640ae7bbe5d5a02f85881c56
+  source: "DINOv3 ViT-L eval transform frozen 2026-08-12"
 
 intervention:
   r:           null
@@ -35,5 +35,26 @@ intervention:
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  D-005 CLOSED by D-015 — cell partner is MoCo v3, NOT DINOv2. Blocked on HF gating (2026-08-12):
-  access request submitted, awaiting Meta review. Pin ViT-L for {L,B} cell spread with MoCo ViT-B.
+  D-005 CLOSED by D-015 — cell partner is MoCo v3, NOT DINOv2. Pin ViT-L for {L,B} cell spread with MoCo ViT-B.
+
+license:
+  spdx: dinov3-license
+  release_tier: B    # conditional — Agreement copy + 'Built with DINOv3' + acknowledge in publication
+
+pretraining_note:
+  base_model: facebook/dinov3-vit7b16-pretrain-lvd1689m
+  distilled: true
+  detail: >
+    Confirmed 2026-08-12 from the model card and the HF base_model field: only DINOv3 ViT-7B is
+    trained from scratch. All five ViT variants (S/S+/B/L/H+) and all four ConvNeXt variants are
+    DISTILLED from it, so ViT-L/16 inherits the 7B's representation rather than learning one
+    independently.
+
+    Not a choice point — every deployable DINOv3 variant is distilled, and DINOv2 has the same
+    structure (ViT-g trained, S/B/L distilled), so this does not reopen D-015.
+
+    Recorded because it touches the primary covariate directly: kappa is a SPECTRAL property and
+    distillation is known to reshape eigenvalue spectra. The general-SSL cell therefore pairs a
+    distilled model (DINOv3 ViT-L) with a directly-trained one (MoCo v3 ViT-B). If DINOv3's geometry
+    behaves unlike the rest of the set, this is the first thing to point at — and it needs to be on
+    record BEFORE the result, not offered afterwards.

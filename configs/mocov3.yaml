@@ -1,24 +1,18 @@
 # mocov3 — D-015. Chosen over DINOv2 to avoid same-lineage under-sampling of within-family variance.
-# D-042: weights via nyu-visionx/moco-v3-vit-b mirror of FAIR vit-b-300ep (see docs/decisions/D-042-mocov3-provenance.md).
+# D-042: nyu-visionx/moco-v3-vit-b mirror verified (see docs/decisions/D-042-mocov3-provenance.md).
 backbone:
   name:       mocov3
   family:     general_ssl
   variant:    MoCo v3 ViT-B/16 (300-epoch IN1K)
-  loader:     timm
-  checkpoint: vit_base_patch16_224
+  loader:     hf          # transformers format (D-045)
+  checkpoint: "nyu-visionx/moco-v3-vit-b"
+  revision:   7d091cd70772c5c0ecf7f00b5f12ca609a99d69d   # D-044 — immutable. NEVER a branch.
   embed_dim:  768
   activation: gelu
-  loader_kwargs:
-    pretrained: false
-    safetensors_hub:
-      repo_id: nyu-visionx/moco-v3-vit-b
-      filename: model.safetensors
-      revision: 7d091cd70772c5c0ecf7f00b5f12ca609a99d69d
-      weights_sha256: 345a04069364250ef448402363443ae8d2da68678e6a88239a8906d2325b912e
 
   representation:
     status:  RESOLVED
-    forward: "timm vit_base_patch16_224 + MoCo v3 safetensors weights"
+    forward: "vision transformer forward -> CLS token"
     pooling: cls
     rationale: >
       CLS token, matching the published linear-probe recipe.
@@ -40,6 +34,16 @@ intervention:
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  Objective is instance-contrastive, deliberately different from DINOv3's self-distillation. That
-  difference IS the point: two members of one cell must differ in the property the cell is named for,
-  or within-family variance is under-estimated.
+  Objective is instance-contrastive, deliberately different from DINOv3's self-distillation.
+
+license:
+  spdx: cc-by-nc-4.0
+  release_tier: B    # conditional — see D-046
+
+provenance:
+  status: VERIFIED       # D-042 — safetensors load into vit_base_patch16_224, 0 missing keys
+  mirror: nyu-visionx/moco-v3-vit-b
+  canonical: facebookresearch/moco-v3 vit-b-300ep.pth
+  detail: >
+    FAIR CDN returned 403 from study server; mirror weights SHA256 pinned in
+    assets/preprocessing/mocov3.json. See docs/decisions/D-042-mocov3-provenance.md.

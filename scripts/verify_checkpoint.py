@@ -154,13 +154,41 @@ def verify(config_path: Path) -> bool:
                 f"{cfg.name}: representation.status is {cfg.representation_status!r}"
             )
 
-        repo_id = _hub_repo_id(cfg.checkpoint)
+        # D-044: every checkpoint must be pinned to something immutable. For a hub
+        # reference that is a revision SHA; for a local file it is a content hash.
+        # Requiring an HF revision of a local .pth would be unsatisfiable, and letting
+        # a local file through unpinned would leave the same hole the decision closes.
+        bb = cfg.raw.get("backbone") or {}
+        revision = bb.get("revision")
+        local_sha = bb.get("checkpoint_sha256")
+        # open_clip uses "arch::pretrained", which is not a repo id — hub_repo names the
+        # repository the pinned revision belongs to when the two differ.
+        repo_id = bb.get("hub_repo") or _hub_repo_id(cfg.checkpoint)
+
+        if repo_id and not revision:
+            raise VerificationFailed(
+                f"{cfg.name}: no immutable revision pinned (D-044).\n"
+                "      A bare repo id tracks a mutable branch: the weights can change\n"
+                "      underneath the study with no error and no record."
+            )
+        if revision and not repo_id:
+            raise VerificationFailed(
+                f"{cfg.name}: a revision is pinned but no repo is named.\n"
+                "      Add backbone.hub_repo so the revision refers to something."
+            )
+        if not repo_id and not local_sha:
+            raise VerificationFailed(
+                f"{cfg.name}: local checkpoint has no checkpoint_sha256 (D-044).\n"
+                "      A path alone pins nothing — the file can be replaced silently."
+            )
+
         if repo_id:
+            print(f"{OK} revision pinned {revision[:12]}…")
             user = check_auth()
             print(f"{OK} authenticated as {user}" if user else f"{WARN} not logged in")
             check_gate(repo_id, authed=bool(user))
         else:
-            print(f"{SKIP} not a Hugging Face hub reference: {cfg.checkpoint}")
+            print(f"{OK} local checkpoint pinned by sha256 {local_sha[:12]}…")
 
         if cfg.loader != "timm":
             print(f"{SKIP} loader is {cfg.loader!r} — load check covers timm only")

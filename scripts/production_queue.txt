@@ -1,14 +1,8 @@
-# Production pipeline queue — 6 backbones (DINOv3 deferred pending HF gating)
-#
-# Gate-0 ready (preprocessing SHA256 + checkpoint pinned):
-#   monet, biomedclip, openclip, siglip, mocov3, medsam
-#
-# Failures → results/scheduler/failures.jsonl; queue continues.
-#
+# Production pipeline queue — 7 backbones (includes DINOv3 after HF approval)
 configs/monet.yaml
 configs/biomedclip.yaml
 configs/openclip.yaml
 configs/siglip.yaml
 configs/mocov3.yaml
 configs/medsam.yaml
-# configs/dinov3.yaml  — uncomment after Meta HF approval
+configs/dinov3.yaml

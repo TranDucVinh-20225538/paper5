@@ -7,6 +7,7 @@ backbone:
   variant:    efficientnet_b3
   loader:     timm
   checkpoint: timm/efficientnet_b3.ra2_in1k
+  revision:   0366a75518620e0f2077789202073759f2d61393   # D-044 — immutable. NEVER a branch.
   embed_dim:  1536
   activation: silu
 
@@ -35,3 +36,7 @@ seeds: [42, 52, 62, 72, 82]
 
 notes: >
   Matched-backbone control already present in the CSG-Skin / DST-Skin infrastructure. SiLU/Swish activation — again, match it.
+
+license:
+  spdx: apache-2.0
+  release_tier: A    # unrestricted redistribution

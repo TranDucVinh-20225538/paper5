@@ -4,8 +4,9 @@ backbone:
   name:       medsam
   family:     PROBE
   variant:    MedSAM ViT-B image encoder
-  loader:     medsam
+  loader:     medsam      # transformers SamModel underneath
   checkpoint: "wanglab/medsam-vit-base"
+  revision:   de8488bca37bb1d4fb190f612c516126d739ce3b   # D-044 — immutable. NEVER a branch.
   embed_dim:  768
   activation: gelu
 
@@ -34,5 +35,16 @@ intervention:
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  D-016: reclassified out of the medical-SSL cell. Excluded from family-level model. Highest
-  extraction cost in the set (1024 input). See docs/medsam_integration.md.
+  D-016: excluded from family-level model. Highest extraction cost in the set (1024 input).
+  See docs/medsam_integration.md.
+
+license:
+  spdx: apache-2.0
+  release_tier: A    # unrestricted redistribution
+
+assertions:
+  embed_dim_must_be: 768   # D-043 — PRE-neck. 256 means the neck ran: WRONG (D-025).
+  why: >
+    transformers SamVisionEncoder.forward applies the neck INSIDE the forward pass, so the obvious
+    API call returns post-neck 256-d — the representation D-025 rejected. The failure is silent:
+    no exception, no warning, a plausible shape, the wrong tensor.

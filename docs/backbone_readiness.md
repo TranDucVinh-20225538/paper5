@@ -14,13 +14,11 @@ Last updated: 2026-08-12 (post pin pass)
 | SigLIP | Ready | preprocessing + SHA256 |
 | MoCo v3 | Ready (D-042) | safetensors_hub + preprocessing SHA256 |
 | MedSAM | Ready | wanglab checkpoint + preprocessing SHA256 |
-| **DINOv3** | **Deferred** | HF gating pending Meta approval |
+| **DINOv3** | Ready | HF approved; preprocessing + SHA256 pinned |
 
 ## DINOv3
 
-Uncomment `configs/dinov3.yaml` in `scripts/production_queue.txt` after HF access approved.
-
-## MoCo v3 (D-042)
+Production queue includes all 7 remaining backbones (DINOv3 re-enabled 2026-08-12).
 
 See `docs/decisions/D-042-mocov3-provenance.md`.
 

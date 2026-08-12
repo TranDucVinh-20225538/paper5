@@ -20,8 +20,12 @@ FIXTURE_CFG = (
 )
 
 
-def test_medsam_step0_fails_null_checkpoint(medsam_config_path: Path, repo_root: Path) -> None:
-    cfg = load_backbone_config(medsam_config_path, repo_root=repo_root)
+def test_step0_fails_null_checkpoint(repo_root: Path) -> None:
+    # Uses a dedicated fixture, not MedSAM: MedSAM was pinned to
+    # wanglab/medsam-vit-base @ de8488bc (D-043), so it no longer exercises this path.
+    # The behaviour under test — Step 0 refuses a null checkpoint — still matters.
+    path = repo_root / "tests" / "fixtures" / "configs" / "fixture_null_checkpoint.yaml"
+    cfg = load_backbone_config(path, repo_root=repo_root)
     with pytest.raises(ValueError, match="checkpoint is null"):
         run_step0_hard_stops(
             cfg,
@@ -31,9 +35,10 @@ def test_medsam_step0_fails_null_checkpoint(medsam_config_path: Path, repo_root:
         )
 
 
-def test_medsam_run_all_exits_nonzero(medsam_config_path: Path, repo_root: Path) -> None:
+def test_run_all_exits_nonzero_on_null_checkpoint(repo_root: Path) -> None:
+    path = repo_root / "tests" / "fixtures" / "configs" / "fixture_null_checkpoint.yaml"
     result = subprocess.run(
-        [sys.executable, "-m", "src.pipeline.cli", str(medsam_config_path), "--through-step", "0"],
+        [sys.executable, "-m", "src.pipeline.cli", str(path), "--through-step", "0"],
         cwd=repo_root,
         capture_output=True,
         text=True,

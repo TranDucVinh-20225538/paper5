@@ -1,0 +1,23 @@
+{
+  "instrument": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+  "frozen_from": {
+    "source": "transformers.AutoImageProcessor.from_pretrained('facebook/dinov3-vitl16-pretrain-lvd1689m', revision=ea8dc2863c51be0a264bab82070e3e8836b02d51)",
+    "hub_revision": "ea8dc2863c51be0a264bab82070e3e8836b02d51",
+    "checkpoint": {
+      "hub_id": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+      "weights_file": "model.safetensors",
+      "weights_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
+    },
+    "note": "DINOv3 ViT eval: resize 224x224 (default_to_square), ImageNet normalize"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 224 },
+    { "op": "ToTensor" },
+    {
+      "op": "Normalize",
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
+    }
+  ],
+  "modified": false
+}

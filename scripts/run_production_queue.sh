@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
 # Launch the production GPU/CPU scheduler for remaining backbones.
 #
-# Waits until no external GPU pipeline job is running (e.g. UNI rerun), then
-# starts gpu_cpu_scheduler.sh with configs from production_queue.txt.
+# Production-first: start with MAX_CPU=2, read scheduler metrics.csv after 2–3
+# backbones, then restart remaining queue with MAX_CPU=3/4 if CPU headroom exists.
+# Separate benchmark runs are optional (scheduler debugging only).
 #
 # Usage:
 #   export CSG_DATA_ROOT=/path/to/CSG-Skin/data
 #   nohup ./scripts/run_production_queue.sh > results/logs/production_queue.log 2>&1 &
 #
+# Hands-off after UNI (recommended):
+#   nohup ./scripts/wait_and_run_production.sh > results/logs/wait_production.log 2>&1 &
+#
 # Env:
-#   MAX_CPU                CPU worker pool size (required — set from benchmark data)
+#   MAX_CPU=2              Default conservative pool (override after telemetry)
 #   WAIT_FOR_GPU=1         Block until external GPU job finishes (default 1)
 #   POLL_SEC=60            Wait poll when GPU busy
+#   RETRY_FAILED=1         Retry backbones listed in results/scheduler/failures.jsonl
 #   QUEUE_FILE             Override queue file path
 
 set -euo pipefail
@@ -21,6 +26,7 @@ cd "$ROOT"
 QUEUE_FILE="${QUEUE_FILE:-$ROOT/scripts/production_queue.txt}"
 WAIT_FOR_GPU="${WAIT_FOR_GPU:-1}"
 POLL_SEC="${POLL_SEC:-60}"
+MAX_CPU="${MAX_CPU:-2}"
 
 if [[ -z "${CSG_DATA_ROOT:-}" ]]; then
   echo "ERROR: CSG_DATA_ROOT must be set." >&2
@@ -56,7 +62,6 @@ external_gpu_running() {
 
 log "=== production queue launcher $STAMP ==="
 log "configs (${#CONFIGS[@]}): ${CONFIGS[*]}"
-: "${MAX_CPU:?Set MAX_CPU from benchmark results before production run}"
 log "MAX_CPU=$MAX_CPU WAIT_FOR_GPU=$WAIT_FOR_GPU"
 
 if (("$WAIT_FOR_GPU" == 1)); then
@@ -71,4 +76,10 @@ export MAX_CPU
 export RESPECT_EXTERNAL_GPU=1
 export RESUME=1
 
-exec ./scripts/gpu_cpu_scheduler.sh "${CONFIGS[@]}" 2>&1 | tee -a "$LOG"
+./scripts/gpu_cpu_scheduler.sh "${CONFIGS[@]}" 2>&1 | tee -a "$LOG"
+exit_code="${PIPESTATUS[0]}"
+if ((exit_code != 0)); then
+  log "scheduler finished with failures (exit=$exit_code) — see results/scheduler/failures.jsonl"
+  log "passed backbones kept; re-run with RETRY_FAILED=1 to retry failed only"
+fi
+exit "$exit_code"

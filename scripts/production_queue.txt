@@ -14,6 +14,8 @@
 # uni              RUNNING
 #
 # Remaining (scheduler order after UNI completes):
+# Failures (e.g. checkpoint not frozen) are logged to results/scheduler/failures.jsonl
+# and the queue continues — one backbone failure does not stop the rest.
 configs/monet.yaml
 configs/biomedclip.yaml
 configs/dinov3.yaml

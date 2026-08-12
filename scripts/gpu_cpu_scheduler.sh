@@ -55,6 +55,8 @@ GPU_DEVICE="${CUDA_VISIBLE_DEVICES:-0}"
 POLL_SEC="${POLL_SEC:-30}"
 RESPECT_EXTERNAL_GPU="${RESPECT_EXTERNAL_GPU:-1}"
 DRY_RUN="${DRY_RUN:-0}"
+DRY_RUN_FAIL_FIRST_GPU="${DRY_RUN_FAIL_FIRST_GPU:-0}"
+DRY_RUN_GPU_LAUNCHED=0
 BASELINE_GPU_MIN="${BASELINE_GPU_MIN:-159}"
 BASELINE_CPU_MIN="${BASELINE_CPU_MIN:-465}"
 read -r -a COMMON <<< "${COMMON_FLAGS:---skip-split-check}"
@@ -62,7 +64,8 @@ read -r -a COMMON <<< "${COMMON_FLAGS:---skip-split-check}"
 LOCK_DIR="${LOCK_DIR:-$ROOT/results/locks}"
 GPU_LOCK="$LOCK_DIR/gpu.lock"
 STATE_FILE="${STATE_FILE:-$ROOT/results/scheduler/state.json}"
-mkdir -p "$LOCK_DIR" "$(dirname "$STATE_FILE")"
+FAILURES_LOG="${FAILURES_LOG:-$ROOT/results/scheduler/failures.jsonl}"
+mkdir -p "$LOCK_DIR" "$(dirname "$STATE_FILE")" "$(dirname "$FAILURES_LOG")"
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 if [[ -f "$STATE_FILE" && "${RESUME:-1}" == "1" ]]; then
@@ -104,7 +107,50 @@ log() { echo "[$(date -u +%FT%TZ)] $*" | tee -a "$SCHED_LOG"; }
 cfg_name() { basename "$1" .yaml; }
 
 backbone_phase() {
-  python3 -m src.utils.scheduler_state "$1" 2>/dev/null | awk -F'\t' '{print $2}'
+  python3 - "$1" "$ROOT" <<'PY'
+import sys
+from pathlib import Path
+from src.utils.scheduler_state import backbone_phase
+cfg, root = Path(sys.argv[1]), Path(sys.argv[2])
+print(backbone_phase(cfg, repo_root=root))
+PY
+}
+
+is_recorded_failure() {
+  local name=$1
+  [[ "${RETRY_FAILED:-0}" == "1" ]] && return 1
+  [[ ! -f "$FAILURES_LOG" ]] && return 1
+  python3 - "$name" "$FAILURES_LOG" <<'PY'
+import json, sys
+name, path = sys.argv[1], sys.argv[2]
+with open(path, encoding="utf-8") as fh:
+    for line in fh:
+        line = line.strip()
+        if not line:
+            continue
+        if json.loads(line).get("backbone") == name:
+            raise SystemExit(0)
+raise SystemExit(1)
+PY
+}
+
+record_failure() {
+  local name=$1 phase=$2 code=$3 logfile=$4
+  python3 - "$name" "$phase" "$code" "$logfile" "$FAILURES_LOG" <<'PY'
+import json, sys
+from datetime import datetime, timezone
+name, phase, code, logfile, path = sys.argv[1:6]
+rec = {
+    "backbone": name,
+    "phase": phase,
+    "exit_code": int(code),
+    "log": logfile,
+    "timestamp": datetime.now(timezone.utc).isoformat(),
+}
+with open(path, "a", encoding="utf-8") as fh:
+    fh.write(json.dumps(rec, sort_keys=True) + "\n")
+PY
+  log "recorded failure $name phase=$phase exit=$code → $FAILURES_LOG"
 }
 
 init_queue_phases() {
@@ -112,6 +158,12 @@ init_queue_phases() {
   local -a pending=() cpu_ready=() skipped=()
   for cfg in "${QUEUE[@]}"; do
     name="$(cfg_name "$cfg")"
+    if is_recorded_failure "$name"; then
+      FAILED_BACKBONES["$name"]=1
+      skipped+=("$name")
+      log "skip $name (recorded failure — set RETRY_FAILED=1 to retry)"
+      continue
+    fi
     phase="$(backbone_phase "$cfg")"
     BACKBONE_PHASE["$name"]="$phase"
     case "$phase" in
@@ -299,7 +351,12 @@ start_gpu() {
   log "GPU phase start $name"
   GPU_START_EPOCH="$(date +%s)"
   if [[ "$DRY_RUN" == "1" ]]; then
+    DRY_RUN_GPU_LAUNCHED=$((DRY_RUN_GPU_LAUNCHED + 1))
     (
+      if [[ "$DRY_RUN_FAIL_FIRST_GPU" == "1" && "$DRY_RUN_GPU_LAUNCHED" -eq 1 ]]; then
+        sleep "${DRY_RUN_GPU_SEC:-2}"
+        exit 1
+      fi
       sleep "${DRY_RUN_GPU_SEC:-2}"
       exit 0
     ) >"$log" 2>&1 &
@@ -368,8 +425,9 @@ reap_gpu() {
     log "GPU phase OK $name"
     start_cpu "$GPU_CFG"
   else
-    log "GPU phase FAILED $name exit=$code"
+    log "GPU phase FAILED $name exit=$code — continuing queue"
     FAILED_BACKBONES["$name"]=1
+    record_failure "$name" "gpu" "$code" "$LOG_DIR/${name}_gpu.log"
   fi
   GPU_PID=""
   GPU_CFG=""
@@ -391,8 +449,9 @@ reap_cpu() {
       DONE_BACKBONES["$name"]=1
       log "CPU phase OK $name"
     else
-      log "CPU phase FAILED $name exit=$code"
+      log "CPU phase FAILED $name exit=$code — continuing queue"
       FAILED_BACKBONES["$name"]=1
+      record_failure "$name" "cpu" "$code" "$LOG_DIR/${name}_cpu.log"
     fi
     unset 'CPU_PIDS[$name]'
     unset 'CPU_START_EPOCH[$name]'
@@ -481,10 +540,14 @@ rm -f "$LOG_DIR/.monitor"
 wait "$MONITOR_PID" 2>/dev/null || true
 
 log "=== scheduler done $(date -u +%Y%m%dT%H%M%SZ) wall=$(( $(date +%s) - SCHED_START_EPOCH ))s ==="
+log "passed (${#DONE_BACKBONES[@]}): ${!DONE_BACKBONES[*]:-none}"
 if ((${#FAILED_BACKBONES[@]})); then
-  log "failed: ${!FAILED_BACKBONES[*]}"
+  log "failed (${#FAILED_BACKBONES[@]}): ${!FAILED_BACKBONES[*]}"
+  log "failures log: $FAILURES_LOG"
+  log "metrics: $METRICS_CSV"
+  rm -f "$STATE_FILE"
   exit 1
 fi
-log "all backbones passed Gate 1"
+log "all queued backbones passed Gate 1"
 log "metrics: $METRICS_CSV"
 rm -f "$STATE_FILE"

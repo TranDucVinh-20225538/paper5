@@ -76,3 +76,45 @@ def test_scheduler_dry_run_single_backbone(scheduler_executable: Path, tmp_path:
         timeout=60,
     )
     assert proc.returncode == 0
+
+
+def test_scheduler_continues_after_gpu_failure(scheduler_executable: Path, tmp_path: Path) -> None:
+    """First backbone GPU fail must not block the second."""
+    cfg_a = tmp_path / "dryrun_a.yaml"
+    cfg_b = tmp_path / "dryrun_b.yaml"
+    for path, name in ((cfg_a, "dryrun_a"), (cfg_b, "dryrun_b")):
+        text = FIXTURE_CFG.read_text(encoding="utf-8").replace("fixture_test", name, 1)
+        path.write_text(text, encoding="utf-8")
+
+    env = os.environ.copy()
+    failures = tmp_path / "failures.jsonl"
+    env.update(
+        {
+            "DRY_RUN": "1",
+            "DRY_RUN_GPU_SEC": "1",
+            "DRY_RUN_CPU_SEC": "1",
+            "DRY_RUN_FAIL_FIRST_GPU": "1",
+            "MAX_CPU": "2",
+            "POLL_SEC": "1",
+            "RESPECT_EXTERNAL_GPU": "0",
+            "LOCK_DIR": str(tmp_path / "locks"),
+            "STATE_FILE": str(tmp_path / "state3.json"),
+            "FAILURES_LOG": str(failures),
+            "CSG_DATA_ROOT": "/tmp",
+        }
+    )
+    proc = subprocess.run(
+        [str(scheduler_executable), str(cfg_a), str(cfg_b)],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert proc.returncode == 1, proc.stderr + proc.stdout
+    assert failures.is_file()
+    body = failures.read_text(encoding="utf-8")
+    assert "dryrun_a" in body
+    combined = proc.stdout + proc.stderr
+    assert "continuing queue" in combined.lower()
+    assert "CPU phase OK dryrun_b" in combined

@@ -22,8 +22,8 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/uni.json
-  sha256: 943e69719ce234a00dc14f5025b4e306fde2fb11df2f537ed9aa166ad944fe10
-  source: "UNI model card: Resize(224) + ImageNet mean/std"
+  sha256: 2ae9de2ce4a6b5692d0c12c80bdf374535ad77af34a5bfb0ec55f78281547cba
+  source: "UNI model card: square Resize(224,224) + ImageNet mean/std"
 
 intervention:
   r:           null

@@ -59,15 +59,25 @@ def within_class_scatter(features: np.ndarray, labels: np.ndarray, num_classes: 
     return s_w / n
 
 
-def spectral_decay_slope(s_w: np.ndarray) -> float:
+def spectral_decay_slope(s_w: np.ndarray, *, eig_floor: float = 1e-12) -> float:
+    """
+    Sort eigenvalues of S_w descending, fit log(lambda_i) = a + b*i on positive
+    eigenvalues only. When embed_dim exceeds effective rank (common for high-d
+    CNN backbones at n~7k), trailing zero eigenvalues are excluded rather than
+    treated as fatal — the slope is fit on the support of S_w.
+    """
     eigvals = np.linalg.eigvalsh(s_w)
     eigvals = np.sort(eigvals)[::-1]
-    if np.any(eigvals <= 0):
-        raise ValueError("S_w has non-positive eigenvalue(s).")
+    pos = eigvals[eigvals > eig_floor]
+    if pos.size < 2:
+        raise ValueError(
+            "S_w has fewer than two positive eigenvalues above the floor; "
+            "cannot estimate spectral-decay slope."
+        )
 
-    d = eigvals.shape[0]
+    d = pos.shape[0]
     i = np.arange(1, d + 1, dtype=np.float64)
-    log_lambda = np.log(eigvals)
+    log_lambda = np.log(pos)
     design = np.vstack([np.ones_like(i), i]).T
     _a, b = np.linalg.lstsq(design, log_lambda, rcond=None)[0]
     return float(abs(b))

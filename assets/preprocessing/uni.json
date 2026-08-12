@@ -2,10 +2,10 @@
   "instrument": "MahmoodLab/UNI ViT-L/16",
   "frozen_from": {
     "source": "UNI model card — Resize(224) + ImageNet mean/std",
-    "note": "Direct 224 resize per published frozen-feature protocol"
+    "note": "Square 224×224 resize per frozen ViT batching requirement (aspect-ratio Resize breaks DataLoader stacking)"
   },
   "pipeline": [
-    { "op": "Resize", "size": 224 },
+    { "op": "Resize", "size": [224, 224] },
     { "op": "ToTensor" },
     { "op": "Normalize", "mean": [0.485, 0.456, 0.406], "std": [0.229, 0.224, 0.225] }
   ],

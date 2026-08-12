@@ -113,8 +113,16 @@ If a geometry-manipulation check is needed, use **spectral tempering**
 
 ## Step 10 — Geometry metrics
 
-Condition number (**primary** — the only Holm-significant metric in Paper 4). LID and within-class
-spectral-decay slope as secondary.
+**κ_primary** = `λ₁/λ_k` over the descending eigenvalues of the pooled within-class covariance
+`Σ_W`, **unregularized**, `k = 256` fixed across all backbones (D-035). Sensitivity at
+`k ∈ {128,256,512}`.
+
+**κ_paper4** = Paper 4's definition unchanged (full-`d`, `Σ_W + 1e-5·I`, from the precision matrix),
+reported alongside for direct replication comparison.
+
+No normalization: κ is scale-invariant, so scale was never the confound — the absolute ε was, and
+κ_primary takes no inverse so it needs none. LID and within-class spectral-decay slope stay
+secondary.
 
 ## Step 11 — Reliability estimators
 
@@ -141,14 +149,26 @@ output checksums.
 Cross-backbone analysis. **Do not run any of it before the per-backbone loop is complete** — partial
 cross-backbone results are the most tempting way to let the outcome taxonomy drift.
 
-1. Kendall's τ (exact), condition number vs. AUROC, per backbone.
+**0. Testability gate first (D-033).** Let `T` = backbones passing both Gate 0-pre and Gate 1. If
+`T < 5`, or fewer than 2 complete family cells survive, **stop**: report as a portability/feasibility
+study and score neither tier. Gate 1 failure is *not testable*, never falsification — so failures
+carry no information about the hypothesis, and an inconclusive study must not be reported as a
+negative one.
+
+1. Kendall's τ (exact), κ vs. AUROC, per backbone, on the **n=30 population fixed by D-034**:
+   Intervention α∈{0.25,0.5,0.75,1.0}×5 seeds, plus Adaptation linear-probe ×5 and partial-FT ×5.
+   **Excludes** Adaptation full-adapter-FT (= Conventional data). Not the α-ladder alone — on the
+   canonical arm only this gives τ=0.242, p=0.146.
 2. Paired t-test + Wilcoxon signed-rank for arm comparisons.
 3. Holm–Bonferroni across scorer × metric × arm × **backbone**.
 4. **Primary**: backbone as fixed effect, planned family-level contrasts (CNN / medical-SSL /
    medical-VLM / general-SSL / general-VLM).
 5. **Secondary, explicitly exploratory**: mixed model with backbone as random effect, variance
    component flagged low-confidence.
-6. Score against the outcome taxonomy — using the signed-off numbers from D-007, not the drafts.
+6. Score the **two-tier taxonomy (D-032)**: Tier 1 (A/B/C/D, on the count `S` alone) then Tier 2
+   (consistent / family-specific / heterogeneous). Report the pair, never a letter alone.
+7. Moderators (D-036): family **confirmatory**; dimension **preregistered sensitivity**; objective
+   **exploratory and aliased** — never reported as a tested moderator.
 
 **Collider hazard.** Representation geometry sits between backbone and intervention strength
 (Paper 4 `15_Causal_Graph.md`). Conditioning on geometry can manufacture spurious association. The

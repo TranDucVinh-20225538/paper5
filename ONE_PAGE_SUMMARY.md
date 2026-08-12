@@ -4,10 +4,10 @@
      Every change to this file must be authorized by an entry in the program decision log:
      ../lab-notebook/decision_log.md -->
 
-    Version:     2
-    Amended-by:  D-017 (backbone set fixed at N=10; D-014…D-024 from the backbone audit)
-    Date:        2026-08-11
-    Status:      PLAN — not yet a preregistration. One stop condition remains (D-007).
+    Version:     3
+    Amended-by:  D-032 (two-tier taxonomy; D-032…D-036 lock the protocol)
+    Date:        2026-08-12
+    Status:      PROTOCOL LOCKED — all stop conditions closed. Preregistration may now be written.
 
 This file is the anchor. Every other document in this repository is downstream of it. If something
 here changes, the change is a decision, and the decision goes in the log with an ID before the edit
@@ -91,12 +91,34 @@ a **fixed effect** and planned family-level contrasts (CNN / medical-SSL / medic
 / general-VLM). Estimators: Mahalanobis, cosine-to-centroid, k-NN (k=10), KDE. Holm–Bonferroni
 across backbone × estimator × metric × arm.
 
-**Condition number is computed on a fixed number of principal components** (k below the smallest
-embedding dimension in the set), not on the raw full-dimensional covariance (D-019). At fixed sample
-size κ grows with dimension as arithmetic, and dimension tracks family across this set — so raw κ
-would let the family contrast pick up dimension rather than geometry. Raw κ with `d` as a covariate
-is retained as a preregistered sensitivity analysis. Paper 4 could not have detected this: with one
-backbone, `d` was constant.
+**Analysis population — n=30 per backbone (D-034), matching Paper 4 exactly:**
+
+    INCLUDED  Intervention arm, α ∈ {0.25,0.5,0.75,1.0} × 5 seeds = 20
+              Adaptation arm, linear-probe rung        × 5 seeds =  5
+              Adaptation arm, partial-FT rung          × 5 seeds =  5
+    EXCLUDED  Adaptation arm, full-adapter-FT rung (= Conventional data; Paper 4's own
+              stated reason — avoid conflating the C4 control with the C2 population)
+
+Not the α-ladder alone: on the canonical arm only (n=20) the same association gives τ=0.242, p=0.146
+— not significant. The effect depends on pooling across arms of differing capacity.
+
+**κ definitions (D-035):**
+
+    κ_primary = λ₁/λ_k over Σ_W's descending eigenvalues, UNREGULARIZED, k=256 fixed
+    κ_paper4  = Paper 4's: full-d, Σ_W + 1e-5·I, from the precision matrix
+
+κ is computed on the **pooled within-class covariance `Σ_W`** (D-029), not the marginal covariance.
+Sensitivity at `k ∈ {128,256,512}`; the conclusion must not depend on which.
+
+*Why no normalization:* κ is scale-invariant — `κ(cΣ)=κ(Σ)` — so scale was never the confound. The
+**absolute** ε was, since it does not rescale with the matrix. ε exists only to make Σ_W invertible
+for the Mahalanobis scorer; κ_primary takes no inverse, so dropping ε removes the confound outright
+rather than adjusting for it. Paper 4 could not have seen this: one backbone, one scale, constant `d`.
+
+**Moderators are not equally answerable (D-036):** Family is **confirmatory**; dimension is a
+**preregistered sensitivity** (3 of 5 cells carry a within-family 768/1024 contrast); pretraining
+objective is **exploratory only and aliased** — `supervised` ≡ the CNN cell and `VL-contrastive` ≡ the
+two VLM cells, leaving exactly one non-redundant contrast (DINOv3 vs MoCo v3) at n=2.
 
 ## Secondary outcomes
 
@@ -118,10 +140,27 @@ not a caveat.
 | 2 | medical-VLM family cell was n=1 | **D-014** — ✅ closed, MONET |
 | 3 | general-SSL family cell was n=1 | **D-015** — ✅ closed, MoCo v3 |
 | 4 | Backbone count inconsistent across documents (7 vs 8) | **D-017** — ✅ closed, **N = 10** |
-| 5 | **Outcome-taxonomy thresholds are drafts, not numbers** | **D-007** — ⛔ **OPEN — the last one** |
+| 5 | Outcome-taxonomy thresholds were drafts, not numbers | **D-032** — ✅ closed, two-tier taxonomy |
+| 6 | κ_primary definition (k, normalization) | **D-035** — ✅ closed, k=256, unregularized |
+| 7 | Analysis population unspecified | **D-034** — ✅ closed, n=30 matching Paper 4 |
 
-D-007 is now unblocked (it was waiting on the denominator) but not resolved. **Until it closes,
-nothing here is preregistered.** The power analysis is likewise unblocked and unwritten.
+**All stop conditions are closed.** The power analysis is unblocked and remains to be written; it is
+the last artifact before the preregistration itself.
+
+## Testability gate — evaluated before any scoring (D-033)
+
+Let `T` = backbones passing **both** Gate 0-pre and Gate 1. The hypothesis is tested **only if**:
+
+1. `T ≥ 5`, **and**
+2. at least **2 complete family cells** survive (both members testable).
+
+Otherwise the hypothesis is **not tested**. The study reports as a **portability/feasibility study** —
+which families admit the ladder at all, and why the others do not. Neither tier below is scored, and
+no claim is made for or against the hypothesis.
+
+This exists because Gate 1 failure means *not testable*, never falsification — so failures carry no
+information about the hypothesis. A study where most units fail Gate 1 is inconclusive, not negative,
+and the two must not be reported alike.
 
 ## Gates — three outcomes each, never two
 
@@ -144,20 +183,40 @@ prevent it.
 
 ## Success criteria
 
-Outcome taxonomy — **N is now fixed at 10, but the thresholds themselves are still drafts pending
-D-007.** The denominators below are no longer placeholders; the *criteria* still are, and are marked
-so deliberately so they cannot be read as preregistered numbers later.
+**Two tiers (D-032). Tier 1 counts; Tier 2 interprets.** Reporting is always the pair — *"Outcome C,
+heterogeneous"* — never a Tier-1 letter alone.
 
-| Outcome | Draft criterion (N=10 family members) | Reading |
+Let `S` = testable backbones with a Holm-significant κ→AUROC association **in the same direction**.
+
+**Tier 1 — Outcome.** Defined purely on `S`, so the four partition `{0,…,T}` with no gaps:
+
+| Outcome | Criterion | At T=10 |
 |---|---|---|
-| A — full replication | Holm-significant, same direction, in **all 10** | Strongest result |
-| B — majority replication | Significant, same direction, in **≥6** *(draft — the 4/7 rule rescaled; needs sign-off, not arithmetic)*, no family reversed | Still strong |
-| C — family-conditional | Significant within one family (**2/2** agreeing) but not another, split **directionally consistent by family**, not scattered | Most interesting; drives the Discussion |
-| D — no broader replication | Significant in **≤1**, i.e. not exceeding Paper 4 alone | Paper 4 becomes a boundary condition, not a general account |
+| **A** full replication | `S = T` | 10 |
+| **B** majority replication | `⌈0.6·T⌉ ≤ S < T` | 6–9 |
+| **C** partial replication | `2 ≤ S < ⌈0.6·T⌉` | 2–5 |
+| **D** no broader replication | `S ≤ 1` | 0–1 |
 
-MedSAM is scored and reported but **does not count toward any denominator above** — it is a
-portability probe, not a family member (D-016). Fixing this in advance prevents a post-hoc argument
-about whether to include it once its result is known.
+No family-coherence condition appears here. That was the flaw in the draft taxonomy: mixing a count
+rule with a pattern rule left outcomes satisfying none of A–D — 4 significant scattered across
+families was not A, not B, not C, not D.
+
+**Tier 2 — Interpretation**, applied to whichever outcome occurred:
+
+| Interpretation | Criterion |
+|---|---|
+| **consistent** | family contrast **not** significant **and** no family reversed |
+| **family-specific** | ≥1 family at 2/2, ≥1 family at 0/2, **and** contrast **is** significant |
+| **heterogeneous** | everything else — the complement, by construction |
+
+`heterogeneous` is deliberately residual. Defining it as a complement is what makes Tier 2 exhaustive
+without inventing further labels.
+
+**All outcomes are publishable.** D means Paper 4 is a boundary condition rather than a general
+account — a finding, not a failure. A single backbone breaking the trend is discussed, not explained
+away.
+
+MedSAM is reported but **counts toward no denominator** — probe, not family member (D-016).
 
 All four outcomes are publishable. This follows Paper 4's own precedent that each of its
 falsification outcomes was "scientifically informative and publishable." A single backbone breaking

@@ -1,0 +1,24 @@
+{
+  "instrument": "microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224",
+  "frozen_from": {
+    "source": "open_clip.create_model_and_transforms('hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224').eval transform",
+    "hub_revision": "9f341de24bfb00180f1b847274256e9b65a3a32e",
+    "checkpoint": {
+      "hub_id": "microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224",
+      "weights_file": "open_clip_pytorch_model.bin",
+      "weights_sha256": "52cc993c5c5ff962bd0c60931874bc001e7e9b41666a385530f4a036294576be"
+    },
+    "note": "OpenCLIP eval: resize 224, center crop 224, CLIP normalize (not ImageNet constants)"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 224 },
+    { "op": "CenterCrop", "size": 224 },
+    { "op": "ToTensor" },
+    {
+      "op": "Normalize",
+      "mean": [0.48145466, 0.4578275, 0.40821073],
+      "std": [0.26862954, 0.26130258, 0.27577711]
+    }
+  ],
+  "modified": false
+}

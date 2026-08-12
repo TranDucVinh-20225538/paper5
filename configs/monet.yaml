@@ -22,7 +22,7 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/monet.json
-  sha256: null
+  sha256: 75272f90b9583f2d0f5c6700b2721890665b7c565bba9be04ee168213665da2d
   source: "AutoProcessor.from_pretrained('suinleelab/monet') — freeze its resolved transform"
 
 intervention:

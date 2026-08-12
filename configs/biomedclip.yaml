@@ -16,7 +16,7 @@ backbone:
       Pre-projection per D-018. Uniform with MONET, SigLIP and OpenCLIP — an inconsistent extraction
       rule across the four VLMs would confound both VLM cells.
 
-preprocessing: {asset: assets/preprocessing/biomedclip.json, sha256: null, source: null}
+preprocessing: {asset: assets/preprocessing/biomedclip.json, sha256: f0c46886c0a6c005b4e6ce7717b8b059a8ac6a2d7e53e90d73a5ddd9a7ef56f0, source: "open_clip eval transform frozen 2026-08-12"}
 
 intervention:
   r: null

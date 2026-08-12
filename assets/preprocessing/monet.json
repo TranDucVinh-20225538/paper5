@@ -1,0 +1,20 @@
+{
+  "instrument": "suinleelab/monet (CLIP ViT-L/14)",
+  "frozen_from": {
+    "source": "transformers.AutoProcessor.from_pretrained('suinleelab/monet').image_processor",
+    "hub_revision": "1d1efd0b8d61bde82cde22d2e93c28d73441f29e",
+    "checkpoint": {
+      "hub_id": "suinleelab/monet",
+      "weights_file": "model.safetensors",
+      "weights_sha256": "f5b874fff0aa8119484a75a497c997da8b4ff300a8c81c838aab893f301390af"
+    },
+    "note": "CLIP eval: resize shortest edge 224, center crop 224, ImageNet normalize"
+  },
+  "pipeline": [
+    { "op": "Resize", "size": 224 },
+    { "op": "CenterCrop", "size": 224 },
+    { "op": "ToTensor" },
+    { "op": "Normalize", "mean": [0.485, 0.456, 0.406], "std": [0.229, 0.224, 0.225] }
+  ],
+  "modified": false
+}

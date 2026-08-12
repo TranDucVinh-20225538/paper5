@@ -1,19 +1,24 @@
-# Pin exactly before the first real run. Floating versions silently change
-# results — a different BLAS or a different sklearn default is enough to move
-# a condition number.
-numpy
-scipy
-scikit-learn
+# PINNED — D-044 / D-045. Do not bump during Paper 5.
+#
+# timm is held at 0.9.16 deliberately. It cannot build DINOv3, which is exactly why
+# DINOv3 loads through transformers instead (D-045). Upgrading timm would change the
+# library that produced the ResNet-50, EfficientNet-B3 and UNI embeddings already
+# recorded in results/manifest.jsonl, invalidating their environment fingerprints and
+# the regression baseline built on them. Upgrading is a separate decision, scoped to
+# Paper 5.1 / Paper 6, applied to every backbone at once.
+numpy==2.4.2
+scipy==1.17.1
+scikit-learn==1.8.0
 pandas
-torch
+torch==2.10.0
 torchvision
-timm                # ResNet-50, EfficientNet-B3
-open_clip_torch     # OpenCLIP, BiomedCLIP
-transformers        # SigLIP, HF-hosted variants
-statsmodels         # fixed-effect model, contrasts
-pingouin            # exact Kendall tau, Wilcoxon
+timm==0.9.16              # ResNet-50, EfficientNet-B3, UNI — FROZEN, see above
+open_clip_torch==2.32.0   # OpenCLIP, BiomedCLIP
+transformers==5.14.1      # SigLIP, MONET, DINOv3, MedSAM
+statsmodels
+pingouin
 matplotlib
 seaborn
 pyyaml
 tqdm
-pytest>=7.4          # dev — milestone tests; pin before first reportable run
+pytest

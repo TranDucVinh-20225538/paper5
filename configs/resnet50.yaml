@@ -7,6 +7,7 @@ backbone:
   variant:    resnet50
   loader:     timm
   checkpoint: timm/resnet50.a1_in1k
+  revision:   767268603ca0cb0bfe326fa87277f19c419566ef   # D-044 — immutable. NEVER a branch.
   embed_dim:  2048
   activation: relu
 
@@ -35,3 +36,7 @@ seeds: [42, 52, 62, 72, 82]
 
 notes: >
   Papers 1-3 baseline. Reuses an existing checkpoint. Note the activation is ReLU, not GELU — the adapter must match it.
+
+license:
+  spdx: apache-2.0
+  release_tier: A    # unrestricted redistribution

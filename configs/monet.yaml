@@ -8,6 +8,7 @@ backbone:
   variant:    suinleelab/monet  (CLIP ViT-L/14, 105,550 derm image-text pairs from medical literature)
   loader:     hf
   checkpoint: "suinleelab/monet"
+  revision:   1d1efd0b8d61bde82cde22d2e93c28d73441f29e   # D-044 — immutable. NEVER a branch.
   embed_dim:  1024          # VERIFY — ViT-L pre-projection; projected is ~768, NOT used
   activation: gelu
 

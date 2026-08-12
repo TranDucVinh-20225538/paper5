@@ -5,8 +5,9 @@ backbone:
   name:       medsam
   family:     PROBE          # D-016 — NOT a family member. Excluded from the family-level model.
   variant:    MedSAM ViT-B image encoder
-  loader:     medsam
-  checkpoint: null
+  loader:     medsam      # transformers SamModel underneath
+  checkpoint: "wanglab/medsam-vit-base"   # originating lab, not the higher-download mirror
+  revision:   de8488bca37bb1d4fb190f612c516126d739ce3b   # D-044 — immutable. NEVER a branch.
   embed_dim:  768          # pre-neck; VERIFY with one forward pass
   activation: gelu
 
@@ -35,3 +36,14 @@ seeds: [42, 52, 62, 72, 82]
 
 notes: >
   D-016: reclassified out of the medical-SSL cell. MedSAM is supervised segmentation (SAM fine-tuned on medical masks), NOT self-supervised — it shares only 'medical' and 'image-only' with PanDerm, so keeping it in an SSL-named cell would break the homogeneity the family contrast assumes. Retained as a declared architecture-portability probe: full ladder, per-backbone analysis, EXCLUDED from the family model and from every outcome-taxonomy denominator. Run it FIRST — it is the structurally most different encoder in the set and the cheapest place to discover the recipe does not port. Representation choice is still open: see docs/medsam_integration.md (Task 4).
+
+license:
+  spdx: apache-2.0
+  release_tier: A    # unrestricted redistribution
+
+assertions:
+  embed_dim_must_be: 768   # D-043 — PRE-neck. 256 means the neck ran: WRONG (D-025).
+  why: >
+    transformers SamVisionEncoder.forward applies the neck INSIDE the forward pass, so the obvious
+    API call returns post-neck 256-d — the representation D-025 rejected. The failure is silent:
+    no exception, no warning, a plausible shape, the wrong tensor.

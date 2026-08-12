@@ -5,6 +5,7 @@ backbone:
   variant:    MahmoodLab/UNI  (ViT-L/16, DINOv2 recipe on Mass-100K histopathology)
   loader:     timm
   checkpoint: "hf-hub:MahmoodLab/uni"
+  revision:   b55a5ec6cade1a39edfe6534189a9b8ca7a022f0   # D-044 — immutable. NEVER a branch.
   embed_dim:  1024          # CONFIRMED — feature_emb shape [1, 1024]
   activation: gelu
   loader_kwargs:

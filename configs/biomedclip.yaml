@@ -5,6 +5,7 @@ backbone:
   variant:    "BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"   # VERIFY exact hub string
   loader:     open_clip
   checkpoint: "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"   # VERIFY
+  revision:   9f341de24bfb00180f1b847274256e9b65a3a32e   # D-044 — immutable. NEVER a branch.
   embed_dim:  768        # VERIFY — ViT-B/16 pre-projection. Projected (~512) is NOT used.
   activation: gelu
 
@@ -30,3 +31,7 @@ seeds: [42, 52, 62, 72, 82]
 notes: >
   Cell partner is MONET (ViT-L/14). This cell spans {B, L}, which D-022 mirrors in the general-VLM
   cell so the medical-vs-general VLM contrast is scale-controlled by construction.
+
+license:
+  spdx: mit
+  release_tier: A    # unrestricted redistribution

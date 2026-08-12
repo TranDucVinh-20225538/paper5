@@ -4,10 +4,11 @@
 backbone:
   name:       dinov3
   family:     general_ssl
-  variant:    null
-  loader:     dinov3
-  checkpoint: null
-  embed_dim:  null
+  variant:    facebook/dinov3-vitl16-pretrain-lvd1689m  (ViT-L/16, LVD-1689M)
+  loader:     hf          # D-045 — NOT timm: timm 0.9.16 cannot build dinov3
+  checkpoint: "facebook/dinov3-vitl16-pretrain-lvd1689m"
+  revision:   ea8dc2863c51be0a264bab82070e3e8836b02d51   # D-044 — immutable. NEVER a branch.
+  embed_dim:  1024        # ViT-L; VERIFY with one forward pass
   activation: gelu
 
   representation:
@@ -35,3 +36,7 @@ seeds: [42, 52, 62, 72, 82]
 
 notes: >
   D-005 CLOSED by D-015 — cell partner is MoCo v3, NOT DINOv2. DINOv2 was rejected as same-lineage: it would measure scaling variance and report it as family variance. Variant still to pin; pin ViT-L so the cell spans {L, B} and record embed_dim.
+
+license:
+  spdx: dinov3-license
+  release_tier: B    # conditional — Agreement copy + 'Built with DINOv3' + acknowledge in publication

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -62,3 +64,21 @@ def test_masked_pool_empty_mask_forbidden() -> None:
     mask = np.zeros((4, 4), dtype=bool)
     with pytest.raises(ValueError, match="zero tokens"):
         masked_global_average_pool(tokens, mask)
+
+
+def test_medsam_config_asserts_pre_neck_dimension():
+    """D-043: 768 is pre-neck. 256 means the neck ran, which D-025 rejected.
+
+    transformers applies the neck inside SamVisionEncoder.forward, so the obvious
+    API call silently returns the wrong tensor at a plausible shape. The config
+    carries the assertion so extraction can enforce it.
+    """
+    import yaml
+
+    from src.utils.config import find_repo_root
+
+    path = find_repo_root(Path(__file__)) / "configs" / "medsam.yaml"
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8"))
+    assert cfg["assertions"]["embed_dim_must_be"] == 768
+    assert cfg["backbone"]["embed_dim"] == 768, "config must declare pre-neck 768, not post-neck 256"
+    assert cfg["backbone"]["revision"], "D-044: MedSAM revision must be pinned"

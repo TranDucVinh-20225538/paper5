@@ -1,0 +1,31 @@
+# Fixture backbone for pipeline integration tests only — not a study backbone.
+backbone:
+  name: fixture_null_checkpoint
+  family:     cnn
+  variant:    test-fixture
+  loader:     fixture
+  checkpoint: null
+  embed_dim:  32
+  activation: relu
+
+  representation:
+    status:    RESOLVED
+    forward:   fixture
+    pooling:   none
+    rationale: Synthetic fixture for Step 3 integration tests.
+
+preprocessing:
+  asset:  tests/fixtures/preprocessing/test_backbone.json
+  sha256: c00e9abbf5b7d5a4d8140160f211a9d1a06dd6279091abdbb6e496864e769d21
+  source: unit-test fixture
+
+intervention:
+  r: null
+  lambda_proj: null
+  grid:
+    r: [16]
+    lambda_proj: [0.1]
+  nuisance_direction: {formula: unit(mu_ISIC - mu_PAD), learned: false}
+  alpha_ladder: [0.0, 1.0]
+
+seeds: [42]

@@ -3,8 +3,9 @@ backbone:
   name:       mocov3
   family:     general_ssl
   variant:    MoCo v3 ViT-B/16   # VERIFY exact release
-  loader:     timm
-  checkpoint: null      # PENDING — pin the official checkpoint and record it
+  loader:     hf          # transformers format, not timm
+  checkpoint: "nyu-visionx/moco-v3-vit-b"
+  revision:   7d091cd70772c5c0ecf7f00b5f12ca609a99d69d   # D-044 — immutable. NEVER a branch.
   embed_dim:  768       # VERIFY
   activation: gelu
 
@@ -37,3 +38,15 @@ notes: >
   or within-family variance is under-estimated. DINOv2 would have measured scaling variance instead.
   MAE was rejected as second choice — larger objective contrast but weak frozen features, hence
   material Gate 0-pre risk (D-020).
+
+license:
+  spdx: cc-by-nc-4.0
+  release_tier: B    # conditional — see D-046
+
+provenance:
+  status: UNVERIFIED       # D-042 — extraction MUST refuse while UNVERIFIED
+  issue: >
+    Third-party re-upload, not FAIR's release, and the HF card declares NO licence while FAIR's
+    moco-v3 is CC-BY-NC-4.0. Before freezing: obtain the official facebookresearch/moco-v3
+    checkpoint, compare config and parameter tensors. Identical -> pin and carry FAIR attribution.
+    Not identical -> DROP MoCo v3 and reopen D-005.

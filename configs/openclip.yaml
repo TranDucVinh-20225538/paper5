@@ -6,6 +6,9 @@ backbone:
   variant:    "ViT-B-16 / laion2b_s34b_b88k"      # VERIFY — pin corpus, not just architecture
   loader:     open_clip
   checkpoint: "ViT-B-16::laion2b_s34b_b88k"       # VERIFY
+  hub_repo:   laion/CLIP-ViT-B-16-laion2B-s34B-b88K   # the repo the revision below belongs to;
+                                                      # `checkpoint` above is open_clip's own identifier
+  revision:   7288da5a0d6f0b51c4a2b27c624837a9236d0112   # D-044 — immutable. NEVER a branch.
   embed_dim:  768        # VERIFY — pre-projection. Projected (512) is NOT used.
   activation: gelu
 
@@ -26,3 +29,7 @@ intervention:
   alpha_ladder: [0.0, 0.25, 0.5, 0.75, 1.0]
 
 seeds: [42, 52, 62, 72, 82]
+
+license:
+  spdx: mit
+  release_tier: A    # unrestricted redistribution

@@ -5,6 +5,7 @@ backbone:
   variant:    "google/siglip-large-patch16-256"   # VERIFY — must be the ViT-L variant, not base
   loader:     hf
   checkpoint: "google/siglip-large-patch16-256"   # VERIFY
+  revision:   d0da9f876e7d66b4e250cd2450c3ba2ce735e447   # D-044 — immutable. NEVER a branch.
   embed_dim:  1024       # VERIFY — ViT-L pre-projection
   activation: gelu
 
@@ -30,3 +31,7 @@ seeds: [42, 52, 62, 72, 82]
 notes: >
   D-022: pinned at ViT-L to mirror MONET, so both VLM cells carry one ViT-B and one ViT-L. Objective
   is sigmoid pairwise contrastive, vs OpenCLIP's softmax contrastive — that is the within-cell spread.
+
+license:
+  spdx: apache-2.0
+  release_tier: A    # unrestricted redistribution

@@ -40,3 +40,21 @@ notes: >
 license:
   spdx: dinov3-license
   release_tier: B    # conditional — Agreement copy + 'Built with DINOv3' + acknowledge in publication
+
+pretraining_note:
+  base_model: facebook/dinov3-vit7b16-pretrain-lvd1689m
+  distilled: true
+  detail: >
+    Confirmed 2026-08-12 from the model card and the HF base_model field: only DINOv3 ViT-7B is
+    trained from scratch. All five ViT variants (S/S+/B/L/H+) and all four ConvNeXt variants are
+    DISTILLED from it, so ViT-L/16 inherits the 7B's representation rather than learning one
+    independently.
+
+    Not a choice point — every deployable DINOv3 variant is distilled, and DINOv2 has the same
+    structure (ViT-g trained, S/B/L distilled), so this does not reopen D-015.
+
+    Recorded because it touches the primary covariate directly: kappa is a SPECTRAL property and
+    distillation is known to reshape eigenvalue spectra. The general-SSL cell therefore pairs a
+    distilled model (DINOv3 ViT-L) with a directly-trained one (MoCo v3 ViT-B). If DINOv3's geometry
+    behaves unlike the rest of the set, this is the first thing to point at — and it needs to be on
+    record BEFORE the result, not offered afterwards.

@@ -16,3 +16,10 @@ def test_load_resnet50_preprocessing(repo_root: Path) -> None:
     img = Image.fromarray(np.zeros((300, 300, 3), dtype=np.uint8))
     out = transform(img)
     assert out.shape == (3, 224, 224)
+
+
+def test_load_uni_preprocessing_non_square(repo_root: Path) -> None:
+    transform = load_preprocessing_pipeline(repo_root / "assets" / "preprocessing" / "uni.json")
+    img = Image.fromarray(np.zeros((300, 400, 3), dtype=np.uint8))
+    out = transform(img)
+    assert out.shape == (3, 224, 224)

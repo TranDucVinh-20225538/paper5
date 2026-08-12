@@ -18,7 +18,7 @@
 #
 # Env:
 #   MAX_GPU=1              GPU slots (default 1)
-#   MAX_CPU=2              Concurrent CPU analysis jobs
+#   MAX_CPU                Concurrent CPU analysis jobs (required unless DRY_RUN=1)
 #   CPU_THREADS=16         Threads per CPU job
 #   CUDA_VISIBLE_DEVICES=0
 #   POLL_SEC=30            Scheduler poll interval
@@ -45,7 +45,11 @@ if [[ -z "${CSG_DATA_ROOT:-}" && "${DRY_RUN:-0}" != "1" ]]; then
 fi
 
 MAX_GPU="${MAX_GPU:-1}"
-MAX_CPU="${MAX_CPU:-2}"
+if [[ "${DRY_RUN:-0}" == "1" ]]; then
+  MAX_CPU="${MAX_CPU:-1}"
+else
+  MAX_CPU="${MAX_CPU:?Set MAX_CPU (benchmark ladder 2→3→4→… before production)}"
+fi
 CPU_THREADS="${CPU_THREADS:-16}"
 GPU_DEVICE="${CUDA_VISIBLE_DEVICES:-0}"
 POLL_SEC="${POLL_SEC:-30}"

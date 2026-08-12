@@ -9,7 +9,7 @@
 #   nohup ./scripts/run_production_queue.sh > results/logs/production_queue.log 2>&1 &
 #
 # Env:
-#   MAX_CPU=2              CPU worker pool size (try 3 after benchmark)
+#   MAX_CPU                CPU worker pool size (required — set from benchmark data)
 #   WAIT_FOR_GPU=1         Block until external GPU job finishes (default 1)
 #   POLL_SEC=60            Wait poll when GPU busy
 #   QUEUE_FILE             Override queue file path
@@ -56,7 +56,8 @@ external_gpu_running() {
 
 log "=== production queue launcher $STAMP ==="
 log "configs (${#CONFIGS[@]}): ${CONFIGS[*]}"
-log "MAX_CPU=${MAX_CPU:-2} WAIT_FOR_GPU=$WAIT_FOR_GPU"
+: "${MAX_CPU:?Set MAX_CPU from benchmark results before production run}"
+log "MAX_CPU=$MAX_CPU WAIT_FOR_GPU=$WAIT_FOR_GPU"
 
 if (("$WAIT_FOR_GPU" == 1)); then
   while external_gpu_running; do
@@ -66,7 +67,7 @@ if (("$WAIT_FOR_GPU" == 1)); then
   log "GPU lane free — starting scheduler"
 fi
 
-export MAX_CPU="${MAX_CPU:-2}"
+export MAX_CPU
 export RESPECT_EXTERNAL_GPU=1
 export RESUME=1
 

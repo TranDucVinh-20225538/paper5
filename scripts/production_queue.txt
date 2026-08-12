@@ -1,25 +1,24 @@
 # Production pipeline queue — processed top-to-bottom by run_production_queue.sh
 #
-# Status key:
-#   DONE     — skip (manifest step 12_record)
-#   RUNNING  — skip launch (external job; scheduler waits via RESPECT_EXTERNAL_GPU)
-#   PENDING  — scheduler will run when GPU free
+# Backbone readiness (2026-08-12):
+#   monet, biomedclip     READY (preprocessing + SHA256 frozen)
+#   openclip, siglip      checkpoint pinned; preprocessing SHA256 pending
+#   mocov3                D-042 provenance verify pending (not blocked on download)
+#   medsam                design locked (D-025–D-027); config/preprocessing pin pending in repo
+#   dinov3                DEFERRED — HF gating pending Meta approval (see configs/dinov3.yaml)
+#
+# Failures log to results/scheduler/failures.jsonl; queue continues.
 #
 # Completed (do not rerun):
-# panderm          DONE
-# resnet50         DONE
-# efficientnet_b3  DONE
+#   panderm, resnet50, efficientnet_b3
 #
-# Currently running outside scheduler:
-# uni              RUNNING
+# Running outside scheduler:
+#   uni (sequential rerun — waiter blocks until GPU free)
 #
-# Remaining (scheduler order after UNI completes):
-# Failures (e.g. checkpoint not frozen) are logged to results/scheduler/failures.jsonl
-# and the queue continues — one backbone failure does not stop the rest.
 configs/monet.yaml
 configs/biomedclip.yaml
-configs/dinov3.yaml
-configs/mocov3.yaml
 configs/openclip.yaml
 configs/siglip.yaml
+configs/mocov3.yaml
 configs/medsam.yaml
+# configs/dinov3.yaml  DEFERRED — uncomment after HF access approved + verify_checkpoint

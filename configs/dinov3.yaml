@@ -1,13 +1,14 @@
-# dinov3 — see _template.yaml for field semantics and rules.
-# null = decision not made. The pipeline must refuse to run, not fill it in.
+# dinov3 — D-015 cell partner to MoCo v3 (ViT-L vs ViT-B).
+# HF ACCESS: PENDING Meta approval (facebook/dinov3-vitl16-pretrain-lvd1689m).
+# Do not queue until huggingface-cli can download weights. See docs/backbone_readiness.md.
 
 backbone:
   name:       dinov3
   family:     general_ssl
-  variant:    null
+  variant:    "facebook/dinov3-vitl16-pretrain-lvd1689m"
   loader:     dinov3
-  checkpoint: null
-  embed_dim:  null
+  checkpoint: "facebook/dinov3-vitl16-pretrain-lvd1689m"
+  embed_dim:  1024       # VERIFY after download — ViT-L CLS pre-head
   activation: gelu
 
   representation:
@@ -34,4 +35,5 @@ intervention:
 seeds: [42, 52, 62, 72, 82]
 
 notes: >
-  D-005 CLOSED by D-015 — cell partner is MoCo v3, NOT DINOv2. DINOv2 was rejected as same-lineage: it would measure scaling variance and report it as family variance. Variant still to pin; pin ViT-L so the cell spans {L, B} and record embed_dim.
+  D-005 CLOSED by D-015 — cell partner is MoCo v3, NOT DINOv2. Blocked on HF gating (2026-08-12):
+  access request submitted, awaiting Meta review. Pin ViT-L for {L,B} cell spread with MoCo ViT-B.

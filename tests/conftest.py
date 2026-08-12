@@ -34,3 +34,8 @@ def medsam_config_path() -> Path:
 @pytest.fixture
 def test_preprocessing_asset() -> Path:
     return FIXTURES_DIR / "preprocessing" / "test_backbone.json"
+
+
+@pytest.fixture
+def fixture_config() -> Path:
+    return FIXTURES_DIR / "configs" / "fixture_backbone.yaml"

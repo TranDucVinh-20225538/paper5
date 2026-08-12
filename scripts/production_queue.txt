@@ -1,0 +1,23 @@
+# Production pipeline queue — processed top-to-bottom by run_production_queue.sh
+#
+# Status key:
+#   DONE     — skip (manifest step 12_record)
+#   RUNNING  — skip launch (external job; scheduler waits via RESPECT_EXTERNAL_GPU)
+#   PENDING  — scheduler will run when GPU free
+#
+# Completed (do not rerun):
+# panderm          DONE
+# resnet50         DONE
+# efficientnet_b3  DONE
+#
+# Currently running outside scheduler:
+# uni              RUNNING
+#
+# Remaining (scheduler order after UNI completes):
+configs/monet.yaml
+configs/biomedclip.yaml
+configs/dinov3.yaml
+configs/mocov3.yaml
+configs/openclip.yaml
+configs/siglip.yaml
+configs/medsam.yaml

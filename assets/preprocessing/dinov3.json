@@ -8,10 +8,10 @@
       "weights_file": "model.safetensors",
       "weights_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
     },
-    "note": "DINOv3 ViT eval: resize 224x224 (default_to_square), ImageNet normalize"
+    "note": "DINOv3 ViT eval: force 224x224 (default_to_square), ImageNet normalize"
   },
   "pipeline": [
-    { "op": "Resize", "size": 224 },
+    { "op": "Resize", "size": [224, 224] },
     { "op": "ToTensor" },
     {
       "op": "Normalize",

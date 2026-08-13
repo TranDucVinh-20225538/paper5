@@ -1,9 +1,8 @@
 """
 Backbone-agnostic embedding extraction wrapper (protocol Step 3).
 
-Real checkpoint loaders are dispatched by config; only ``fixture`` is implemented
-for integration tests. Production loaders (panderm, timm, medsam, …) raise until
-wired in a later milestone — no PanDerm assumptions in the dispatch layer.
+Real checkpoint loaders are dispatched by config; ``fixture`` is used for integration tests.
+Production loaders: ``timm``, ``hf``, ``open_clip``, ``medsam``, plus PanDerm reuse/skip.
 """
 
 from __future__ import annotations
@@ -143,6 +142,16 @@ def extract_embeddings(
         from src.backbone.loaders.timm_loader import extract_timm_embeddings
 
         return extract_timm_embeddings(cfg, output_dir=output_dir)
+
+    if loader_name == "hf":
+        from src.backbone.loaders.hf_loader import extract_hf_embeddings
+
+        return extract_hf_embeddings(cfg, output_dir=output_dir)
+
+    if loader_name == "open_clip":
+        from src.backbone.loaders.open_clip_loader import extract_open_clip_embeddings
+
+        return extract_open_clip_embeddings(cfg, output_dir=output_dir)
 
     if loader_name == "medsam":
         from src.backbone.loaders.medsam_loader import extract_medsam_embeddings

@@ -17,7 +17,7 @@ backbone:
       SigLIP uses an attention-pooling (MAP) head, NOT a CLS token — do not assume CLS. Take the
       pooled output before the projection head, per D-018.
 
-preprocessing: {asset: assets/preprocessing/siglip.json, sha256: 75be8ddaf053413c48d9f0ebe0ec522aebb41b9f945ec8fa9c5a3cebbaca41e6, source: "SigLIP large patch16-256 processor frozen 2026-08-12"}
+preprocessing: {asset: assets/preprocessing/siglip.json, sha256: 4f32732002b15ce72f25136042734358cf4a6e24f70bd701e9630ae9f6499d78, source: "SigLIP large patch16-256 processor frozen 2026-08-12"}
 
 intervention:
   r: null

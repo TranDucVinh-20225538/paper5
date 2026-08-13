@@ -33,4 +33,6 @@ testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
     "slow: integration tests that train adapters (deselect with '-m \"not slow\"')",
+    "checkpoint: forward-pass tests that download pinned checkpoints from Hugging Face",
+    "smoke: single-image Step 3 extraction smoke tests (deselect with '-m \"not smoke\"')",
 ]

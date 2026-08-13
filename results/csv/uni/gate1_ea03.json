@@ -1,0 +1,76 @@
+{
+  "criterion": "EA-03",
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "results": {
+    "canonical": [
+      {
+        "alpha": 0.0,
+        "lid_reproducible": false,
+        "slope_reproducible": false,
+        "gate1_pass": false
+      },
+      {
+        "alpha": 0.25,
+        "lid_reproducible": false,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      },
+      {
+        "alpha": 0.5,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      },
+      {
+        "alpha": 0.75,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      },
+      {
+        "alpha": 1.0,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      }
+    ],
+    "conventional": [
+      {
+        "alpha": 0.0,
+        "lid_reproducible": false,
+        "slope_reproducible": false,
+        "gate1_pass": false
+      },
+      {
+        "alpha": 0.25,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      },
+      {
+        "alpha": 0.5,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      },
+      {
+        "alpha": 0.75,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      },
+      {
+        "alpha": 1.0,
+        "lid_reproducible": true,
+        "slope_reproducible": true,
+        "gate1_pass": true
+      }
+    ]
+  }
+}

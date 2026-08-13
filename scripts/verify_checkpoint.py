@@ -9,9 +9,8 @@ seconds — rather than partway through a multi-day extraction job.
     python3 scripts/verify_checkpoint.py uni
     python3 scripts/verify_checkpoint.py --all
 
-Uses the pipeline's own `create_timm_model`, deliberately: a parallel loader written
-just for verification would drift from the production path and could pass while the
-real extraction fails.
+Uses the pipeline's own ``create_backbone_model`` / ``verify_backbone_forward``, deliberately:
+a parallel loader written just for verification would drift from the production path.
 
 This script never handles credentials. If authentication is missing it says so and
 exits; log in yourself with `hf auth login`.
@@ -97,34 +96,24 @@ def check_gate(repo_id: str, *, authed: bool) -> None:
 
 def load_and_verify(cfg) -> None:
     """Load via the production path and check the embedding shape matches config."""
-    import torch
+    from src.backbone.loaders.model_factory import create_backbone_model, verify_backbone_forward
 
-    from src.backbone.loaders.timm_loader import create_timm_model
+    model = create_backbone_model(cfg)
+    print(f"{OK} model constructed via create_backbone_model()")
 
-    model = create_timm_model(cfg)
-    print(f"{OK} model constructed via create_timm_model()")
+    if cfg.loader == "timm":
+        import torch
 
-    # LayerScale trap: timm sets ls1 = nn.Identity() when init_values is absent, so
-    # the weights load "successfully" minus their LayerScale gammas and the features
-    # are silently wrong. configs/uni.yaml warns about this; assert it rather than
-    # trusting the warning was read.
-    blocks = getattr(model, "blocks", None)
-    if blocks is not None and len(blocks) and hasattr(blocks[0], "ls1"):
-        if isinstance(blocks[0].ls1, torch.nn.Identity):
-            raise VerificationFailed(
-                f"{cfg.name}: LayerScale is nn.Identity — init_values was not applied.\n"
-                "      Features would be silently wrong. Check loader_kwargs.init_values."
-            )
-        print(f"{OK} LayerScale active (init_values applied)")
+        blocks = getattr(model, "blocks", None)
+        if blocks is not None and len(blocks) and hasattr(blocks[0], "ls1"):
+            if isinstance(blocks[0].ls1, torch.nn.Identity):
+                raise VerificationFailed(
+                    f"{cfg.name}: LayerScale is nn.Identity — init_values was not applied.\n"
+                    "      Features would be silently wrong. Check loader_kwargs.init_values."
+                )
+            print(f"{OK} LayerScale active (init_values applied)")
 
-    size = getattr(model, "pretrained_cfg", {}).get("input_size", (3, 224, 224))
-    with torch.no_grad():
-        out = model(torch.zeros(1, *size))
-
-    if out.ndim != 2:
-        raise VerificationFailed(
-            f"{cfg.name}: expected a 2-D pooled output, got shape {tuple(out.shape)}"
-        )
+    out = verify_backbone_forward(cfg, model)
     got = out.shape[1]
     if got != cfg.embed_dim:
         raise VerificationFailed(
@@ -132,7 +121,7 @@ def load_and_verify(cfg) -> None:
             f"forward pass gives {got}.\n"
             "      Fix the config; do not adjust downstream code to absorb it."
         )
-    print(f"{OK} forward pass {tuple(size)} -> [1, {got}], matches config embed_dim")
+    print(f"{OK} forward pass -> [1, {got}], matches config embed_dim")
 
 
 def verify(config_path: Path) -> bool:
@@ -189,10 +178,6 @@ def verify(config_path: Path) -> bool:
             check_gate(repo_id, authed=bool(user))
         else:
             print(f"{OK} local checkpoint pinned by sha256 {local_sha[:12]}…")
-
-        if cfg.loader != "timm":
-            print(f"{SKIP} loader is {cfg.loader!r} — load check covers timm only")
-            return True
 
         load_and_verify(cfg)
 

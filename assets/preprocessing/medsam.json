@@ -8,10 +8,11 @@
       "weights_file": "pytorch_model.bin",
       "weights_sha256": "0ef67838fba16f16c0e308eaf7a3ae6fbf4fe8e13d7a120ca932671ed9c47db0"
     },
-    "note": "1024x1024 resize, ImageNet normalize; masked GAP at extraction (see docs/medsam_integration.md §5.3)"
+    "note": "longest-side 1024 + pad to 1024x1024, ImageNet normalize; masked GAP at extraction (see docs/medsam_integration.md §5.3)"
   },
   "pipeline": [
-    { "op": "Resize", "size": 1024 },
+    { "op": "ResizeLongestSide", "size": 1024 },
+    { "op": "PadSquare", "size": 1024 },
     { "op": "ToTensor" },
     {
       "op": "Normalize",

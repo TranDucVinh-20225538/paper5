@@ -20,7 +20,7 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/dinov3.json
-  sha256: 62424930330eb84dc388265e1696b21c3c4ff272640ae7bbe5d5a02f85881c56
+  sha256: aa8af900dcaf99da41f1779b17b965e66d5d3a9f59f5356756063f69c14b6417
   source: "DINOv3 ViT-L eval transform frozen 2026-08-12"
 
 intervention:

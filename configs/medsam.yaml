@@ -20,7 +20,7 @@ backbone:
 
 preprocessing:
   asset:  assets/preprocessing/medsam.json
-  sha256: fbcf2ba867421a9bfbcf048df6ad7c00a1f41a66812520b5a052bdebdff80b1b
+  sha256: dfb78e884c1e8f0208a22f3dcc9855596a08a2d340c90a64f5b01e5cc7677f67
   source: "MedSAM 1024 eval transform frozen 2026-08-12"
 
 intervention:

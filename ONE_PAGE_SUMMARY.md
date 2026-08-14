@@ -4,10 +4,11 @@
      Every change to this file must be authorized by an entry in the program decision log:
      ../lab-notebook/decision_log.md -->
 
-    Version:     4
-    Amended-by:  D-049 (dimension rationale withdrawn; decision unchanged)
-    Date:        2026-08-14
-    Status:      PROTOCOL LOCKED — all stop conditions closed. Preregistration may now be written.
+    Version:     5
+    Amended-by:  D-053 (status line only — no substantive change)
+    Date:        2026-08-15
+    Status:      PROTOCOL FROZEN at a83c74c. Analysis complete. Manuscript round 0 written.
+                 Nothing below this line changed after the freeze.
 
 This file is the anchor. Every other document in this repository is downstream of it. If something
 here changes, the change is a decision, and the decision goes in the log with an ID before the edit

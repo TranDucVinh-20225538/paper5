@@ -1,7 +1,8 @@
 # Protocol — per-backbone runbook
 
-    Status: DRAFT — executable order of operations, not yet locked.
-    Locks when docs/preregistration.md is written.
+    Status: LOCKED. docs/preregistration.md was frozen at a83c74c (tag v0.2-protocol-frozen).
+    This file is the executable form of that document. Changing it now is a deviation
+    and requires a decision-log entry with `Outcome data seen at decision time: YES`.
 
 This file is the **ordered procedure**. The *reasoning* behind each choice lives in
 [`01_Implementation_Brief.md`](01_Implementation_Brief.md) and [`00_Kickoff.md`](00_Kickoff.md), and

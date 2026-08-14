@@ -283,8 +283,9 @@ k ∈ {128, 256, 512} gives S = 0 and Tier 1 = D at every k. `κ_paper4` gives S
 
 ### 4.7 Secondary scorers
 
-Cosine-to-centroid, k-NN and KDE were computed in full and lie outside the confirmatory correction.
-[Table — supplementary.]
+Cosine-to-centroid, k-NN and KDE were computed in full and lie outside the confirmatory correction,
+as preregistered. They are reported in Supplementary Table S1 and are not used to support any claim
+in this section.
 
 ---
 
@@ -403,8 +404,28 @@ on the dose ladder. We do not develop that further here.
 
 ## 6. Data and code availability
 
-Repository, frozen preregistration commit, decision log. Release policy is stratified by checkpoint
-licence; artifacts derived from non-redistributable backbones are represented by checksums only.
+Both datasets are public. The split is pinned by a digest over assignment columns rather than over
+the metadata file, so it is verifiable on any machine; the digest is `7841f732…3289ce`.
+
+The repository contains the protocol, the preregistration frozen as a single commit
+(`a83c74c`, tag `v0.2-protocol-frozen`), the analysis code, the per-backbone result tables, and a
+run manifest recording the commit, configuration hash, checkpoint revision and library versions for
+every run. Every checkpoint is pinned to an immutable revision rather than to a branch.
+
+A decision log covering the full design and analysis history accompanies the repository. It records
+each decision with the date, the commit, and whether outcome data had been seen at the time — the
+last of which is what distinguishes a preregistered choice from a post-hoc one, and is the reason
+the exploratory analyses that were run and deliberately excluded (D-052) are recorded rather than
+omitted.
+
+Release is stratified by checkpoint licence. Three of the ten backbones carry non-commercial terms,
+one prohibits redistribution of derivatives, and one is withheld pending a legal question about
+ShareAlike obligations. Artifacts derived from those backbones are represented by checksums.
+Reproduction from a clean clone is therefore not uniform across backbones, and we state this rather
+than implying a uniform reproduction path that does not exist.
+
+Embeddings and adapter checkpoints total tens of gigabytes and are not held in version control;
+their checksums are.
 
 ---
 

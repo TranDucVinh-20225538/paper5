@@ -1,12 +1,27 @@
-PLACEHOLDER — choose a license before this repository is made public.
+NOT YET CHOSEN — and blocked on a specific question, not on indecision.
 
-For research code accompanying a paper the usual choices are MIT (permissive,
-simplest) or Apache-2.0 (permissive + explicit patent grant). Some venues or
-institutions require a specific one; check before deciding.
+The code licence for this repository cannot be settled independently of the
+checkpoint licences it depends on. Decision D-046 established that release is
+stratified rather than uniform:
 
-Note that a license covers the CODE only. It does not grant any rights over
-ISIC 2019 or PAD-UFES-20, which carry their own terms, nor over any pretrained
-checkpoint in assets/checkpoints/ — each of those has its own license and some
-are non-commercial. Record them in assets/README.md.
+  Tier A  unrestricted        Apache-2.0 / MIT checkpoints
+  Tier B  conditional         DINOv3 (notice required), MoCo v3 (CC-BY-NC-4.0)
+  Tier C  withheld            UNI (CC-BY-NC-ND-4.0), MONET (CC-BY-NC-SA-4.0)
 
-Replace this file, and log the choice as a decision.
+Two consequences:
+
+1. Three of the ten backbones are NON-COMMERCIAL. Whatever licence this code
+   carries, artifacts derived from those backbones are non-commercial only.
+
+2. MONET is CC-BY-NC-SA-4.0, a ShareAlike licence. Whether an adapter trained on
+   MONET embeddings, or the embeddings themselves, constitute "Adapted Material"
+   under Creative Commons is an unsettled legal question, and this project does
+   not assert an answer. Pending institutional guidance, MONET-derived artifacts
+   are withheld as a precaution rather than released under an asserted licence.
+
+Until that question is answered, no licence is asserted here. This is a recorded
+open item (D-046), not an oversight.
+
+NOTE: a code licence would in any case cover the CODE only. It grants no rights
+over ISIC 2019, PAD-UFES-20, or any pretrained checkpoint, each of which carries
+its own terms. Those are recorded in assets/README.md.

@@ -8,11 +8,20 @@ acquisition shift.
 |---|---|
 | **Local path** | `/Users/cubo/Research/geometry-reliability-generalization/` |
 | **GitHub** | https://github.com/TranDucVinh-20225538/paper5 |
-| **Latest tag** | `v0.1-kickoff` |
+| **Latest tag** | `p5-round0` |
+| **Protocol frozen** | `a83c74c` · tag `v0.2-protocol-frozen` |
 
-**Status: pre-protocol.** No runs have started. Five blockers are open — see
-[`ONE_PAGE_SUMMARY.md`](ONE_PAGE_SUMMARY.md) § Stop conditions. Nothing in this repository may be
-described as *preregistered* until they close.
+**Status: analysis complete, manuscript round 0 written.**
+
+The protocol was frozen before any cross-backbone association was computed. All stop conditions are
+closed. Ten backbones passed both gates; one declared probe (MedSAM) is recorded *not testable*.
+The confirmatory result is Outcome D, heterogeneous — no backbone cleared the Holm-corrected
+threshold — alongside an exact replication of the prior study on its original backbone
+(τ = +0.5576, difference 0.0000).
+
+> ⚠ **Open provenance gap.** `scripts/run_confirmatory_analysis.py` and `results/csv/confirmatory/`
+> were reported as committed at `da8b775`, but that commit is not present on any branch here. Until
+> it is pushed, the numbers in the manuscript have no committed source. See D-053.
 
 ## Start here
 
@@ -47,8 +56,8 @@ to one paper would reset it at every new paper (D-009).
 that is supposed to be immutable.
 
 **`experiments/` uses names, not numbers.** `experiments/panderm/`, not `experiments/backbone01/`.
-The backbone list is explicitly not final — two family cells are still n=1 (D-004, D-005) — so
-numbered directories would churn and break every reference in the decision log.
+The backbone list churned during design — two family cells were resolved late (D-014, D-015) — so
+numbered directories would have broken every reference in the decision log.
 
 **Large arrays never enter git.** Embeddings run to tens of GB across the backbone set. The repo
 tracks checksums and JSON/CSV summaries; the arrays live outside. See
@@ -86,6 +95,17 @@ it.
 | Paper 4 | preregistered causal test on one frozen foundation model (PanDerm ViT-L/16). Condition number is the **only** Holm-significant geometry metric; LID and spectral decay are not |
 | **Paper 5** | Paper 4's own Prediction 3 — dropped for compute, not logic — revived as a multi-backbone causal replication (`F-003`) |
 
-## License
+## Licensing and artifact release
 
-See [`LICENSE`](LICENSE) — placeholder, needs a choice before the repo goes public.
+Release is **stratified by checkpoint licence** (D-046), not uniform. Three of the ten backbones are
+non-commercial, so the study's artifacts are non-commercial overall regardless of what the code
+licence says.
+
+| Tier | Backbones | Derived artifacts |
+|---|---|---|
+| **A** unrestricted | ResNet-50, EfficientNet-B3, BiomedCLIP, OpenCLIP, SigLIP, MedSAM | released |
+| **B** conditional | DINOv3 (notice), MoCo v3 (non-commercial, attribution) | released with conditions |
+| **C** withheld | UNI (no derivatives), MONET (**under legal review**) | checksums only |
+
+See [`LICENSE`](LICENSE). The code licence is not yet chosen — it is blocked on the MONET question
+in D-046, not on indecision.

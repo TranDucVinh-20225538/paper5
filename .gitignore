@@ -52,6 +52,8 @@ paper/manuscript/**/*.log
 paper/manuscript/**/*.out
 paper/manuscript/**/*.synctex.gz
 paper/manuscript/**/*.toc
+# the built PDF is archived per round in paper/history/, not tracked here
+paper/manuscript/**/*.pdf
 
 # Python
 __pycache__/

@@ -34,21 +34,75 @@ Account of Distance-Based Reliability Estimation in Dermatology
 
 ## 1. Introduction
 
-*[To write.]*
+A skin-lesion classifier deployed outside the setting it was trained in will meet images it should
+not be trusted on: a different camera, a different clinic, a different population. The practical
+safeguard is not a better classifier but a *reliability estimator* — a mechanism that flags such
+inputs before a prediction is acted upon. Distance-based estimators are the usual choice, because
+they operate on a frozen representation, require no retraining, and depend on no classifier head.
+Mahalanobis distance to class-conditional centroids is the canonical instance.
 
-Structure the gap so the reader reaches the same question the preregistration asks:
+Whether these estimators actually survive acquisition shift has proved harder to settle than early
+results suggested, and the difficulty is instructive. On dermoscopy-to-smartphone shift, Mahalanobis
+distance separated in-distribution from shifted inputs at AUROC 0.97 while softmax confidence
+collapsed [1]. That robustness did not survive scrutiny: after domain-adversarial shortcut removal,
+the same estimator on the same shift fell to approximately 0.40 [2] — worse than chance, and
+therefore not merely a loss of discriminative power. The natural reading is that the original
+robustness had been reading a shortcut rather than the shift itself.
 
-1. Distance-based reliability estimators under acquisition shift — the Paper 1–3 lineage, ending in
-   the finding that apparent robustness may be shortcut-driven and that the collapse is not loss of
-   information.
-2. Paper 4: a preregistered causal test on one frozen foundation model. Condition number the only
-   Holm-significant geometry metric.
-3. The gap: one backbone. Treating "architecture" as a unitary causal category from a single
-   instance is unfalsifiable by design; within-category variance was never measured. Existing
-   large-scale multi-backbone work is correlational.
-4. This study: the same intervention ladder, applied independently to ten backbones sampled to span
-   five representation families, with the analysis preregistered before any cross-backbone
-   association was computed.
+The reading that followed was less natural and more interesting. If the estimator fails because the
+domain information has been removed, a domain probe applied to the same embeddings should also fail.
+It does not. A linear probe still decoded domain at 0.72–0.81 AUROC from embeddings on which eight
+distance and density estimators performed at or below chance [3]. The information is present. The
+estimators cannot reach it.
+
+That is a statement about the *geometry* of the representation rather than its information content,
+and it converts a negative result into a mechanistic question: which property of an embedding space
+determines whether a distance-based estimator can exploit the structure it contains?
+
+A preregistered causal study addressed that question on a single frozen dermatology foundation model
+[4]. Rather than comparing representations observationally, it intervened: a small adapter on the
+frozen output embedding, trained to suppress a closed-form nuisance direction, with a dose ladder
+obtained by post-hoc interpolation and matched control arms that isolate capacity from the
+orthogonality objective. Among the preregistered geometry metrics, condition number was the only one
+Holm-significantly associated with estimator performance; local intrinsic dimensionality and
+within-class spectral decay were not.
+
+That study was explicit about what it could not establish. Its own analysis flagged that treating
+"architecture" as a causal category on the basis of a single instance is unfalsifiable by design:
+with one backbone, a property of *representations* and a property of *that representation* produce
+identical evidence, and within-category variance is never measured. It deferred the multi-backbone
+test to future work for resource reasons rather than logical ones.
+
+Filling that gap is not simply a matter of running more models. Large-scale multi-backbone studies of
+representation quality exist, but they are correlational: they compare backbones as found, so any
+association between geometry and estimator behaviour is confounded by everything else that differs
+between them. What the question requires is the *same* intervention applied *independently* within
+each backbone, so that the causal claim is tested once per representation and then compared across
+representations — with backbone identity modelled as a source of variance rather than assumed away.
+
+This study does that. We apply the full intervention ladder — dose ladder, control arms, implementation
+and manipulation gates — independently to ten backbones, sampled as five representation families with
+two instances each so that within-family variance is measurable rather than assumed. The families span
+supervised CNNs, medical and general self-supervised encoders, and medical and general
+vision–language models. A segmentation encoder was included separately as a declared
+architecture-portability probe.
+
+The analysis was preregistered and frozen before any cross-backbone association was computed. The
+population, the covariate definition, the confirmatory family, the inference procedure, the outcome
+taxonomy and the stopping rule were each fixed in advance, and the freeze is a single commit whose
+timestamp precedes every result reported here. Two features of that protocol matter for reading what
+follows: the primary inference resamples whole random seeds rather than individual observations,
+because observations sharing a seed share an adapter and a training trajectory; and a backbone whose
+manipulation check fails is recorded as *not testable* rather than as evidence against the
+hypothesis.
+
+We report three things. Under the preregistered protocol we found no confirmatory evidence that the
+geometric relationship generalizes across backbone families. On the original backbone, the original
+result reproduced exactly — to four decimal places — which removes the pipeline as an explanation for
+the first finding. And the two inference procedures, differing only in their unit of resampling,
+disagreed on six of ten backbones, including on the exact effect size the original study reported.
+
+*[Citations: 1 = Paper 1, 2 = CSG-Skin, 3 = DST-Skin, 4 = Paper 4. Replace with final refs.]*
 
 ---
 

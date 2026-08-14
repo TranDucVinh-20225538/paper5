@@ -3,9 +3,11 @@
 Beyond a Single Backbone: A Preregistered Multi-Backbone Test of a Geometry-Mediated
 Account of Distance-Based Reliability Estimation in Dermatology
 
-    Draft:      round 0
+    Draft:      round 1
     Protocol:   frozen at a83c74c (tag v0.2-protocol-frozen)
-    Decisions:  lab-notebook D-001 … D-052
+    Analysis:   scripts/run_confirmatory_analysis.py — regenerates every number below
+    Figures:    results/figures/fig1_confirmatory, fig2_auroc_range
+    Decisions:  lab-notebook D-001 … D-053
 
 > **Structural rule for this file.** Confirmatory and exploratory content are separated by file
 > structure, not only by wording. §4 contains preregistered results and no interpretation. §5

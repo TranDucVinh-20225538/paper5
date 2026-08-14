@@ -1,4 +1,4 @@
-"""Geometry measurement suite — Step 10 (κ_paper4 only; κ_primary blocked by D-029)."""
+"""Geometry measurement suite — Step 10 (κ_paper4 and κ_primary; D-029 closed by D-035)."""
 
 from __future__ import annotations
 
@@ -10,7 +10,12 @@ import numpy as np
 import pandas as pd
 
 from src.estimators.mahalanobis import compute_mahalanobis_params_from_arrays
-from src.geometry.condition_number import condition_number
+from src.geometry.condition_number import (
+    SENSITIVITY_KS,
+    condition_number,
+    kappa_primary,
+    unregularized_pooled_within_class_covariance,
+)
 from src.geometry.lid_spectral_decay import compute_lid_spectral_diagnostics
 from src.intervention.arms import PARTIAL_FT_R, ArmCheckpoints
 from src.intervention.embeddings import EmbeddingArtifacts
@@ -87,12 +92,36 @@ def compute_geometry_metrics(
     )
     lid_diag = compute_lid_spectral_diagnostics(z, labels, num_classes=num_classes)
     proj = z @ w
-    return {
+    out: dict[str, Any] = {
         "condition_number": float(condition_number(precision)),
         "per_direction_variance_w": float(np.var(proj)),
         "lid_mean": lid_diag.lid_mean,
         "spectral_decay_slope": lid_diag.spectral_slope,
     }
+    out.update(kappa_primary_fields(z, labels, num_classes=num_classes))
+    return out
+
+
+def kappa_primary_fields(
+    z: np.ndarray,
+    labels: np.ndarray,
+    *,
+    num_classes: int = NUM_CLASSES,
+) -> dict[str, float]:
+    """κ_primary and preregistered k-sensitivity. Omits a k when d < k."""
+    sigma_w = unregularized_pooled_within_class_covariance(z, labels, num_classes=num_classes)
+    d = int(sigma_w.shape[0])
+    names = {
+        256: "condition_number_primary",
+        128: "condition_number_primary_k128",
+        512: "condition_number_primary_k512",
+    }
+    fields: dict[str, float] = {}
+    for k in SENSITIVITY_KS:
+        if d < k:
+            continue
+        fields[names[k]] = float(kappa_primary(sigma_w, k=k))
+    return fields
 
 
 def run_geometry_completion(

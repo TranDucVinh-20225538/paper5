@@ -113,6 +113,40 @@ def run_steps_4_through_6(
     return record
 
 
+def _step3_record(
+    cfg: BackboneConfig,
+    extraction: ExtractionOutput,
+    root: Path,
+    *,
+    loader_override: str | None = None,
+) -> dict[str, Any]:
+    """The Step 3 manifest record — one definition, used by every entrypoint.
+
+    This was duplicated across four call sites and the copies drifted: only
+    run_steps_0_through_3 wrote the checksums, so any backbone run straight through
+    to step 6/7/12 lost exactly the provenance D-044 exists to record. The zeros then
+    propagated silently through resolve_extraction.
+    """
+    return {
+        "step": "3_extract_embeddings",
+        "commit": git_commit_sha(root),
+        "config_hash": config_sha256(cfg),
+        "backbone": cfg.name,
+        "family": cfg.family,
+        "loader": loader_override or cfg.raw["backbone"].get("loader"),
+        "embed_dim": cfg.embed_dim,
+        "pooling": cfg.pooling,
+        "train_n": extraction.train_n,
+        "eval_n": extraction.eval_n,
+        "train_dir": str(extraction.train_dir),
+        "eval_dir": str(extraction.eval_dir),
+        "train_sha256": extraction.train_sha256,
+        "eval_sha256": extraction.eval_sha256,
+        "skipped": extraction.skipped,
+        "skip_reason": extraction.skip_reason,
+    }
+
+
 def resolve_extraction(root: Path, cfg: BackboneConfig) -> ExtractionOutput:
     """Load Step 3 artifact paths for a backbone (for CPU-phase resume)."""
     exp_emb = _experiment_dir(root, cfg.name) / "embeddings"
@@ -125,7 +159,9 @@ def resolve_extraction(root: Path, cfg: BackboneConfig) -> ExtractionOutput:
 
     manifest = root / "results" / "manifest.jsonl"
     record = latest_manifest_record(manifest, cfg.name, step="3_extract_embeddings")
-    if record:
+    # An incomplete record is worse than none: it yields train_n=0 and empty checksums
+    # that look like data. Fall through to reading the arrays instead.
+    if record and record.get("train_n") and record.get("train_sha256"):
         return ExtractionOutput(
             backbone=cfg.name,
             train_dir=Path(record["train_dir"]),
@@ -332,24 +368,7 @@ def run_steps_0_through_3(
     )
 
     manifest = manifest_path or (root / "results" / "manifest.jsonl")
-    record = {
-        "step": "3_extract_embeddings",
-        "commit": git_commit_sha(root),
-        "config_hash": config_sha256(cfg),
-        "backbone": cfg.name,
-        "family": cfg.family,
-        "loader": loader_override or cfg.raw["backbone"].get("loader"),
-        "embed_dim": cfg.embed_dim,
-        "pooling": cfg.pooling,
-        "train_n": extraction.train_n,
-        "eval_n": extraction.eval_n,
-        "train_dir": str(extraction.train_dir),
-        "eval_dir": str(extraction.eval_dir),
-        "train_sha256": extraction.train_sha256,
-        "eval_sha256": extraction.eval_sha256,
-        "skipped": extraction.skipped,
-        "skip_reason": extraction.skip_reason,
-    }
+    record = _step3_record(cfg, extraction, root, loader_override=loader_override)
     append_manifest(record, manifest)
     return record
 
@@ -387,17 +406,7 @@ def run_steps_0_through_6(
         fixture_eval_n=fixture_eval_n,
     )
     manifest = manifest_path or (root / "results" / "manifest.jsonl")
-    append_manifest(
-        {
-            "step": "3_extract_embeddings",
-            "commit": git_commit_sha(root),
-            "config_hash": config_sha256(cfg),
-            "backbone": cfg.name,
-            "train_dir": str(extraction.train_dir),
-            "eval_dir": str(extraction.eval_dir),
-        },
-        manifest,
-    )
+    append_manifest(_step3_record(cfg, extraction, root), manifest)
     return run_steps_4_through_6(
         cfg,
         extraction,
@@ -476,17 +485,7 @@ def run_steps_0_through_7(
         fixture_eval_n=fixture_eval_n,
     )
     manifest = manifest_path or (root / "results" / "manifest.jsonl")
-    append_manifest(
-        {
-            "step": "3_extract_embeddings",
-            "commit": git_commit_sha(root),
-            "config_hash": config_sha256(cfg),
-            "backbone": cfg.name,
-            "train_dir": str(extraction.train_dir),
-            "eval_dir": str(extraction.eval_dir),
-        },
-        manifest,
-    )
+    append_manifest(_step3_record(cfg, extraction, root), manifest)
     step6 = run_steps_4_through_6(
         cfg,
         extraction,
@@ -569,17 +568,7 @@ def run_steps_0_through_12(
         fixture_eval_n=fixture_eval_n,
     )
     manifest = manifest_path or (root / "results" / "manifest.jsonl")
-    append_manifest(
-        {
-            "step": "3_extract_embeddings",
-            "commit": git_commit_sha(root),
-            "config_hash": config_sha256(cfg),
-            "backbone": cfg.name,
-            "train_dir": str(extraction.train_dir),
-            "eval_dir": str(extraction.eval_dir),
-        },
-        manifest,
-    )
+    append_manifest(_step3_record(cfg, extraction, root), manifest)
     step6 = run_steps_4_through_6(
         cfg,
         extraction,

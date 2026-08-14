@@ -62,6 +62,42 @@ def main(argv: list[str] | None = None) -> int:
     if args.from_step > args.through_step:
         parser.error("--from-step must be <= --through-step")
 
+    # Resume at steps 4-6 without re-extracting. Every piece already existed
+    # (resolve_extraction, run_steps_4_through_6); only this wiring was missing, so
+    # --from-step was accepted, validated, and then silently ignored for 1-7 — the
+    # dispatch below keys on --through-step alone and always starts at 0. For MedSAM
+    # that meant ~11 hours of re-extraction on every attempt to run step 5.
+    if 4 <= args.from_step <= 6:
+        if args.through_step > 6:
+            parser.error("--from-step 4..6 currently runs through step 6 only")
+        from src.pipeline.steps import resolve_extraction, run_steps_4_through_6
+        from src.utils.config import load_backbone_config
+
+        # find_repo_root is the module-level wrapper below — importing it here as well
+        # would make the name function-local for the whole of main(), leaving it unbound
+        # in every branch that does not run this one.
+        cfg = load_backbone_config(args.config)
+        root = find_repo_root(args.config)
+        extraction = resolve_extraction(root, cfg)
+        print(
+            f"Resuming at step {args.from_step} from existing embeddings: "
+            f"{extraction.train_n}x{extraction.embed_dim} train, {extraction.eval_n} eval"
+        )
+        record = run_steps_4_through_6(cfg, extraction, root, grid_epochs=args.grid_epochs)
+        print(
+            f"Step 6 complete: {record['backbone']} r={record['selected_r']} "
+            f"lambda={record['selected_lambda_proj']} gate0=PASS"
+        )
+        return 0
+
+    if args.from_step in (1, 2, 3, 7):
+        # Fail loudly rather than quietly restarting from 0, which is what happened
+        # before and is indistinguishable from success until the wall-clock bill arrives.
+        parser.error(
+            f"--from-step {args.from_step} is not supported. "
+            "Use 0 (full run), 4..6 (resume at the grid search), or 8 (CPU phase)."
+        )
+
     if args.from_step >= 8:
         if args.through_step < 8:
             parser.error("CPU phase requires --through-step >= 8")

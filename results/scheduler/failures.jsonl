@@ -1,1 +1,7 @@
 {"backbone": "dinov3", "exit_code": 1, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260812T201938Z/dinov3_gpu.log", "phase": "gpu", "timestamp": "2026-08-13T00:08:49.013836+00:00"}
+{"backbone": "siglip", "exit_code": 127, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260813T042706Z/siglip_gpu.log", "phase": "gpu", "timestamp": "2026-08-13T05:02:40.411268+00:00"}
+{"backbone": "medsam", "exit_code": 1, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260813T042706Z/medsam_gpu.log", "phase": "gpu", "timestamp": "2026-08-13T05:03:11.428169+00:00"}
+{"backbone": "biomedclip", "exit_code": 127, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260813T042706Z/biomedclip_cpu.log", "phase": "cpu", "timestamp": "2026-08-13T07:31:00.139352+00:00"}
+{"backbone": "monet", "exit_code": 127, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260813T042706Z/monet_cpu.log", "phase": "cpu", "timestamp": "2026-08-13T07:43:08.087344+00:00"}
+{"backbone": "mocov3", "exit_code": 127, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260813T042706Z/mocov3_cpu.log", "phase": "cpu", "timestamp": "2026-08-13T08:02:20.048774+00:00"}
+{"backbone": "openclip", "exit_code": 127, "log": "/mnt/data2/Vinh/paper5/results/logs/scheduler_20260813T042706Z/openclip_cpu.log", "phase": "cpu", "timestamp": "2026-08-13T08:34:11.633088+00:00"}

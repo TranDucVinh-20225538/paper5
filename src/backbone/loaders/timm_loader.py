@@ -16,6 +16,7 @@ from src.datasets.image_dataset import MetadataImageDataset
 from src.datasets.splits import assert_split_counts, build_eval_pool_df, build_isic_train_df
 from src.utils.config import BackboneConfig
 from src.utils.paths import load_dataset_paths
+from src.utils.torch_device import pin_memory_for, resolve_torch_device
 
 
 def _metadata_frame(df: pd.DataFrame) -> pd.DataFrame:
@@ -114,7 +115,7 @@ def extract_timm_embeddings(
     assert_split_counts(train_df, eval_df)
 
     transform = load_preprocessing_pipeline(cfg.preprocessing_asset)
-    dev = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    dev = device or resolve_torch_device()
     model = create_timm_model(cfg).to(dev)
     pooling = cfg.pooling or "gap"
 
@@ -125,14 +126,14 @@ def extract_timm_embeddings(
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=dev.type == "cuda",
+        pin_memory=pin_memory_for(dev),
     )
     eval_loader = DataLoader(
         eval_ds,
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=dev.type == "cuda",
+        pin_memory=pin_memory_for(dev),
     )
 
     train_z = _extract_loader(model, train_loader, pooling=pooling, device=dev, desc=f"{cfg.name} train")

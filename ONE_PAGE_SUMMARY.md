@@ -4,9 +4,9 @@
      Every change to this file must be authorized by an entry in the program decision log:
      ../lab-notebook/decision_log.md -->
 
-    Version:     3
-    Amended-by:  D-032 (two-tier taxonomy; D-032…D-036 lock the protocol)
-    Date:        2026-08-12
+    Version:     4
+    Amended-by:  D-049 (dimension rationale withdrawn; decision unchanged)
+    Date:        2026-08-14
     Status:      PROTOCOL LOCKED — all stop conditions closed. Preregistration may now be written.
 
 This file is the anchor. Every other document in this repository is downstream of it. If something
@@ -113,7 +113,13 @@ Sensitivity at `k ∈ {128,256,512}`; the conclusion must not depend on which.
 *Why no normalization:* κ is scale-invariant — `κ(cΣ)=κ(Σ)` — so scale was never the confound. The
 **absolute** ε was, since it does not rescale with the matrix. ε exists only to make Σ_W invertible
 for the Mahalanobis scorer; κ_primary takes no inverse, so dropping ε removes the confound outright
-rather than adjusting for it. Paper 4 could not have seen this: one backbone, one scale, constant `d`.
+rather than adjusting for it. Paper 4 could not have seen this: one backbone, one scale.
+
+*Why κ_primary rather than raw κ — corrected (D-049).* The original argument was that κ grows with
+embedding dimension. **Measured across the ten backbones, it does not:** Spearman(d, κ_paper4) =
+−0.308, p = 0.386, pointing the wrong way. The justification is **scale-and-regularisation
+commensurability**, evidenced directly: κ_primary compresses the cross-backbone spread from
+**3918× to 5.2×**. The decision stands; the dimension rationale is withdrawn.
 
 **Moderators are not equally answerable (D-036):** Family is **confirmatory**; dimension is a
 **preregistered sensitivity** (3 of 5 cells carry a within-family 768/1024 contrast); pretraining

@@ -121,8 +121,14 @@ If a geometry-manipulation check is needed, use **spectral tempering**
 reported alongside for direct replication comparison.
 
 No normalization: κ is scale-invariant, so scale was never the confound — the absolute ε was, and
-κ_primary takes no inverse so it needs none. LID and within-class spectral-decay slope stay
-secondary.
+κ_primary takes no inverse so it needs none.
+
+**D-049.** Do not justify κ_primary by a dimension effect. Measured across the ten backbones,
+Spearman(embed_dim, κ_paper4) = −0.308, p = 0.386 — not significant and the wrong sign. What
+κ_primary demonstrably does is make κ commensurable: it compresses the cross-backbone spread from
+3918× to 5.2×. State that, not the dimension story.
+
+LID and within-class spectral-decay slope stay secondary.
 
 ## Step 11 — Reliability estimators
 

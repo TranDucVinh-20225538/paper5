@@ -23,6 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4"]
+report = ["matplotlib>=3.7"]
 
 [tool.setuptools.packages.find]
 where = ["."]

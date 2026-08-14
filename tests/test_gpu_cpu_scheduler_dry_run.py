@@ -20,6 +20,25 @@ def scheduler_executable() -> Path:
     return SCHEDULER
 
 
+def _bash_supports_assoc_arrays() -> bool:
+    """gpu_cpu_scheduler.sh uses `declare -A`, which needs bash 4+.
+
+    macOS ships bash 3.2 (frozen in 2007 over GPLv3), so these tests cannot run on a
+    stock Mac. They are skipped rather than left failing: a permanently red suite
+    trains people to ignore failures, which is exactly how a real regression gets
+    through. The scheduler itself is fine — the Linux server has bash 5.
+    """
+    out = subprocess.run(["bash", "-c", "declare -A _t 2>/dev/null && echo ok"],
+                         capture_output=True, text=True)
+    return out.stdout.strip() == "ok"
+
+
+requires_bash4 = pytest.mark.skipif(
+    not _bash_supports_assoc_arrays(),
+    reason="gpu_cpu_scheduler.sh needs bash 4+ (declare -A); macOS ships bash 3.2",
+)
+
+@requires_bash4
 def test_scheduler_dry_run_two_backbones(scheduler_executable: Path, tmp_path: Path) -> None:
     """Simulate 2-backbone overlap without touching GPU."""
     env = os.environ.copy()
@@ -52,6 +71,7 @@ def test_scheduler_dry_run_two_backbones(scheduler_executable: Path, tmp_path: P
     assert "scheduler done" in combined.lower()
 
 
+@requires_bash4
 def test_scheduler_dry_run_single_backbone(scheduler_executable: Path, tmp_path: Path) -> None:
     env = os.environ.copy()
     env.update(
@@ -78,6 +98,7 @@ def test_scheduler_dry_run_single_backbone(scheduler_executable: Path, tmp_path:
     assert proc.returncode == 0
 
 
+@requires_bash4
 def test_scheduler_continues_after_gpu_failure(scheduler_executable: Path, tmp_path: Path) -> None:
     """First backbone GPU fail must not block the second."""
     cfg_a = tmp_path / "dryrun_a.yaml"

@@ -125,3 +125,65 @@ seeds: [42]
             require_preprocessing_hash=False,
             require_split_checksum=False,
         )
+
+
+def test_step3_record_carries_checksums(repo_root: Path) -> None:
+    """Every entrypoint must write the same complete Step 3 record (D-044).
+
+    Four call sites used to build this dict independently and only one wrote the
+    checksums, so a backbone run straight through to step 6 lost its provenance.
+    """
+    from src.backbone.extract import ExtractionOutput
+    from src.pipeline.steps import _step3_record
+    from src.utils.config import load_backbone_config
+
+    cfg = load_backbone_config(repo_root / "configs" / "medsam.yaml", repo_root=repo_root)
+    extraction = ExtractionOutput(
+        backbone="medsam",
+        train_dir=repo_root / "t",
+        eval_dir=repo_root / "e",
+        train_sha256="a" * 64,
+        eval_sha256="b" * 64,
+        train_n=16211,
+        eval_n=7365,
+        embed_dim=768,
+    )
+    rec = _step3_record(cfg, extraction, repo_root)
+    for key in ("train_sha256", "eval_sha256", "train_n", "eval_n", "embed_dim", "pooling"):
+        assert rec.get(key), f"Step 3 record is missing {key}"
+
+
+def test_from_step_rejects_unsupported_values(repo_root: Path) -> None:
+    """--from-step 1/2/3 must fail loudly, not silently restart from 0.
+
+    Silently restarting is indistinguishable from success until the wall-clock bill
+    arrives — for MedSAM that was ~11 hours of re-extraction per attempt.
+    """
+    # 7 is handled separately now — see test_from_step_7_refuses_unconfirmable_selection.
+    for bad in ("1", "2", "3"):
+        result = subprocess.run(
+            [sys.executable, "-m", "src.pipeline.cli", "configs/medsam.yaml",
+             "--from-step", bad, "--through-step", "12"],
+            cwd=repo_root, capture_output=True, text=True,
+        )
+        assert result.returncode != 0, f"--from-step {bad} should have errored"
+        assert "not supported" in result.stderr
+
+
+def test_from_step_7_refuses_unconfirmable_selection(repo_root: Path) -> None:
+    """--from-step 7 must refuse a step-6 record it cannot confirm as a full-grid run.
+
+    Protocol Step 5 selects (r, lambda_proj) from the full pre-committed grid. Carrying
+    forward a pair chosen by a shortened grid substitutes a different selection rule,
+    silently. A warning would not have helped: the first record this guard met was a
+    1-epoch smoke run, and legacy records carry no grid_epochs at all, so a warn-only
+    version let it straight through and trained all three arms on it.
+    """
+    result = subprocess.run(
+        [sys.executable, "-m", "src.pipeline.cli", "configs/medsam.yaml",
+         "--from-step", "7", "--through-step", "12"],
+        cwd=repo_root, capture_output=True, text=True,
+    )
+    assert result.returncode != 0
+    assert "cannot be confirmed as a full-grid protocol selection" in result.stderr
+    assert "--accept-legacy-selection" in result.stderr

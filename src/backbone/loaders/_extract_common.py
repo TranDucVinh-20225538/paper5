@@ -15,6 +15,7 @@ from src.backbone.preprocessing_transform import load_preprocessing_pipeline
 from src.datasets.image_dataset import MetadataImageDataset
 from src.datasets.splits import assert_split_counts, build_eval_pool_df, build_isic_train_df
 from src.utils.config import BackboneConfig
+from src.utils.torch_device import pin_memory_for, resolve_torch_device
 from src.utils.paths import load_dataset_paths
 
 
@@ -35,8 +36,8 @@ def build_standard_dataloaders(
     assert_split_counts(train_df, eval_df)
 
     transform = load_preprocessing_pipeline(cfg.preprocessing_asset)
-    dev = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    pin = dev.type == "cuda"
+    dev = device or resolve_torch_device()
+    pin = pin_memory_for(dev)
 
     train_loader = DataLoader(
         MetadataImageDataset(train_df, transform),

@@ -76,3 +76,7 @@ Thumbs.db
 .env
 *.key
 credentials.json
+
+# Quarantined artifacts from aborted or invalidated runs — never committed,
+# never consumed. Kept on disk so a mistake stays inspectable.
+experiments/*/_quarantine_*/

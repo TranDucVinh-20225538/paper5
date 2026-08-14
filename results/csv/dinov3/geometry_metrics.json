@@ -417,6 +417,88 @@
         "lid_mean": 16.88782010868352,
         "spectral_decay_slope": 0.005328553641197206
       }
+    ],
+    "adaptation": [
+      {
+        "seed": 42,
+        "rung": "linear-probe",
+        "condition_number": 1372551.467244969,
+        "per_direction_variance_w": 17.647069931030273,
+        "lid_mean": 17.407386915935554,
+        "spectral_decay_slope": 0.005250791303386218
+      },
+      {
+        "seed": 52,
+        "rung": "linear-probe",
+        "condition_number": 1372551.467244969,
+        "per_direction_variance_w": 17.647069931030273,
+        "lid_mean": 17.407386915935554,
+        "spectral_decay_slope": 0.005250791303386218
+      },
+      {
+        "seed": 62,
+        "rung": "linear-probe",
+        "condition_number": 1372551.467244969,
+        "per_direction_variance_w": 17.647069931030273,
+        "lid_mean": 17.407386915935554,
+        "spectral_decay_slope": 0.005250791303386218
+      },
+      {
+        "seed": 72,
+        "rung": "linear-probe",
+        "condition_number": 1372551.467244969,
+        "per_direction_variance_w": 17.647069931030273,
+        "lid_mean": 17.407386915935554,
+        "spectral_decay_slope": 0.005250791303386218
+      },
+      {
+        "seed": 82,
+        "rung": "linear-probe",
+        "condition_number": 1372551.467244969,
+        "per_direction_variance_w": 17.647069931030273,
+        "lid_mean": 17.407386915935554,
+        "spectral_decay_slope": 0.005250791303386218
+      },
+      {
+        "seed": 42,
+        "rung": "partial-FT",
+        "condition_number": 774775.5937767153,
+        "per_direction_variance_w": 19.248703002929688,
+        "lid_mean": 16.725557574486462,
+        "spectral_decay_slope": 0.005325171871971304
+      },
+      {
+        "seed": 52,
+        "rung": "partial-FT",
+        "condition_number": 307172.9612888944,
+        "per_direction_variance_w": 16.76960563659668,
+        "lid_mean": 16.976104570486836,
+        "spectral_decay_slope": 0.005305683795175789
+      },
+      {
+        "seed": 62,
+        "rung": "partial-FT",
+        "condition_number": 566646.0248772645,
+        "per_direction_variance_w": 17.730764389038086,
+        "lid_mean": 16.887404492753557,
+        "spectral_decay_slope": 0.005321704742410713
+      },
+      {
+        "seed": 72,
+        "rung": "partial-FT",
+        "condition_number": 427748.39374940476,
+        "per_direction_variance_w": 16.030773162841797,
+        "lid_mean": 16.893339108979603,
+        "spectral_decay_slope": 0.00531109783965593
+      },
+      {
+        "seed": 82,
+        "rung": "partial-FT",
+        "condition_number": 503969.8890009048,
+        "per_direction_variance_w": 17.08796501159668,
+        "lid_mean": 16.915149943655432,
+        "spectral_decay_slope": 0.005310934726863137
+      }
     ]
   }
 }

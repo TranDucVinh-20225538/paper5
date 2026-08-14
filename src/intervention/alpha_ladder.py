@@ -52,6 +52,7 @@ def run_alpha_ladder(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_results: dict[str, list[dict[str, Any]]] = {}
+    # Adaptation rungs have no alpha ladder (capacity points, not dose points), so they are not interpolated here.
     for arm in ("canonical", "conventional"):
         arm_dir = checkpoints.arm_dir(arm)
         if not arm_dir.is_dir():

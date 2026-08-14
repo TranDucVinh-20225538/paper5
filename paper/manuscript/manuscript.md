@@ -16,19 +16,36 @@ Account of Distance-Based Reliability Estimation in Dermatology
 
 ## Abstract
 
-*[To write. Constraints, not prose:]*
+Distance-based reliability estimators flag inputs that a deployed classifier should not be trusted
+on, and their behaviour under acquisition shift has been linked to the geometry of the frozen
+representation they operate on. A preregistered causal study established that link on a single
+dermatology foundation model, where condition number was the only geometry metric significantly
+associated with estimator performance. Whether that account describes representations in general or
+that representation in particular cannot be determined from one backbone: with a single instance,
+the two produce identical evidence.
 
-- **Lead with geometry, not with statistics.** The preregistration is a geometry study; an abstract
-  that opens on inference invites the reviewer question "where is the geometry?"
-- The primary claim is the preregistered one, and is stated with its scope:
-  *"Under a preregistered evaluation protocol, we found no confirmatory evidence that the geometric
-  relationship reported in [Paper 4] generalizes across backbone families."*
-  Not *"geometry does not generalize."*
-- The exact replication on the original backbone is stated as a result, because it is what rules out
-  a pipeline explanation for the null.
-- The resolution limitation is stated in the abstract, not deferred to the Discussion:
-  *"the combination of five clusters and Holm correction severely limits attainable family-wise
-  significance."*
+We applied the same intervention ladder — dose ladder, matched control arms, and implementation and
+manipulation gates — independently to ten frozen backbones, sampled as five representation families
+with two instances each so that within-family variance could be measured rather than assumed. The
+analysis was preregistered and frozen in a single commit before any cross-backbone association was
+computed. Primary inference resampled whole random seeds rather than individual observations, since
+observations sharing a seed share an adapter and a training trajectory.
+
+We found no confirmatory evidence that the association generalizes: no backbone cleared the
+Holm-corrected threshold, and the pattern across families was heterogeneous. Six of ten backbones
+nonetheless showed |τ| ≥ 0.29, in both directions, so this is not evidence of absence. On the
+original backbone the original result reproduced exactly (τ = +0.5576, difference 0.0000), which
+removes the analysis pipeline as an explanation for the null. Evaluated under seed-level permutation,
+that same τ gives p = 0.13; the two inference procedures, differing only in their unit of resampling,
+disagreed on six of ten backbones.
+
+With five seeds, the permutation distribution and the Holm correction together severely limit
+attainable family-wise significance, and the null should be read with that constraint. We report a
+boundary of validity rather than a refutation, and note that the earlier inference is not robust to
+changing the unit of resampling.
+
+**Keywords:** reliability estimation · distribution shift · representation geometry · preregistration
+· replication · dermoscopy
 
 ---
 

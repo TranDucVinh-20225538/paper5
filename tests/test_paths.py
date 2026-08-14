@@ -16,9 +16,10 @@ from src.utils.paths import (
 
 def test_split_checksum_spec_loads(repo_root: Path) -> None:
     spec = load_split_checksum_spec(repo_root)
-    assert spec["sha256"] == "2df20422ede69e56ee9b4f1beb101e50cbc6c43d550f9d1a0816ecec99af6ad2"
-    assert spec["row_count"] == 27629
+    assert spec["sha256"] == "7841f7324129881a9b648051fe110f14768f7708c37c602b7f378fe34a3289ce"
+    assert spec["hashed_columns_in_order"] == ["image_id", "label_idx", "domain", "partition"]
     assert spec["partition_counts"]["isic_train"] == 16211
+    assert spec["row_count"] == 23576
 
 
 def test_load_dataset_paths_from_env(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:

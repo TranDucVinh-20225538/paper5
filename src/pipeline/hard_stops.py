@@ -24,9 +24,8 @@ def git_commit_sha(repo_root: Path) -> str:
 
 def verify_split_checksum(repo_root: Path, *, verify_live: bool = True) -> None:
     """
-    Verify pinned split spec exists and optionally match live master_metadata.csv.
-
-    When CSG_DATA_ROOT is configured, compares sha256 against the Papers 1–4 artifact.
+    Verify the D-050 split-assignment pin exists and, when the dataset is
+    configured, that live assignments match it.
     """
     from src.utils.paths import (
         load_dataset_paths,
@@ -43,6 +42,8 @@ def verify_split_checksum(repo_root: Path, *, verify_live: bool = True) -> None:
     spec = load_split_checksum_spec(repo_root)
     if "sha256" not in spec:
         raise ValueError(f"Invalid split spec (missing sha256): {spec_path}")
+    if spec.get("hashed_columns_in_order") != ["image_id", "label_idx", "domain", "partition"]:
+        raise ValueError(f"Invalid split spec (D-050 columns missing): {spec_path}")
 
     if not verify_live:
         return

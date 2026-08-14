@@ -18,6 +18,20 @@ from src.intervention.training import apply_adapter, resolve_training_epochs, tr
 from src.utils.config import BackboneConfig
 
 
+class GridSearchExhausted(RuntimeError):
+    """No (r, lambda_proj) passed both gates. Carries every trial for diagnosis."""
+
+    def __init__(self, backbone: str, trials: list[dict[str, Any]]):
+        self.backbone = backbone
+        self.trials = trials
+        g0 = sum(1 for t in trials if t["gate0"]["gate0_pass"])
+        g1 = sum(1 for t in trials if t["gate1_pass"])
+        super().__init__(
+            f"{backbone}: no (r, lambda_proj) in the pre-committed grid passed both gates "
+            f"({len(trials)} trials: Gate 0 passed {g0}, Gate 1 passed {g1})"
+        )
+
+
 @dataclass(frozen=True)
 class GridSelection:
     r: int
@@ -90,5 +104,9 @@ def search_hyperparameters(
             break
 
     if selected is None:
-        return None
+        # A failed grid is the most informative failure this study can produce -- under
+        # D-020/D-033 "no configuration passed" is a declared outcome, not a bug. It
+        # cannot be declared without knowing which gate failed and by how much, so the
+        # trials are carried out on the exception rather than discarded with the return.
+        raise GridSearchExhausted(cfg.name, trials)
     return selected

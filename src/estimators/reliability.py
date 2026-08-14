@@ -23,7 +23,7 @@ from src.estimators.scorers import (
     cosine_centroid_scores,
     density_kde_scores,
 )
-from src.intervention.arms import ArmCheckpoints
+from src.intervention.arms import PARTIAL_FT_R, ArmCheckpoints
 from src.intervention.embeddings import EmbeddingArtifacts
 from src.intervention.training import apply_alpha, compute_delta_z, load_adapter_checkpoint
 from src.utils.config import BackboneConfig
@@ -102,6 +102,50 @@ def run_reliability_ladder(
                 scores = evaluate_reliability_scorers(z_train_a, y_train, z_eval_a, meta_eval)
                 arm_rows.append({"seed": seed, "alpha": alpha, **scores})
         all_results[arm] = arm_rows
+
+    # Adaptation arm — D-034. Paper 4's analysis population is n=30 per backbone:
+    # 20 rows from the canonical alpha-ladder plus 5 linear-probe and 5 partial-FT
+    # rows. Without these the population is n=20, on which the association is not
+    # significant (PanDerm: tau=0.242, p=0.146 versus tau=0.5576 at n=30), so every
+    # backbone would fail to replicate Paper 4 for a purely mechanical reason.
+    #
+    # The rungs are capacity points, not dose points: they are task-loss only and
+    # carry no alpha ladder, so each seed contributes exactly one row.
+    #
+    # full-adapter-FT is deliberately NOT scored. It reuses the conventional arm's
+    # checkpoints, and D-034 excludes it to avoid conflating the C4 control with the
+    # C2 population — Paper 4's own stated reason.
+    adaptation_dir = checkpoints.arm_dir("adaptation")
+    adaptation_manifest = adaptation_dir / "manifest.json"
+    if adaptation_manifest.is_file():
+        rungs = json.loads(adaptation_manifest.read_text(encoding="utf-8"))["rungs"]
+        adaptation_rows: list[dict[str, Any]] = []
+
+        # linear-probe has no adapter at all: the probe is fit on the frozen
+        # embeddings, so the representation scored here is the unmodified one.
+        for row in rungs.get("linear-probe", []):
+            scores = evaluate_reliability_scorers(
+                z_train_raw, y_train, z_eval_raw, meta_eval
+            )
+            adaptation_rows.append(
+                {"seed": int(row["seed"]), "rung": "linear-probe", **scores}
+            )
+
+        # partial-FT carries its own checkpoints at a fixed rank, distinct from the
+        # r selected in step 5, and is applied at full strength (no ladder).
+        for row in rungs.get("partial-FT", []):
+            seed = int(row["seed"])
+            ckpt = adaptation_dir / row.get("checkpoint_file", f"partialFT_adapter_seed{seed}.pt")
+            if not ckpt.is_file():
+                continue
+            adapter = load_adapter_checkpoint(ckpt, cfg, r=PARTIAL_FT_R)
+            z_train_a = apply_alpha(z_train_raw, compute_delta_z(adapter, z_train_raw), 1.0)
+            z_eval_a = apply_alpha(z_eval_raw, compute_delta_z(adapter, z_eval_raw), 1.0)
+            scores = evaluate_reliability_scorers(z_train_a, y_train, z_eval_a, meta_eval)
+            adaptation_rows.append({"seed": seed, "rung": "partial-FT", **scores})
+
+        if adaptation_rows:
+            all_results["adaptation"] = adaptation_rows
 
     out_path = output_dir / "reliability_scorers.json"
     payload = {"alphas": list(alphas), "results": all_results}

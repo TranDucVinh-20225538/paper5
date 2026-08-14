@@ -154,12 +154,13 @@ def test_step3_record_carries_checksums(repo_root: Path) -> None:
 
 
 def test_from_step_rejects_unsupported_values(repo_root: Path) -> None:
-    """--from-step 1/2/3/7 must fail loudly, not silently restart from 0.
+    """--from-step 1/2/3 must fail loudly, not silently restart from 0.
 
     Silently restarting is indistinguishable from success until the wall-clock bill
     arrives — for MedSAM that was ~11 hours of re-extraction per attempt.
     """
-    for bad in ("1", "2", "3", "7"):
+    # 7 is handled separately now — see test_from_step_7_refuses_unconfirmable_selection.
+    for bad in ("1", "2", "3"):
         result = subprocess.run(
             [sys.executable, "-m", "src.pipeline.cli", "configs/medsam.yaml",
              "--from-step", bad, "--through-step", "12"],
@@ -167,3 +168,22 @@ def test_from_step_rejects_unsupported_values(repo_root: Path) -> None:
         )
         assert result.returncode != 0, f"--from-step {bad} should have errored"
         assert "not supported" in result.stderr
+
+
+def test_from_step_7_refuses_unconfirmable_selection(repo_root: Path) -> None:
+    """--from-step 7 must refuse a step-6 record it cannot confirm as a full-grid run.
+
+    Protocol Step 5 selects (r, lambda_proj) from the full pre-committed grid. Carrying
+    forward a pair chosen by a shortened grid substitutes a different selection rule,
+    silently. A warning would not have helped: the first record this guard met was a
+    1-epoch smoke run, and legacy records carry no grid_epochs at all, so a warn-only
+    version let it straight through and trained all three arms on it.
+    """
+    result = subprocess.run(
+        [sys.executable, "-m", "src.pipeline.cli", "configs/medsam.yaml",
+         "--from-step", "7", "--through-step", "12"],
+        cwd=repo_root, capture_output=True, text=True,
+    )
+    assert result.returncode != 0
+    assert "cannot be confirmed as a full-grid protocol selection" in result.stderr
+    assert "--accept-legacy-selection" in result.stderr

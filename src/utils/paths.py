@@ -12,7 +12,6 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from src.utils.config import find_repo_root
-from src.utils.preprocessing import sha256_file
 
 
 @dataclass(frozen=True)
@@ -157,13 +156,15 @@ def verify_master_metadata_checksum(
     *,
     repo_root: Path | None = None,
 ) -> str:
-    """Verify live master_metadata.csv matches the pinned Papers 1–4 split."""
+    """Verify live split assignments match the D-050 pin (not the raw CSV bytes)."""
+    from src.datasets.split_pin import compute_split_assignment_digest_from_master
+
     spec = load_split_checksum_spec(repo_root)
     expected = spec["sha256"]
-    actual = sha256_file(paths.master_metadata)
+    actual = compute_split_assignment_digest_from_master(paths.master_metadata)
     if actual != expected:
         raise ValueError(
-            f"master_metadata.csv sha256 mismatch: expected {expected}, got {actual}. "
-            "Do not regenerate — use the Papers 1–4 artifact."
+            f"split assignment digest mismatch: expected {expected}, got {actual}. "
+            "The pin hashes image_id, label_idx, domain, partition (D-050), not CSV paths."
         )
     return actual

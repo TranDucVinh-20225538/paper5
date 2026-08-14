@@ -54,3 +54,76 @@ def test_condition_number_via_mahalanobis_pipeline() -> None:
 def test_condition_number_too_few_eigenvalues() -> None:
     with pytest.raises(ValueError, match="fewer than 2 positive eigenvalues"):
         condition_number(np.diag([1.0, 0.0, 0.0]))
+
+
+def test_kappa_primary_is_lambda1_over_lambdak() -> None:
+    from src.geometry.condition_number import kappa_primary
+
+    eig = np.arange(10, 0, -1, dtype=np.float64)
+    sigma = np.diag(eig)
+    assert kappa_primary(sigma, k=4) == pytest.approx(10.0 / 7.0)
+
+
+def test_kappa_primary_scale_invariant() -> None:
+    from src.geometry.condition_number import (
+        kappa_primary,
+        unregularized_pooled_within_class_covariance,
+    )
+
+    rng = np.random.default_rng(0)
+    n, d, k_cls = 400, 32, 8
+    z = rng.normal(size=(n, d))
+    labels = np.repeat(np.arange(k_cls), n // k_cls)
+    s = unregularized_pooled_within_class_covariance(z, labels, num_classes=k_cls)
+    assert kappa_primary(s, k=8) == pytest.approx(kappa_primary(4.0 * s, k=8))
+
+
+def test_kappa_primary_uses_sigma_w_not_marginal() -> None:
+    from src.geometry.condition_number import (
+        kappa_primary,
+        unregularized_pooled_within_class_covariance,
+    )
+
+    rng = np.random.default_rng(1)
+    n_per, d, k_cls = 80, 32, 8
+    parts = []
+    labels = []
+    for c in range(k_cls):
+        parts.append(rng.normal(loc=20.0 * c, scale=1.0, size=(n_per, d)))
+        labels.append(np.full(n_per, c))
+    z = np.concatenate(parts)
+    y = np.concatenate(labels)
+    sigma_w = unregularized_pooled_within_class_covariance(z, y, num_classes=k_cls)
+    sigma_m = np.cov(z, rowvar=False)
+    k_w = kappa_primary(sigma_w, k=8)
+    k_m = kappa_primary(sigma_m, k=8)
+    assert k_m > 5.0 * k_w
+
+
+def test_kappa_primary_has_no_epsilon() -> None:
+    from src.geometry.condition_number import kappa_primary
+
+    d = 32
+    sigma = np.diag(np.linspace(1.0, 1e-8, d))
+    unreg = kappa_primary(sigma, k=d)
+    regularized = kappa_primary(sigma + 1e-5 * np.eye(d), k=d)
+    assert unreg > 10.0 * regularized
+
+
+def test_kappa_primary_rejects_k_beyond_rank() -> None:
+    from src.geometry.condition_number import kappa_primary
+
+    with pytest.raises(ValueError, match="cannot take"):
+        kappa_primary(np.eye(4), k=8)
+
+
+def test_condition_number_function_body_unchanged() -> None:
+    import inspect
+
+    from src.geometry.condition_number import condition_number
+
+    src = inspect.getsource(condition_number)
+    assert "reg_eps" not in src
+    assert "kappa_primary" not in src
+    assert "eigvals = eigvals[eigvals > 0]" in src
+    assert "return float(eigvals.max() / eigvals.min())" in src

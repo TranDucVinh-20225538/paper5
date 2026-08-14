@@ -9,6 +9,9 @@
   "r": 16,
   "reference_alpha0": {
     "condition_number": 269830.2834978253,
+    "condition_number_primary_k128": 157.2701577408772,
+    "condition_number_primary": 403.58529512057453,
+    "condition_number_primary_k512": 1178.6285744410025,
     "per_direction_variance_w": 1.8299014568328857,
     "lid_mean": 18.345713972521015,
     "spectral_decay_slope": 0.003434406009905497
@@ -19,6 +22,9 @@
         "seed": 42,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -27,6 +33,9 @@
         "seed": 42,
         "alpha": 0.25,
         "condition_number": 261819.07527430708,
+        "condition_number_primary_k128": 147.30509866067484,
+        "condition_number_primary": 381.60212011130346,
+        "condition_number_primary_k512": 1134.0538709594352,
         "per_direction_variance_w": 1.5438843965530396,
         "lid_mean": 18.36991589590579,
         "spectral_decay_slope": 0.003448000513009831
@@ -35,6 +44,9 @@
         "seed": 42,
         "alpha": 0.5,
         "condition_number": 273325.78852229397,
+        "condition_number_primary_k128": 151.97105776141206,
+        "condition_number_primary": 396.8439795056471,
+        "condition_number_primary_k512": 1185.246997426009,
         "per_direction_variance_w": 1.3134733438491821,
         "lid_mean": 18.00107519403451,
         "spectral_decay_slope": 0.0034582803612663066
@@ -43,6 +55,9 @@
         "seed": 42,
         "alpha": 0.75,
         "condition_number": 417546.48420607246,
+        "condition_number_primary_k128": 230.33038988120998,
+        "condition_number_primary": 605.5243118049767,
+        "condition_number_primary_k512": 1810.0151662700632,
         "per_direction_variance_w": 1.1386678218841553,
         "lid_mean": 17.368959077619394,
         "spectral_decay_slope": 0.003466015396134861
@@ -51,6 +66,9 @@
         "seed": 42,
         "alpha": 1.0,
         "condition_number": 695331.00127323,
+        "condition_number_primary_k128": 382.8948034859972,
+        "condition_number_primary": 1004.89871752456,
+        "condition_number_primary_k512": 3012.979363309186,
         "per_direction_variance_w": 1.0194679498672485,
         "lid_mean": 16.69212160927217,
         "spectral_decay_slope": 0.0034726961875737213
@@ -59,6 +77,9 @@
         "seed": 52,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -67,6 +88,9 @@
         "seed": 52,
         "alpha": 0.25,
         "condition_number": 263780.94467226835,
+        "condition_number_primary_k128": 146.8051628077944,
+        "condition_number_primary": 385.43364991384794,
+        "condition_number_primary_k512": 1143.560926526299,
         "per_direction_variance_w": 1.437267780303955,
         "lid_mean": 18.341676098154572,
         "spectral_decay_slope": 0.0034505405722962193
@@ -75,6 +99,9 @@
         "seed": 52,
         "alpha": 0.5,
         "condition_number": 279016.70769458864,
+        "condition_number_primary_k128": 154.10705656099003,
+        "condition_number_primary": 405.46288674928786,
+        "condition_number_primary_k512": 1209.8476395267849,
         "per_direction_variance_w": 1.1352046728134155,
         "lid_mean": 17.892391548968824,
         "spectral_decay_slope": 0.0034619148633295987
@@ -83,6 +110,9 @@
         "seed": 52,
         "alpha": 0.75,
         "condition_number": 426039.6012361688,
+        "condition_number_primary_k128": 234.58158188885275,
+        "condition_number_primary": 617.1273386882903,
+        "condition_number_primary_k512": 1847.7504479802296,
         "per_direction_variance_w": 0.9237120747566223,
         "lid_mean": 17.14819138802705,
         "spectral_decay_slope": 0.0034707342387853045
@@ -91,6 +121,9 @@
         "seed": 52,
         "alpha": 1.0,
         "condition_number": 711614.5799573702,
+        "condition_number_primary_k128": 390.7010809103312,
+        "condition_number_primary": 1027.5630627573144,
+        "condition_number_primary_k512": 3084.3508468017462,
         "per_direction_variance_w": 0.802790105342865,
         "lid_mean": 16.33892364470026,
         "spectral_decay_slope": 0.0034782363559419287
@@ -99,6 +132,9 @@
         "seed": 62,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -107,6 +143,9 @@
         "seed": 62,
         "alpha": 0.25,
         "condition_number": 266290.654189464,
+        "condition_number_primary_k128": 148.0845528300821,
+        "condition_number_primary": 386.7414547853307,
+        "condition_number_primary_k512": 1154.8771467790727,
         "per_direction_variance_w": 1.5444320440292358,
         "lid_mean": 18.312970843804326,
         "spectral_decay_slope": 0.003450464700919118
@@ -115,6 +154,9 @@
         "seed": 62,
         "alpha": 0.5,
         "condition_number": 293227.94428570557,
+        "condition_number_primary_k128": 162.14009144236783,
+        "condition_number_primary": 423.5393864594393,
+        "condition_number_primary_k512": 1266.229625832547,
         "per_direction_variance_w": 1.3135381937026978,
         "lid_mean": 17.803583310196267,
         "spectral_decay_slope": 0.00346170913204904
@@ -123,6 +165,9 @@
         "seed": 62,
         "alpha": 0.75,
         "condition_number": 483963.04432855244,
+        "condition_number_primary_k128": 267.80509431360827,
+        "condition_number_primary": 697.0346868116895,
+        "condition_number_primary_k512": 2087.9310513379373,
         "per_direction_variance_w": 1.1372191905975342,
         "lid_mean": 17.090936867802373,
         "spectral_decay_slope": 0.0034701817250409888
@@ -131,6 +176,9 @@
         "seed": 62,
         "alpha": 1.0,
         "condition_number": 805369.4048535422,
+        "condition_number_primary_k128": 445.5849789184775,
+        "condition_number_primary": 1157.0162263631885,
+        "condition_number_primary_k512": 3472.2776418927615,
         "per_direction_variance_w": 1.0154753923416138,
         "lid_mean": 16.308492543279385,
         "spectral_decay_slope": 0.003477363336387043
@@ -139,6 +187,9 @@
         "seed": 72,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -147,6 +198,9 @@
         "seed": 72,
         "alpha": 0.25,
         "condition_number": 267262.0322698048,
+        "condition_number_primary_k128": 149.2279957711757,
+        "condition_number_primary": 389.3179291573228,
+        "condition_number_primary_k512": 1154.248141392695,
         "per_direction_variance_w": 1.5712014436721802,
         "lid_mean": 18.330442969664873,
         "spectral_decay_slope": 0.0034495204336843057
@@ -155,6 +209,9 @@
         "seed": 72,
         "alpha": 0.5,
         "condition_number": 288798.61304153927,
+        "condition_number_primary_k128": 158.1910598912875,
+        "condition_number_primary": 419.6846362210039,
+        "condition_number_primary_k512": 1242.512263802963,
         "per_direction_variance_w": 1.3627296686172485,
         "lid_mean": 17.902950115031924,
         "spectral_decay_slope": 0.0034607329255884082
@@ -163,6 +220,9 @@
         "seed": 72,
         "alpha": 0.75,
         "condition_number": 474925.5013034987,
+        "condition_number_primary_k128": 258.68753794045705,
+        "condition_number_primary": 688.6154148121904,
+        "condition_number_primary_k512": 2039.4589350086103,
         "per_direction_variance_w": 1.2044861316680908,
         "lid_mean": 17.27148638100037,
         "spectral_decay_slope": 0.003469265359923752
@@ -171,6 +231,9 @@
         "seed": 72,
         "alpha": 1.0,
         "condition_number": 798973.7177567282,
+        "condition_number_primary_k128": 433.3058093732526,
+        "condition_number_primary": 1154.3152897665461,
+        "condition_number_primary_k512": 3428.693297921154,
         "per_direction_variance_w": 1.096470594406128,
         "lid_mean": 16.534767719528492,
         "spectral_decay_slope": 0.003476570351709489
@@ -179,6 +242,9 @@
         "seed": 82,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -187,6 +253,9 @@
         "seed": 82,
         "alpha": 0.25,
         "condition_number": 260802.99566947148,
+        "condition_number_primary_k128": 144.85016854814154,
+        "condition_number_primary": 380.6490941408779,
+        "condition_number_primary_k512": 1130.8029532560922,
         "per_direction_variance_w": 1.4178634881973267,
         "lid_mean": 18.346832620141363,
         "spectral_decay_slope": 0.0034502413833232344
@@ -195,6 +264,9 @@
         "seed": 82,
         "alpha": 0.5,
         "condition_number": 300805.04368909134,
+        "condition_number_primary_k128": 165.79898326368556,
+        "condition_number_primary": 437.67764743063805,
+        "condition_number_primary_k512": 1295.5576282711315,
         "per_direction_variance_w": 1.0916389226913452,
         "lid_mean": 17.9874925342393,
         "spectral_decay_slope": 0.003460843272175611
@@ -203,6 +275,9 @@
         "seed": 82,
         "alpha": 0.75,
         "condition_number": 538906.9153034039,
+        "condition_number_primary_k128": 294.97316423959694,
+        "condition_number_primary": 781.7790955937085,
+        "condition_number_primary_k512": 2319.1940255796558,
         "per_direction_variance_w": 0.8512274026870728,
         "lid_mean": 17.37966012397838,
         "spectral_decay_slope": 0.003468935599210309
@@ -211,6 +286,9 @@
         "seed": 82,
         "alpha": 1.0,
         "condition_number": 911418.9213623637,
+        "condition_number_primary_k128": 498.91629339177365,
+        "condition_number_primary": 1315.7006837235654,
+        "condition_number_primary_k512": 3918.2431148053424,
         "per_direction_variance_w": 0.6966289281845093,
         "lid_mean": 16.66692295216808,
         "spectral_decay_slope": 0.0034758261205026517
@@ -221,6 +299,9 @@
         "seed": 42,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -229,6 +310,9 @@
         "seed": 42,
         "alpha": 0.25,
         "condition_number": 272468.26937646786,
+        "condition_number_primary_k128": 152.85741494288962,
+        "condition_number_primary": 397.1500404932273,
+        "condition_number_primary_k512": 1184.3356167775432,
         "per_direction_variance_w": 1.8790621757507324,
         "lid_mean": 18.27677997056994,
         "spectral_decay_slope": 0.0034484000757185763
@@ -237,6 +321,9 @@
         "seed": 42,
         "alpha": 0.5,
         "condition_number": 284621.9991598074,
+        "condition_number_primary_k128": 159.0253007438161,
+        "condition_number_primary": 413.2358486718287,
+        "condition_number_primary_k512": 1236.4475746248004,
         "per_direction_variance_w": 1.9337923526763916,
         "lid_mean": 17.82761273455273,
         "spectral_decay_slope": 0.003458847730701301
@@ -245,6 +332,9 @@
         "seed": 42,
         "alpha": 0.75,
         "condition_number": 389065.8887184008,
+        "condition_number_primary_k128": 215.17828098485654,
+        "condition_number_primary": 564.2237585624862,
+        "condition_number_primary_k512": 1685.855621972499,
         "per_direction_variance_w": 1.9940924644470215,
         "lid_mean": 17.138177616888797,
         "spectral_decay_slope": 0.003466793281703388
@@ -253,6 +343,9 @@
         "seed": 42,
         "alpha": 1.0,
         "condition_number": 645827.2104543966,
+        "condition_number_primary_k128": 354.8284856677271,
+        "condition_number_primary": 935.3465276075534,
+        "condition_number_primary_k512": 2796.0766112336546,
         "per_direction_variance_w": 2.059962272644043,
         "lid_mean": 16.378268520464673,
         "spectral_decay_slope": 0.003473658083990891
@@ -261,6 +354,9 @@
         "seed": 52,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -269,6 +365,9 @@
         "seed": 52,
         "alpha": 0.25,
         "condition_number": 273597.81473073334,
+        "condition_number_primary_k128": 153.3504362602364,
+        "condition_number_primary": 399.25091324888484,
+        "condition_number_primary_k512": 1187.533533012632,
         "per_direction_variance_w": 1.8854224681854248,
         "lid_mean": 18.28956984393591,
         "spectral_decay_slope": 0.003449772548654545
@@ -277,6 +376,9 @@
         "seed": 52,
         "alpha": 0.5,
         "condition_number": 291899.8583270049,
+        "condition_number_primary_k128": 159.90904577134233,
+        "condition_number_primary": 423.3650316640021,
+        "condition_number_primary_k512": 1264.403269883397,
         "per_direction_variance_w": 1.9478694200515747,
         "lid_mean": 17.816708472267475,
         "spectral_decay_slope": 0.003460576535681666
@@ -285,6 +387,9 @@
         "seed": 52,
         "alpha": 0.75,
         "condition_number": 406298.4816489274,
+        "condition_number_primary_k128": 221.85320193220053,
+        "condition_number_primary": 587.6609163817305,
+        "condition_number_primary_k512": 1749.7429810239928,
         "per_direction_variance_w": 2.017242193222046,
         "lid_mean": 17.140660175843255,
         "spectral_decay_slope": 0.00346888500730828
@@ -293,6 +398,9 @@
         "seed": 52,
         "alpha": 1.0,
         "condition_number": 671968.2825740883,
+        "condition_number_primary_k128": 366.673083018728,
+        "condition_number_primary": 968.2441653207161,
+        "condition_number_primary_k512": 2889.933029736381,
         "per_direction_variance_w": 2.0935404300689697,
         "lid_mean": 16.370036383990684,
         "spectral_decay_slope": 0.0034759812660320995
@@ -301,6 +409,9 @@
         "seed": 62,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -309,6 +420,9 @@
         "seed": 62,
         "alpha": 0.25,
         "condition_number": 272887.8590954656,
+        "condition_number_primary_k128": 153.05775046125243,
+        "condition_number_primary": 397.6153205719211,
+        "condition_number_primary_k512": 1182.545706594377,
         "per_direction_variance_w": 1.8552149534225464,
         "lid_mean": 18.26695467510859,
         "spectral_decay_slope": 0.003449534748974581
@@ -317,6 +431,9 @@
         "seed": 62,
         "alpha": 0.5,
         "condition_number": 286638.15567113145,
+        "condition_number_primary_k128": 159.03117152175884,
+        "condition_number_primary": 417.84510134673445,
+        "condition_number_primary_k512": 1240.7673133911294,
         "per_direction_variance_w": 1.8858692646026611,
         "lid_mean": 17.855933985330648,
         "spectral_decay_slope": 0.003460412717247896
@@ -325,6 +442,9 @@
         "seed": 62,
         "alpha": 0.75,
         "condition_number": 443337.1185025007,
+        "condition_number_primary_k128": 245.08112123105616,
+        "condition_number_primary": 644.5458752725748,
+        "condition_number_primary_k512": 1915.9148600294557,
         "per_direction_variance_w": 1.9218636751174927,
         "lid_mean": 17.180434433439043,
         "spectral_decay_slope": 0.003468428214357249
@@ -333,6 +453,9 @@
         "seed": 62,
         "alpha": 1.0,
         "condition_number": 735796.4555330998,
+        "condition_number_primary_k128": 404.9546490024866,
+        "condition_number_primary": 1065.3548388951485,
+        "condition_number_primary_k512": 3175.9257645226876,
         "per_direction_variance_w": 1.9631987810134888,
         "lid_mean": 16.40865823983174,
         "spectral_decay_slope": 0.0034751710685963395
@@ -341,6 +464,9 @@
         "seed": 72,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -349,6 +475,9 @@
         "seed": 72,
         "alpha": 0.25,
         "condition_number": 274389.74192726024,
+        "condition_number_primary_k128": 154.30964339206275,
+        "condition_number_primary": 398.4846217521906,
+        "condition_number_primary_k512": 1184.823404015234,
         "per_direction_variance_w": 1.8589518070220947,
         "lid_mean": 18.283438757016103,
         "spectral_decay_slope": 0.003448907667160405
@@ -357,6 +486,9 @@
         "seed": 72,
         "alpha": 0.5,
         "condition_number": 291031.4396576359,
+        "condition_number_primary_k128": 160.757435358475,
+        "condition_number_primary": 420.48054762853207,
+        "condition_number_primary_k512": 1251.6313392117993,
         "per_direction_variance_w": 1.8942500352859497,
         "lid_mean": 17.832508696375594,
         "spectral_decay_slope": 0.0034595726976372502
@@ -365,6 +497,9 @@
         "seed": 72,
         "alpha": 0.75,
         "condition_number": 446528.77746276086,
+        "condition_number_primary_k128": 244.47889048529373,
+        "condition_number_primary": 642.9791387707456,
+        "condition_number_primary_k512": 1919.0140743798481,
         "per_direction_variance_w": 1.9357963800430298,
         "lid_mean": 17.149331546192226,
         "spectral_decay_slope": 0.00346752613570132
@@ -373,6 +508,9 @@
         "seed": 72,
         "alpha": 1.0,
         "condition_number": 749146.3660160394,
+        "condition_number_primary_k128": 409.34069972692555,
+        "condition_number_primary": 1074.2581244204991,
+        "condition_number_primary_k512": 3213.6011836520497,
         "per_direction_variance_w": 1.983590841293335,
         "lid_mean": 16.401935243430145,
         "spectral_decay_slope": 0.0034742805429290396
@@ -381,6 +519,9 @@
         "seed": 82,
         "alpha": 0.0,
         "condition_number": 269830.2834978253,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
         "per_direction_variance_w": 1.8299014568328857,
         "lid_mean": 18.345713972521015,
         "spectral_decay_slope": 0.003434406009905497
@@ -389,6 +530,9 @@
         "seed": 82,
         "alpha": 0.25,
         "condition_number": 272703.64650408557,
+        "condition_number_primary_k128": 152.82825639326677,
+        "condition_number_primary": 399.1623053296245,
+        "condition_number_primary_k512": 1180.8101885299307,
         "per_direction_variance_w": 1.8855516910552979,
         "lid_mean": 18.27870475284614,
         "spectral_decay_slope": 0.0034499092191461493
@@ -397,6 +541,9 @@
         "seed": 82,
         "alpha": 0.5,
         "condition_number": 290625.02475486265,
+        "condition_number_primary_k128": 160.14400864910914,
+        "condition_number_primary": 422.9979319426533,
+        "condition_number_primary_k512": 1258.623521089832,
         "per_direction_variance_w": 1.949302077293396,
         "lid_mean": 17.756319747879107,
         "spectral_decay_slope": 0.003460680728966943
@@ -405,6 +552,9 @@
         "seed": 82,
         "alpha": 0.75,
         "condition_number": 503251.79283042956,
+        "condition_number_primary_k128": 276.84670104691696,
+        "condition_number_primary": 729.3721478661387,
+        "condition_number_primary_k512": 2176.34617883565,
         "per_direction_variance_w": 2.0211527347564697,
         "lid_mean": 17.033326925356885,
         "spectral_decay_slope": 0.00346888088693014
@@ -413,9 +563,124 @@
         "seed": 82,
         "alpha": 1.0,
         "condition_number": 848608.8550443067,
+        "condition_number_primary_k128": 465.87363268080526,
+        "condition_number_primary": 1224.5148939082071,
+        "condition_number_primary_k512": 3659.9616144492943,
         "per_direction_variance_w": 2.1011035442352295,
         "lid_mean": 16.24907641081914,
         "spectral_decay_slope": 0.003475824392474582
+      }
+    ],
+    "adaptation": [
+      {
+        "seed": 42,
+        "rung": "linear-probe",
+        "condition_number": 269830.2842454926,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
+        "per_direction_variance_w": 1.8299014568328857,
+        "lid_mean": 18.345713972521015,
+        "spectral_decay_slope": 0.0036622584064506126
+      },
+      {
+        "seed": 52,
+        "rung": "linear-probe",
+        "condition_number": 269830.2842454926,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
+        "per_direction_variance_w": 1.8299014568328857,
+        "lid_mean": 18.345713972521015,
+        "spectral_decay_slope": 0.0036622584064506126
+      },
+      {
+        "seed": 62,
+        "rung": "linear-probe",
+        "condition_number": 269830.2842454926,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
+        "per_direction_variance_w": 1.8299014568328857,
+        "lid_mean": 18.345713972521015,
+        "spectral_decay_slope": 0.0036622584064506126
+      },
+      {
+        "seed": 72,
+        "rung": "linear-probe",
+        "condition_number": 269830.2842454926,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
+        "per_direction_variance_w": 1.8299014568328857,
+        "lid_mean": 18.345713972521015,
+        "spectral_decay_slope": 0.0036622584064506126
+      },
+      {
+        "seed": 82,
+        "rung": "linear-probe",
+        "condition_number": 269830.2842454926,
+        "condition_number_primary_k128": 157.2701577408772,
+        "condition_number_primary": 403.58529512057453,
+        "condition_number_primary_k512": 1178.6285744410025,
+        "per_direction_variance_w": 1.8299014568328857,
+        "lid_mean": 18.345713972521015,
+        "spectral_decay_slope": 0.0036622584064506126
+      },
+      {
+        "seed": 42,
+        "rung": "partial-FT",
+        "condition_number": 458860.269998651,
+        "condition_number_primary_k128": 254.68439905157882,
+        "condition_number_primary": 664.4836294219202,
+        "condition_number_primary_k512": 1984.2619036066292,
+        "per_direction_variance_w": 1.9575532674789429,
+        "lid_mean": 17.42570166647409,
+        "spectral_decay_slope": 0.00372386739065123
+      },
+      {
+        "seed": 52,
+        "rung": "partial-FT",
+        "condition_number": 468132.3425791741,
+        "condition_number_primary_k128": 257.0381493635888,
+        "condition_number_primary": 676.3365158421241,
+        "condition_number_primary_k512": 2020.746458832666,
+        "per_direction_variance_w": 1.962510347366333,
+        "lid_mean": 17.35498713178699,
+        "spectral_decay_slope": 0.0037271112109762573
+      },
+      {
+        "seed": 62,
+        "rung": "partial-FT",
+        "condition_number": 533167.5627318447,
+        "condition_number_primary_k128": 295.78104400559766,
+        "condition_number_primary": 774.5506887413376,
+        "condition_number_primary_k512": 2311.161555300955,
+        "per_direction_variance_w": 1.9670703411102295,
+        "lid_mean": 17.357430500736164,
+        "spectral_decay_slope": 0.0037247068780964024
+      },
+      {
+        "seed": 72,
+        "rung": "partial-FT",
+        "condition_number": 474438.1887861867,
+        "condition_number_primary_k128": 260.6203645028717,
+        "condition_number_primary": 688.2220128583116,
+        "condition_number_primary_k512": 2045.2523304986619,
+        "per_direction_variance_w": 1.9259302616119385,
+        "lid_mean": 17.20576084209279,
+        "spectral_decay_slope": 0.003732210018683049
+      },
+      {
+        "seed": 82,
+        "rung": "partial-FT",
+        "condition_number": 542494.6873798618,
+        "condition_number_primary_k128": 300.51468268995484,
+        "condition_number_primary": 785.0929976276346,
+        "condition_number_primary_k512": 2331.2002163621883,
+        "per_direction_variance_w": 1.9997889995574951,
+        "lid_mean": 17.260045071012666,
+        "spectral_decay_slope": 0.0037239245152477785
       }
     ]
   }

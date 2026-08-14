@@ -144,6 +144,7 @@ def score_gate1_ea03(
 
 def gate1_manipulation_pass(ea03_scores: dict[str, list[dict[str, Any]]]) -> bool:
     """Backbone passes EA-03 if canonical or conventional shows dose-dependence at some alpha > 0."""
+    # Adaptation rungs have no alpha ladder, so EA-03 (dose-dependence) does not score them.
     for arm in ("canonical", "conventional"):
         for row in ea03_scores.get(arm, []):
             if row["alpha"] > 0 and row["gate1_pass"]:

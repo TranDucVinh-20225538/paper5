@@ -1,0 +1,48 @@
+{
+  "freeze_commit": "a83c74c3273189d9c9a5573b5635fb555279b468",
+  "analysis_commit": "7d998dabab2de8a68dbf198a036a54dc8c0a3887",
+  "T": 10,
+  "complete_cells": 5,
+  "S": 0,
+  "tier1": "D",
+  "tier2": "heterogeneous",
+  "outcome": "D, heterogeneous",
+  "families_significant": {
+    "cnn": 0,
+    "medical_ssl": 0,
+    "medical_vlm": 0,
+    "general_ssl": 0,
+    "general_vlm": 0
+  },
+  "families_mean_tau": {
+    "cnn": -0.24235294117647058,
+    "medical_ssl": 0.1529411764705882,
+    "medical_vlm": -0.2564705882352941,
+    "general_ssl": -0.03529411764705884,
+    "general_vlm": -0.00941176470588235
+  },
+  "sensitivity": {
+    "k=128": {
+      "S": 0,
+      "tier1": "D"
+    },
+    "k=256": {
+      "S": 0,
+      "tier1": "D"
+    },
+    "k=512": {
+      "S": 0,
+      "tier1": "D"
+    },
+    "kappa_paper4": {
+      "S": 0,
+      "tier1": "D"
+    }
+  },
+  "replication_panderm_kappa_paper4": {
+    "tau": 0.5576470588235293,
+    "p_perm": 0.13333333333333333,
+    "published": 0.5576
+  },
+  "permutation_resolution": "1/120"
+}

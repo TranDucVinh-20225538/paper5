@@ -243,7 +243,11 @@ permutation p-values. AUROC range is reported beside every τ.
 | OpenCLIP | 0.0259 | 0.9083 | 0.0259 | 0.8436 | 1.0000 | no | 0.9781–0.9791 |
 | SigLIP | −0.0447 | 0.8083 | −0.0447 | 0.7333 | 1.0000 | no | 0.9655–0.9668 |
 
-PanDerm parametric p = 4.04 × 10⁻⁶.
+PanDerm parametric p = 4.04 × 10⁻⁶. Figure 1A shows the same values ordered by τ.
+
+Figure 2 shows the Mahalanobis AUROC range per backbone. The widest is 0.0086 and the narrowest
+0.0003; τ is scale-free and unaffected by this, but the ranges are reported alongside every τ so a
+rank association is not read as a difference in estimator performance.
 
 ### 4.3 Outcome
 
@@ -265,7 +269,9 @@ Same τ, different p, at unadjusted α = 0.05:
 | DINOv3 | 0.3082 | 0.3083 | 0.0188 |
 | MoCo v3 | −0.3788 | 0.2167 | 0.0039 |
 
-Per the preregistration, the permutation result governs.
+Per the preregistration, the permutation result governs. Figure 1B plots the two p-values against
+each other on log axes, with the permutation floor (1/120) and Holm's first threshold (α/m = 0.005)
+marked: no permutation p-value can fall below the floor, and the floor lies above the threshold.
 
 ### 4.5 Replication of the original result
 

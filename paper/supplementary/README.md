@@ -8,6 +8,10 @@
 | **S4** | Per-backbone gate outcomes, including the probe's twelve grid configurations | `results/csv/*/gate1_ea03.json`, `results/manifest.jsonl` |
 | **S5** | Checkpoint revisions, library versions, split digest | `configs/*.yaml`, `results/manifest.jsonl` |
 
-**Not yet buildable.** S1–S3 depend on `results/csv/confirmatory/`, which is not present on any
-pushed branch — see D-053. The tables are specified here so the gap is visible rather than
-discovered at submission.
+All five are buildable from the repository. Regenerate S1–S3 with:
+
+    python3 scripts/run_confirmatory_analysis.py
+    python3 scripts/make_figures.py
+
+Figures: `results/figures/fig1_confirmatory.{pdf,png}` (association per backbone; permutation versus
+parametric) and `results/figures/fig2_auroc_range.{pdf,png}` (outcome variation per backbone).

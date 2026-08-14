@@ -19,9 +19,11 @@ The confirmatory result is Outcome D, heterogeneous — no backbone cleared the 
 threshold — alongside an exact replication of the prior study on its original backbone
 (τ = +0.5576, difference 0.0000).
 
-> ⚠ **Open provenance gap.** `scripts/run_confirmatory_analysis.py` and `results/csv/confirmatory/`
-> were reported as committed at `da8b775`, but that commit is not present on any branch here. Until
-> it is pushed, the numbers in the manuscript have no committed source. See D-053.
+The confirmatory analysis is reproducible from version-controlled inputs:
+`scripts/run_confirmatory_analysis.py` implements the frozen specification and regenerates every
+number in the manuscript from the per-backbone intermediate outputs. It was written independently of
+the original run, which was lost before reaching any branch, and reproduces its reported table
+exactly (D-053).
 
 ## Start here
 

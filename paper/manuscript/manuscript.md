@@ -278,61 +278,109 @@ Cosine-to-centroid, k-NN and KDE were computed in full and lie outside the confi
 ### 5.1 Layer 1 — the preregistered result
 
 Under a preregistered evaluation protocol, we found no confirmatory evidence that the geometric
-relationship reported in the previous study generalizes across backbone families.
+relationship reported in the previous study generalizes across backbone families. No backbone
+cleared the Holm-corrected threshold, the outcome was classified as D, and the family pattern was
+heterogeneous.
 
-This is stated with two scope conditions that belong in the same breath as the claim:
+Two scope conditions belong in the same breath as that claim, because without them it reads as
+something stronger than the data supports.
 
-**It is not evidence of absence.** Six of ten backbones showed |τ| ≥ 0.29, in both directions.
+**This is not evidence of absence.** Six of ten backbones showed |τ| ≥ 0.29. What distinguishes them
+is not that the associations were small but that they pointed in both directions: four positive, six
+negative, with the largest of each sign at +0.60 and −0.52. A body of near-zero associations would
+have been evidence against the hypothesis. A body of substantial associations without a consistent
+sign is not the same thing, and should not be reported as though it were.
 
-**The procedure's resolution was limited.** With five seeds the permutation distribution admits 120
-arrangements, so p-values are quantised at 1/120 ≈ 0.0083, while Holm's first threshold at ten tests
-is 0.005. The combination of five clusters and Holm correction severely limits attainable
-family-wise significance. *[Reviewers will find this whether or not it is stated. Stating it is
-caution; omitting it is a defect.]*
+**The procedure's resolution was limited.** With five seeds the seed-level permutation distribution
+admits 120 arrangements, so its p-values are quantised at multiples of 1/120 ≈ 0.0083, while Holm's
+first threshold across ten tests is 0.005. The combination of five clusters and Holm correction
+severely limits attainable family-wise significance. This is a property of the design, fixed before
+any result was seen, and it constrains what a null can be taken to mean here. A reader who takes
+Outcome D as a measurement of the world rather than partly a measurement of the procedure will
+overread it.
 
 ### 5.2 Layer 2 — replication
 
-The previous result reproduced exactly on its original backbone: τ = +0.5576 against a published
-τ = +0.5576, difference 0.0000, on the same population and the same covariate definition.
+On its original backbone, using the original covariate definition and the same analysis population,
+the previous result reproduced exactly: τ = +0.5576 against a published τ = +0.5576, a difference of
+0.0000.
 
-This is what forecloses the most common explanation for a null: the pipeline. The same code that
-returned no confirmatory evidence across ten backbones reproduced the original finding to four
-decimal places on the one backbone where a published value exists to check against.
+This forecloses the explanation a null result usually invites. The same code that returned no
+confirmatory evidence across ten backbones reproduced the original finding to four decimal places on
+the one backbone where a published value exists to check against. Whatever accounts for the first
+result, it is not that the pipeline was wrong.
 
-Under the seed-level permutation test, that identical τ gives p = 0.1333. The effect size is
-unchanged; the inference is not. The two studies differ in the unit of resampling, not in the data.
-*[Wording: the previous inference is not robust to changing the resampling unit. Not that it was
-wrong.]*
+The same τ, evaluated under the seed-level permutation test, gives p = 0.1333. Nothing about the data
+or the effect size changed; the unit of resampling did. Observations sharing a random seed share an
+adapter, a training trajectory and an initialisation, and treating the thirty rows as thirty
+independent draws is what separates the two p-values.
+
+We therefore report that the earlier inference is **not robust to changing the unit of resampling**.
+That is a statement about a procedure, and it is checkable. It is not a claim that the earlier
+finding was wrong: a permutation test over five clusters has little power, and p = 0.1333 records a
+failure to resolve rather than a demonstration of absence. Both readings — that the effect is real
+and that the earlier significance was overstated — remain open on this evidence, and we do not choose
+between them.
 
 ### 5.3 Layer 3 — boundary of validity
 
 The two studies answer different questions. The first asked whether the phenomenon exists on one
-backbone; this one asks whether it holds across many. A negative answer to the second does not
-retract the first. What this study establishes is a boundary, not a refutation.
+backbone. This one asks whether it holds across many. A negative answer to the second does not
+retract the first, and the exact replication in §5.2 is what makes that separation credible rather
+than merely rhetorical. What this study establishes is a boundary, not a refutation.
 
-*[One descriptive sentence only, no mechanism:]* Exploratory analyses suggested that variability
-attributable to seed and variability attributable to the intervention were distributed differently
-across quantities, motivating future work on experimental design.
+The boundary extends to the protocol as well as to the finding. The manipulation check inherited from
+the earlier study accepts a geometry change only in the decreasing direction. Across the present
+backbone set, within-class spectral decay moved *upward* under intervention in eight of ten cases.
+With a single backbone, "the intervention decreases this quantity" and "the intervention changes this
+quantity" were indistinguishable; with ten they are not. The declared portability probe — a
+segmentation encoder, deliberately the most structurally distant backbone in the set — passed the
+implementation gate on all twelve grid configurations and failed the manipulation gate on all twelve,
+and is recorded *not testable* rather than as a negative result. That is the outcome the probe was
+included to make possible.
 
-*[Do not write here: that variance decomposition proves anything; that seed dominates; that ICC
-explains the result; that family slopes differ. Exploratory analyses were neither adjusted for
-multiplicity nor preregistered, and in some families rested on two models — and were fitted under
-the same independence assumption this paper argues is not robust. See D-052.]*
+Exploratory analyses suggested that variability attributable to seed and variability attributable to
+the intervention were distributed differently across quantities, motivating future work on
+experimental design.
+
+> **Boundary for revision.** The sentence above is the whole of what the exploratory work supports in
+> this paper. It must not be strengthened into a claim that variance decomposition proves anything,
+> that seed variance dominates, that an intraclass correlation explains the result, or that family
+> slopes differ. Those analyses were run after the confirmatory result, were not adjusted for
+> multiplicity, rested on two models in some families, and were fitted under the same independence
+> assumption this paper argues is not robust. Recorded as D-052.
 
 ### 5.4 Limitations
 
-- Five seeds; the confirmatory procedure's resolution follows directly from that.
-- Two instances per family.
-- The manipulation-check criterion is one-sided (inherited), while the protocol prose describes
-  dose-dependence without direction. The discrepancy is reported rather than repaired: it was
-  already known that one backbone fails one-sided and would pass two-sided, so amending it after the
-  fact would have been outcome-contingent.
-- Artifact redistribution is not uniform across backbones; several checkpoints are non-commercial and
-  one is non-redistributable.
+**Five seeds.** The resolution limit in §5.1 follows directly from the number of seeds, not from the
+choice of a permutation test. A cluster-level procedure with more clusters would not have this
+constraint.
+
+**Two instances per family.** Family-level statements rest on two models each, which is the minimum
+that permits within-family variance to be estimated at all and is far from the minimum that would
+make it precise.
+
+**A one-sided manipulation criterion.** The inherited gate accepts only decreasing geometry change,
+while the protocol text describes dose-dependence without specifying direction. The two do not agree.
+We report the discrepancy rather than repairing it: by the time it was identified it was already
+known which backbone the repair would change, so amending the criterion would have been
+outcome-contingent.
+
+**Non-uniform artifact release.** Several checkpoints carry non-commercial licences and one prohibits
+redistribution of derivatives, so released artifacts are represented by checksums where the licence
+requires it. Reproduction from a clean clone is therefore not uniform across backbones.
+
+**Saturated outcome.** Mahalanobis AUROC varied within a narrow band on every backbone; the widest
+range across the analysis population was under 0.01 and the narrowest under 0.001. Kendall's τ is
+scale-free and is unaffected by this, but a rank association over differences of this size should not
+be read as a practically meaningful difference in estimator performance. Every τ in §4 is reported
+with its AUROC range for that reason.
 
 ### 5.5 Future work
 
-*[Deferred, not promised. Do not describe a specific next paper.]*
+The design constraint identified in §5.1 is specific and actionable: at a fixed budget, the binding
+resource for this class of study is the number of independent seeds rather than the number of rungs
+on the dose ladder. We do not develop that further here.
 
 ---
 
